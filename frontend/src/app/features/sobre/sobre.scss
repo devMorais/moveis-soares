@@ -94,7 +94,9 @@
     width: 100%;
     display: block;
     padding: 70px 0px;
-    background: linear-gradient(135deg, var(--color-primary), color-mix(in srgb, var(--color-primary) 55%, black));
+    background-image: linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 82%, black) 0%, rgba(10, 10, 12, 0.88) 100%), url("/assets/images/fundos/cta.jpg");
+    background-size: cover;
+    background-position: center;
     text-align: center;
 }
 

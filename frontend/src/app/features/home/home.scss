@@ -3,8 +3,9 @@
 .hero-carrossel {
     position: relative;
     width: 100%;
-    height: 100vh;
-    min-height: 560px;
+    height: 70vh;
+    min-height: 420px;
+    max-height: 720px;
     overflow: hidden;
     background-color: var(--color-bg);
 }
@@ -406,17 +407,21 @@
 }
 
 .cta {
-    padding: 40px 0;
+    padding: 64px 0;
     text-align: center;
+    background-image: linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 82%, black) 0%, rgba(10, 10, 12, 0.88) 100%), url("/assets/images/fundos/cta.jpg");
+    background-size: cover;
+    background-position: center;
 }
 
 .cta .titulo {
     font-size: 20px;
     margin-bottom: 8px;
+    color: #fff;
 }
 
 .cta p {
-    color: var(--color-text-muted);
+    color: #f0e0df;
     margin-bottom: 18px;
     font-size: 14px;
 }
@@ -435,6 +440,12 @@
 }
 
 @media only screen and (min-width: 900px) {
+    .hero-carrossel {
+        height: 100vh;
+        min-height: 560px;
+        max-height: none;
+    }
+
     .slide h1 {
         font-size: 44px;
     }
