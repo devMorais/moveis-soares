@@ -1,6 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, HostListener, PLATFORM_ID, inject, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SITE_INFO } from '../../../../core/constants/site-info';
+import { CATEGORIAS } from '../../../../core/constants/categorias';
+
+const LIMIAR_SCROLL_PX = 60;
 
 @Component({
     selector: 'app-navbar',
@@ -9,9 +13,24 @@ import { SITE_INFO } from '../../../../core/constants/site-info';
     styleUrl: './navbar.scss',
 })
 export class Navbar {
+    private platformId = inject(PLATFORM_ID);
+
     info = SITE_INFO;
+    categorias = CATEGORIAS;
 
     menuAberto = signal(false);
+    rolado = signal(false);
+
+    constructor() {
+        if (isPlatformBrowser(this.platformId)) {
+            this.rolado.set(window.scrollY > LIMIAR_SCROLL_PX);
+        }
+    }
+
+    @HostListener('window:scroll')
+    onScroll() {
+        this.rolado.set(window.scrollY > LIMIAR_SCROLL_PX);
+    }
 
     toggleMenu() {
         this.menuAberto.update((v) => !v);

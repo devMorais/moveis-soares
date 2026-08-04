@@ -12,6 +12,8 @@ export const PRODUTOS_MOCK: Produto[] = [
         precoDe: 1899,
         preco: 1599,
         imagemUrl: 'assets/images/produtos/guarda-roupa-off-white-6-portas.jpg',
+        especificacao: '6 PORTAS | ACABAMENTO OFF-WHITE',
+        selo: 'Lançamento',
     },
     {
         id: 2,
@@ -20,6 +22,8 @@ export const PRODUTOS_MOCK: Produto[] = [
         precoDe: 1299,
         preco: 999,
         imagemUrl: 'assets/images/produtos/buffet-amendoa.jpg',
+        especificacao: '4 PORTAS | TAMPO LAQUEADO',
+        selo: 'Oferta',
     },
     {
         id: 3,
@@ -27,6 +31,7 @@ export const PRODUTOS_MOCK: Produto[] = [
         categoria: 'Quarto',
         preco: 1499,
         imagemUrl: 'assets/images/produtos/guarda-roupa-classico-4-portas.jpg',
+        especificacao: '4 PORTAS | ACABAMENTO NOGAL',
     },
     {
         id: 4,
@@ -35,6 +40,8 @@ export const PRODUTOS_MOCK: Produto[] = [
         precoDe: 1799,
         preco: 1499,
         imagemUrl: 'assets/images/produtos/guarda-roupa-glossy-4-portas.jpg',
+        especificacao: '4 PORTAS | ACABAMENTO GLOSSY',
+        selo: 'Oferta',
     },
     {
         id: 5,
@@ -42,5 +49,6 @@ export const PRODUTOS_MOCK: Produto[] = [
         categoria: 'Quarto',
         preco: 1299,
         imagemUrl: 'assets/images/produtos/guarda-roupa-3-portas-2-gavetas.jpg',
+        especificacao: '3 PORTAS | 2 GAVETAS',
     },
 ];

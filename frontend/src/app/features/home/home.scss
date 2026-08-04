@@ -1,204 +1,425 @@
-.hero {
-    padding: 70px 0 90px;
-    background: linear-gradient(160deg, var(--color-surface) 0%, var(--color-bg) 100%);
-    text-align: center;
-}
+/* ===== Hero — capricho vai todo aqui ===== */
 
-.hero .eyebrow {
-    color: var(--color-primary);
-    font-family: var(--font-display);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-size: 14px;
-    margin-bottom: 12px;
-}
-
-.hero .titulo {
-    font-size: 34px;
-    line-height: 1.15;
-    margin-bottom: 16px;
-}
-
-.hero .subtitulo {
-    max-width: 520px;
-    margin: 0 auto 28px;
-    color: var(--color-text-muted);
-    font-size: 16px;
-}
-
-.hero .botoes {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-}
-
-.produtos-slide {
-    padding: 60px 0;
-}
-
-.produtos-slide .titulo {
-    font-size: 26px;
-    text-align: center;
-    margin-bottom: 32px;
-}
-
-.produtos-slide .slide {
+.hero-carrossel {
     position: relative;
     width: 100%;
-    max-width: 480px;
-    margin: 0 auto;
-    aspect-ratio: 4 / 3;
-    border-radius: 8px;
+    height: 70vh;
+    min-height: 420px;
+    max-height: 720px;
     overflow: hidden;
-    background-color: var(--color-surface);
+    background-color: var(--color-bg);
 }
 
-.slide-item {
+.slide {
     position: absolute;
     inset: 0;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.4s ease;
+    transition: opacity 1.1s ease;
 }
 
-.slide-item.ativo {
+.slide.ativo {
     opacity: 1;
     visibility: visible;
 }
 
-.slide-item img {
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 75%;
+    transform: scale(1.06);
+    transition: transform 6s ease-out;
+}
+
+.slide.ativo img {
+    transform: scale(1);
+}
+
+.slide .veu {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.15) 45%, rgba(0, 0, 0, 0.35) 100%);
+}
+
+.slide .conteudo {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding-bottom: 40px;
+    color: #fff;
+}
+
+.slide .selo {
+    display: inline-block;
+    padding: 5px 14px;
+    margin-bottom: 12px;
+    background-color: var(--color-primary);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: 4px;
+}
+
+.slide h1 {
+    color: #fff;
+    font-size: 30px;
+    max-width: 560px;
+    margin-bottom: 8px;
+}
+
+.slide .especificacao {
+    color: #d8d8dc;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    margin-bottom: 18px;
+}
+
+.hero-carrossel .seta {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
+    transition: background-color 0.2s;
+}
+
+.hero-carrossel .seta:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.hero-carrossel .seta.anterior {
+    left: 16px;
+}
+
+.hero-carrossel .seta.proxima {
+    right: 16px;
+}
+
+.hero-carrossel .indicadores {
+    position: absolute;
+    bottom: 18px;
+    right: 24px;
+    display: flex;
+    gap: 6px;
+    z-index: 2;
+}
+
+.hero-carrossel .indicadores button {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: 0.2s;
+}
+
+.hero-carrossel .indicadores button.ativo {
+    background-color: var(--color-primary);
+    width: 20px;
+    border-radius: 4px;
+}
+
+/* ===== Categorias — compactas, discretas ===== */
+
+.secao-categorias {
+    padding: 28px 0;
+}
+
+.secao-categorias .titulo {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.grid-categorias {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.card-categoria {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background-color: var(--color-surface);
+    overflow: hidden;
+}
+
+.card-categoria img {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.card-categoria .overlay {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.card-categoria .rotulo {
+    display: none;
+}
+
+.card-categoria h3 {
+    font-size: 13px;
+    margin: 0;
+    color: var(--color-text);
+    text-transform: none;
+    letter-spacing: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-categoria .link {
+    display: none;
+}
+
+.card-categoria:hover {
+    border-color: var(--color-primary);
+}
+
+/* ===== Institucional — minimalista ===== */
+
+.institucional {
+    padding: 32px 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.institucional .itens {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+}
+
+.institucional .item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+}
+
+.institucional .item i {
+    font-size: 18px;
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.institucional .item h3 {
+    font-size: 13px;
+    margin-bottom: 2px;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.institucional .item p {
+    color: var(--color-text-muted);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+/* ===== Catálogo ===== */
+
+.catalogo {
+    padding: 44px 0;
+}
+
+.catalogo .cabecalho {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.catalogo .cabecalho .titulo {
+    font-size: 20px;
+    text-align: center;
+}
+
+.catalogo .filtros {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+.catalogo .filtros button {
+    padding: 6px 16px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-text-muted);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.catalogo .filtros button.ativo {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+}
+
+.grid-produtos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.grid-produtos .vazio {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--color-text-muted);
+    padding: 32px 0;
+}
+
+.card-produto {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: 0.2s;
+}
+
+.card-produto:hover {
+    border-color: var(--color-primary);
+}
+
+.card-produto .imagem {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background-color: var(--color-surface-alt);
+}
+
+.card-produto .imagem img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.slide-item .info {
+.card-produto .imagem .selo {
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 20px;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 100%);
+    top: 8px;
+    left: 8px;
+    padding: 3px 9px;
+    background-color: var(--color-primary);
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 10px;
+    text-transform: uppercase;
+    border-radius: 4px;
 }
 
-.slide-item .categoria {
+.card-produto .info {
+    padding: 12px;
+}
+
+.card-produto .categoria {
     display: inline-block;
     color: var(--color-primary);
     font-family: var(--font-display);
     font-weight: 600;
     text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    margin-bottom: 4px;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    margin-bottom: 3px;
 }
 
-.slide-item h3 {
-    color: #fff;
-    font-size: 20px;
+.card-produto h3 {
+    font-size: 14px;
     margin-bottom: 6px;
+    text-transform: none;
+    letter-spacing: normal;
 }
 
-.slide-item .preco {
+.card-produto .preco {
     display: flex;
     align-items: baseline;
-    gap: 10px;
+    gap: 8px;
 }
 
-.slide-item .preco .de {
-    color: #d0d0d5;
+.card-produto .preco .de {
+    color: var(--color-text-muted);
     text-decoration: line-through;
-    font-size: 14px;
+    font-size: 12px;
 }
 
-.slide-item .preco .por {
-    color: #fff;
+.card-produto .preco .por {
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 20px;
+    font-size: 16px;
 }
 
-.seta {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.seta.anterior {
-    left: 12px;
-}
-
-.seta.proxima {
-    right: 12px;
-}
-
-.bolinhas {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 16px;
-}
-
-.bolinhas button {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: var(--color-border);
-    border: none;
-    cursor: pointer;
-    padding: 0;
-}
-
-.bolinhas button.ativa {
-    background-color: var(--color-primary);
-}
+/* ===== Quem somos / CTA — minimalista ===== */
 
 .quem-somos {
-    padding: 60px 0;
+    padding: 40px 0;
     background-color: var(--color-surface-alt);
 }
 
 .quem-somos .texto {
-    max-width: 620px;
+    max-width: 560px;
     margin: 0 auto;
     text-align: center;
 }
 
 .quem-somos .titulo {
-    font-size: 26px;
-    margin-bottom: 16px;
+    font-size: 20px;
+    margin-bottom: 12px;
 }
 
 .quem-somos p {
     color: var(--color-text-muted);
-    margin-bottom: 24px;
+    margin-bottom: 18px;
     line-height: 1.6;
+    font-size: 14px;
 }
 
 .cta {
-    padding: 60px 0;
+    padding: 40px 0;
     text-align: center;
 }
 
 .cta .titulo {
-    font-size: 26px;
-    margin-bottom: 12px;
+    font-size: 20px;
+    margin-bottom: 8px;
 }
 
 .cta p {
     color: var(--color-text-muted);
-    margin-bottom: 24px;
+    margin-bottom: 18px;
+    font-size: 14px;
 }
 
 .cta .botoes {
@@ -208,8 +429,33 @@
     gap: 12px;
 }
 
-@media only screen and (min-width: 758px) {
-    .hero .titulo {
-        font-size: 46px;
+@media only screen and (min-width: 700px) {
+    .grid-categorias {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media only screen and (min-width: 900px) {
+    .slide h1 {
+        font-size: 44px;
+    }
+
+    .institucional .itens {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .institucional .item {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .catalogo .cabecalho {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .catalogo .cabecalho .titulo {
+        text-align: left;
     }
 }

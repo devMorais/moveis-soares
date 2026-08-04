@@ -1,29 +1,100 @@
-<section class="hero">
+<section class="hero-carrossel">
+    @for (produto of destaques(); track produto.id; let i = $index) {
+        <div class="slide" [class.ativo]="i === slideAtual()">
+            <img [src]="produto.imagemUrl" [alt]="produto.nome">
+            <div class="veu"></div>
+            <div class="conteudo">
+                <div class="container">
+                    @if (produto.selo) {
+                        <span class="selo">{{ produto.selo }}</span>
+                    }
+                    <h1>{{ produto.nome }}</h1>
+                    @if (produto.especificacao) {
+                        <p class="especificacao">{{ produto.especificacao }}</p>
+                    }
+                    <a routerLink="/contato" class="btn">Consultar disponibilidade</a>
+                </div>
+            </div>
+        </div>
+    }
+    <button type="button" class="seta anterior" (click)="slideAnterior()" aria-label="Produto anterior">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    <button type="button" class="seta proxima" (click)="proximoSlide()" aria-label="Próximo produto">
+        <i class="fas fa-chevron-right"></i>
+    </button>
+    <div class="indicadores">
+        @for (produto of destaques(); track produto.id; let i = $index) {
+            <button type="button" [class.ativo]="i === slideAtual()" (click)="irParaSlide(i)" [attr.aria-label]="'Ir para ' + produto.nome"></button>
+        }
+    </div>
+</section>
+
+<section class="secao-categorias">
     <div class="container">
-        <div class="conteudo">
-            <p class="eyebrow">Móveis Soares</p>
-            <h1 class="titulo">Móveis que transformam sua casa</h1>
-            <p class="subtitulo">
-                Escritório, quarto e sala com qualidade que você vê e sente, e preço
-                justo que cabe no seu bolso.
-            </p>
-            <div class="botoes">
-                <a routerLink="/contato" class="btn">Fale com a gente</a>
-                <a [href]="'https://wa.me/' + info.phoneWhatsapp" target="_blank" rel="noopener" class="btn btn-whatsapp">
-                    <i class="fab fa-whatsapp"></i> WhatsApp
+        <h2 class="titulo">Compre por ambiente</h2>
+        <div class="grid-categorias">
+            @for (categoria of categorias; track categoria.slug) {
+                <a routerLink="/" [queryParams]="{ categoria: categoria.slug }" class="card-categoria" (click)="filtrarPorCategoria(categoria.nome)">
+                    <img [src]="categoria.imagemUrl" [alt]="categoria.nome">
+                    <div class="overlay">
+                        <span class="rotulo">Categoria</span>
+                        <h3>{{ categoria.nome }}</h3>
+                        <span class="link">Ver categoria</span>
+                    </div>
                 </a>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="institucional">
+    <div class="container">
+        <div class="itens">
+            <div class="item">
+                <i class="fas fa-truck"></i>
+                <h3>Entrega combinada com você</h3>
+                <p>Alinhamos prazo e forma de entrega direto com o cliente, sem surpresas.</p>
+            </div>
+            <div class="item">
+                <i class="fas fa-star"></i>
+                <h3>Qualidade que você vê</h3>
+                <p>Acabamento cuidadoso e materiais resistentes em cada peça do catálogo.</p>
+            </div>
+            <div class="item">
+                <i class="fas fa-comments"></i>
+                <h3>Atendimento próximo</h3>
+                <p>Tiramos suas dúvidas pelo WhatsApp antes, durante e depois da compra.</p>
             </div>
         </div>
     </div>
 </section>
 
-<section class="produtos-slide">
+<section class="catalogo">
     <div class="container">
-        <h2 class="titulo">Novidades</h2>
-        <div class="slide">
-            @for (produto of produtos(); track produto.id; let i = $index) {
-                <div class="slide-item" [class.ativo]="i === slideAtual()">
-                    <img [src]="produto.imagemUrl" [alt]="produto.nome">
+        <div class="cabecalho">
+            <h2 class="titulo">Nosso catálogo</h2>
+            <div class="filtros">
+                <button type="button" [class.ativo]="categoriaAtiva() === null" (click)="filtrarPorCategoria(null)">
+                    Todos
+                </button>
+                @for (categoria of categorias; track categoria.slug) {
+                    <button type="button" [class.ativo]="categoriaAtiva() === categoria.nome" (click)="filtrarPorCategoria(categoria.nome)">
+                        {{ categoria.nome }}
+                    </button>
+                }
+            </div>
+        </div>
+
+        <div class="grid-produtos">
+            @for (produto of produtosFiltrados(); track produto.id) {
+                <div class="card-produto">
+                    <div class="imagem">
+                        <img [src]="produto.imagemUrl" [alt]="produto.nome" loading="lazy">
+                        @if (produto.precoDe) {
+                            <span class="selo">Oferta</span>
+                        }
+                    </div>
                     <div class="info">
                         <span class="categoria">{{ produto.categoria }}</span>
                         <h3>{{ produto.nome }}</h3>
@@ -35,17 +106,8 @@
                         </div>
                     </div>
                 </div>
-            }
-            <button type="button" class="seta anterior" (click)="slideAnterior()" aria-label="Produto anterior">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button type="button" class="seta proxima" (click)="proximoSlide()" aria-label="Próximo produto">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </div>
-        <div class="bolinhas">
-            @for (produto of produtos(); track produto.id; let i = $index) {
-                <button type="button" [class.ativa]="i === slideAtual()" (click)="irParaSlide(i)" [attr.aria-label]="'Ir para ' + produto.nome"></button>
+            } @empty {
+                <p class="vazio">Nenhum produto encontrado nessa categoria.</p>
             }
         </div>
     </div>
