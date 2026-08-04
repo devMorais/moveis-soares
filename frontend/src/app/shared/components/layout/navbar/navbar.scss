@@ -16,6 +16,8 @@ header.rolado {
 }
 
 .barra {
+    position: relative;
+    z-index: 16;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -50,6 +52,8 @@ header.rolado .logo img {
 }
 
 .btn-menu {
+    position: relative;
+    z-index: 16;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -61,6 +65,7 @@ header.rolado .logo img {
     border-radius: 6px;
     cursor: pointer;
     padding: 0;
+    flex-shrink: 0;
 }
 
 .btn-menu span {
@@ -71,6 +76,11 @@ header.rolado .logo img {
     background-color: #fff;
     border-radius: 2px;
     transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+header.aberto .btn-menu {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
 }
 
 header.aberto .btn-menu span:nth-child(1) {

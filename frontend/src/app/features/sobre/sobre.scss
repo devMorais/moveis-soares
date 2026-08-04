@@ -1,20 +1,27 @@
 .topo-pagina {
+    position: relative;
     width: 100%;
-    display: block;
-    padding: 128px 0px 60px;
-    background-color: var(--color-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 340px;
+    padding: 128px 24px 60px;
+    background-image: linear-gradient(180deg, rgba(10, 10, 12, 0.55) 0%, rgba(10, 10, 12, 0.85) 100%), url("/assets/images/fundos/sobre-topo.jpg");
+    background-size: cover;
+    background-position: center;
     border-bottom: 3px solid var(--color-primary);
     text-align: center;
 }
 
 .topo-pagina .titulo {
     font-size: 32px;
+    color: #fff;
 }
 
 .topo-pagina .subtitulo {
     margin-top: 10px;
     font-size: 16px;
-    color: var(--color-text-muted);
+    color: #e2e2e6;
 }
 
 .quem-somos {
@@ -42,14 +49,18 @@
 .diferenciais {
     width: 100%;
     display: block;
-    padding: 70px 0px;
-    background-color: var(--color-surface);
+    padding: 80px 0px;
+    background-image: linear-gradient(180deg, rgba(10, 10, 12, 0.88) 0%, rgba(10, 10, 12, 0.93) 100%), url("/assets/images/fundos/sobre-diferenciais.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 .diferenciais .conteudo > .titulo {
     text-align: center;
     font-size: 28px;
     margin-bottom: 40px;
+    color: #fff;
 }
 
 .diferenciais .itens {
@@ -71,11 +82,12 @@
 .diferenciais .item .titulo {
     font-size: 17px;
     margin-bottom: 8px;
+    color: #fff;
 }
 
 .diferenciais .item p {
     font-size: 14px;
-    color: var(--color-text-muted);
+    color: #c9c9cf;
 }
 
 .cta {
