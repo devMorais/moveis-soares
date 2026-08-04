@@ -1,0 +1,83 @@
+<section class="hero">
+    <div class="container">
+        <div class="conteudo">
+            <p class="eyebrow">Móveis Soares</p>
+            <h1 class="titulo">Móveis que transformam sua casa</h1>
+            <p class="subtitulo">
+                Escritório, quarto e sala com qualidade que você vê e sente, e preço
+                justo que cabe no seu bolso.
+            </p>
+            <div class="botoes">
+                <a routerLink="/contato" class="btn">Fale com a gente</a>
+                <a [href]="'https://wa.me/' + info.phoneWhatsapp" target="_blank" rel="noopener" class="btn btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="produtos-slide">
+    <div class="container">
+        <h2 class="titulo">Novidades</h2>
+        <div class="slide">
+            @for (produto of produtos(); track produto.id; let i = $index) {
+                <div class="slide-item" [class.ativo]="i === slideAtual()">
+                    <img [src]="produto.imagemUrl" [alt]="produto.nome">
+                    <div class="info">
+                        <span class="categoria">{{ produto.categoria }}</span>
+                        <h3>{{ produto.nome }}</h3>
+                        <div class="preco">
+                            @if (produto.precoDe) {
+                                <span class="de">R$ {{ produto.precoDe }}</span>
+                            }
+                            <span class="por">R$ {{ produto.preco }}</span>
+                        </div>
+                    </div>
+                </div>
+            }
+            <button type="button" class="seta anterior" (click)="slideAnterior()" aria-label="Produto anterior">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button type="button" class="seta proxima" (click)="proximoSlide()" aria-label="Próximo produto">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+        <div class="bolinhas">
+            @for (produto of produtos(); track produto.id; let i = $index) {
+                <button type="button" [class.ativa]="i === slideAtual()" (click)="irParaSlide(i)" [attr.aria-label]="'Ir para ' + produto.nome"></button>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="quem-somos">
+    <div class="container">
+        <div class="conteudo">
+            <div class="texto">
+                <h2 class="titulo">Quem somos</h2>
+                <p>
+                    A {{ info.businessName }} monta cada ambiente da sua casa com móveis de
+                    qualidade e acabamento pensado pra durar — do escritório à sala, do
+                    quarto à cozinha.
+                </p>
+                <a routerLink="/sobre" class="btn">Conheça nossa história</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="container">
+        <div class="conteudo">
+            <h2 class="titulo">Pronto pra renovar sua casa?</h2>
+            <p>Fale agora com a nossa equipe e tire suas dúvidas sobre entrega e formas de pagamento.</p>
+            <div class="botoes">
+                <a routerLink="/contato" class="btn">Fale Conosco</a>
+                <a [href]="'https://wa.me/' + info.phoneWhatsapp" target="_blank" rel="noopener" class="btn btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i> Chamar no WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

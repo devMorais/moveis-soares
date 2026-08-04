@@ -1,0 +1,131 @@
+.topo-pagina {
+    width: 100%;
+    display: block;
+    padding: 60px 0px;
+    background-color: var(--color-surface);
+    border-bottom: 3px solid var(--color-primary);
+    text-align: center;
+}
+
+.topo-pagina .titulo {
+    font-size: 32px;
+}
+
+.topo-pagina .subtitulo {
+    margin-top: 10px;
+    font-size: 16px;
+    color: var(--color-text-muted);
+}
+
+.contato {
+    width: 100%;
+    display: block;
+    padding: 70px 0px;
+}
+
+.contato .conteudo {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+}
+
+.contato .informacoes .titulo,
+.contato .formulario .titulo {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.contato .informacoes p {
+    margin-bottom: 15px;
+    color: var(--color-text-muted);
+}
+
+.contato .informacoes p i {
+    width: 20px;
+    margin-right: 10px;
+    color: var(--color-primary);
+    text-align: center;
+}
+
+.contato .informacoes .btn-whatsapp {
+    margin: 10px 0px 0px;
+}
+
+.contato form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.contato .campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.contato .campo label {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.contato .campo input,
+.contato .campo textarea {
+    padding: 12px 14px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    resize: vertical;
+}
+
+.contato .campo input:focus,
+.contato .campo textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.contato .campo.honeypot {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+}
+
+.contato button.btn {
+    border: none;
+}
+
+.contato button.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.contato .alerta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.contato .alerta.sucesso {
+    background-color: rgba(37, 211, 102, 0.15);
+    border: 1px solid #25d366;
+    color: #25d366;
+}
+
+.contato .alerta.erro {
+    background-color: rgba(220, 53, 69, 0.15);
+    border: 1px solid #dc3545;
+    color: #dc3545;
+}
+
+@media only screen and (min-width: 900px) {
+    .contato .conteudo {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    }
+}

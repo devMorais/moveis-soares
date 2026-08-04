@@ -1,0 +1,56 @@
+<footer>
+    <div class="container">
+        <div class="conteudo">
+            <div class="coluna sobre">
+                <img [src]="info.logoUrl" [alt]="info.businessName" class="logo">
+                <p>
+                    Móveis de qualidade para escritório, quarto e sala, com preço justo
+                    e atendimento que cuida de cada detalhe da sua casa.
+                </p>
+                <div class="redes-sociais">
+                    @if (info.facebookUrl) {
+                        <a [href]="info.facebookUrl" target="_blank" rel="noopener" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    }
+                    @if (info.instagramUrl) {
+                        <a [href]="info.instagramUrl" target="_blank" rel="noopener" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="coluna links">
+                <h4 class="titulo">Navegação</h4>
+                <nav>
+                    <a routerLink="/">Home</a>
+                    <a routerLink="/sobre">Sobre</a>
+                    <a routerLink="/contato">Fale Conosco</a>
+                </nav>
+            </div>
+            <div class="coluna contato">
+                <h4 class="titulo">Contato</h4>
+                <p>
+                    <i class="fas fa-location-dot"></i>
+                    {{ info.address }}
+                </p>
+                <p>
+                    <i class="fas fa-mobile-screen-button"></i>
+                    <a [href]="'tel:+' + info.phoneWhatsapp">{{ info.phoneDisplay }}</a>
+                </p>
+                <p>
+                    <i class="far fa-envelope"></i>
+                    <a [href]="'mailto:' + info.email">{{ info.email }}</a>
+                </p>
+                <p>
+                    <i class="far fa-clock"></i>
+                    {{ info.hours }}
+                </p>
+            </div>
+        </div>
+        <div class="rodape-final">
+            <p>&copy; {{ ano }} {{ info.businessName }}. Todos os direitos reservados.</p>
+            <p class="creditos">Site desenvolvido por Dolen</p>
+        </div>
+    </div>
+</footer>

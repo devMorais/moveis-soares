@@ -1,0 +1,102 @@
+.topo-pagina {
+    width: 100%;
+    display: block;
+    padding: 60px 0px;
+    background-color: var(--color-surface);
+    border-bottom: 3px solid var(--color-primary);
+    text-align: center;
+}
+
+.topo-pagina .titulo {
+    font-size: 32px;
+}
+
+.topo-pagina .subtitulo {
+    margin-top: 10px;
+    font-size: 16px;
+    color: var(--color-text-muted);
+}
+
+.quem-somos {
+    width: 100%;
+    display: block;
+    padding: 70px 0px;
+}
+
+.quem-somos .conteudo {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.quem-somos .texto .titulo {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.quem-somos .texto p {
+    margin-bottom: 15px;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+}
+
+.diferenciais {
+    width: 100%;
+    display: block;
+    padding: 70px 0px;
+    background-color: var(--color-surface);
+}
+
+.diferenciais .conteudo > .titulo {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 40px;
+}
+
+.diferenciais .itens {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;
+}
+
+.diferenciais .item {
+    text-align: center;
+}
+
+.diferenciais .item i {
+    font-size: 36px;
+    color: var(--color-primary);
+    margin-bottom: 15px;
+}
+
+.diferenciais .item .titulo {
+    font-size: 17px;
+    margin-bottom: 8px;
+}
+
+.diferenciais .item p {
+    font-size: 14px;
+    color: var(--color-text-muted);
+}
+
+.cta {
+    width: 100%;
+    display: block;
+    padding: 70px 0px;
+    background: linear-gradient(135deg, var(--color-primary), color-mix(in srgb, var(--color-primary) 55%, black));
+    text-align: center;
+}
+
+.cta .titulo {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.cta p {
+    margin-bottom: 25px;
+    color: #fff;
+}
+
+.cta .btn {
+    background-color: var(--color-bg);
+}

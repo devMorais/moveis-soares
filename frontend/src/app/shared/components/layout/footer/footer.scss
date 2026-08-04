@@ -1,0 +1,109 @@
+footer {
+    width: 100%;
+    display: block;
+    padding: 60px 0px 0px;
+    background-color: var(--color-surface-alt);
+}
+
+footer .conteudo {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 35px;
+    padding-bottom: 40px;
+}
+
+footer .coluna .logo {
+    max-width: 150px;
+    margin-bottom: 15px;
+}
+
+footer .coluna.sobre p {
+    margin-bottom: 15px;
+    color: var(--color-text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+footer .coluna .titulo {
+    margin-bottom: 18px;
+    font-size: 16px;
+}
+
+footer .coluna nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+footer .coluna nav a {
+    font-size: 14px;
+    color: var(--color-text-muted);
+}
+
+footer .coluna nav a:hover {
+    color: var(--color-primary);
+}
+
+footer .coluna.contato p {
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: var(--color-text-muted);
+}
+
+footer .coluna.contato p i {
+    width: 16px;
+    margin-right: 8px;
+    color: var(--color-primary);
+}
+
+footer .coluna.contato a {
+    color: var(--color-text-muted);
+}
+
+footer .coluna.contato a:hover {
+    color: var(--color-primary);
+}
+
+footer .redes-sociais {
+    display: flex;
+    gap: 12px;
+    margin-top: 5px;
+}
+
+footer .redes-sociais a {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-border);
+    border-radius: 50%;
+    color: var(--color-text);
+}
+
+footer .redes-sociais a:hover {
+    background-color: var(--color-primary);
+}
+
+footer .rodape-final {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 20px 0px;
+    border-top: 1px solid var(--color-border);
+    font-size: 13px;
+    color: var(--color-text-muted);
+}
+
+@media only screen and (min-width: 700px) {
+    footer .conteudo {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media only screen and (min-width: 1100px) {
+    footer .conteudo {
+        grid-template-columns: 2fr 1fr 1.3fr;
+    }
+}

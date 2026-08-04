@@ -1,0 +1,45 @@
+<header>
+    <div class="container">
+        <div class="conteudo">
+            <div class="topo">
+                <div class="redes-sociais">
+                    @if (info.facebookUrl) {
+                        <a [href]="info.facebookUrl" target="_blank" rel="noopener" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    }
+                    @if (info.instagramUrl) {
+                        <a [href]="info.instagramUrl" target="_blank" rel="noopener" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    }
+                </div>
+                <div class="contatos">
+                    <a [href]="'tel:+' + info.phoneWhatsapp">
+                        <i class="fas fa-mobile-screen-button"></i>
+                        {{ info.phoneDisplay }}
+                    </a>
+                    <a [href]="'mailto:' + info.email">
+                        <i class="far fa-envelope"></i>
+                        {{ info.email }}
+                    </a>
+                </div>
+            </div>
+            <div class="logo">
+                <a routerLink="/">
+                    <img [src]="info.logoUrl" [alt]="info.businessName">
+                </a>
+            </div>
+            <div class="menu" [class.active]="menuAberto()">
+                <nav>
+                    <a routerLink="/" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharMenu()">Home</a>
+                    <a routerLink="/sobre" routerLinkActive="ativo" (click)="fecharMenu()">Sobre</a>
+                    <a routerLink="/contato" routerLinkActive="ativo" (click)="fecharMenu()">Fale Conosco</a>
+                </nav>
+                <a href="javascript:void(0)" class="btn-nav" (click)="toggleMenu()">
+                    <i class="fas" [class.fa-bars-staggered]="!menuAberto()" [class.fa-xmark]="menuAberto()"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>

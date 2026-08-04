@@ -1,1 +1,121 @@
-/* You can add global styles to this file, and also import other style files */
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+
+@font-face {
+    font-family: "Inter";
+    src: url("/assets/fonts/inter-latin-variable.woff2") format("woff2");
+    font-weight: 400 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Oswald";
+    src: url("/assets/fonts/oswald-latin-variable.woff2") format("woff2");
+    font-weight: 500 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Identidade Móveis Soares — vermelho de marca sobre chumbo escuro. */
+    --color-primary: #e63329;
+    --color-primary-dark: #b8281f;
+
+    --color-bg: #1a1a1d;
+    --color-surface: #232326;
+    --color-surface-alt: #141416;
+    --color-text: #ffffff;
+    --color-text-muted: #b3b3b8;
+    --color-border: #33333a;
+
+    --font-display: "Oswald", sans-serif;
+    --font-body: "Inter", sans-serif;
+}
+
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    line-height: 1.4;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 16px;
+}
+
+a {
+    color: inherit;
+    font-family: var(--font-body);
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+.container {
+    width: 100%;
+    max-width: 1280px;
+    padding: 0 24px;
+    display: block;
+    margin: 0 auto;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: max-content;
+    padding: 14px 28px;
+    background-color: var(--color-primary);
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.btn:hover {
+    filter: brightness(1.12);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--color-text);
+    border: 2px solid var(--color-text);
+}
+
+.btn-whatsapp {
+    background-color: #25d366;
+}

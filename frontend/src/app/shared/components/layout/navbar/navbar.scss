@@ -1,0 +1,207 @@
+header {
+    width: 100%;
+    display: block;
+    position: relative;
+    z-index: 10;
+    background-color: var(--color-surface-alt);
+    border-bottom: 1px solid var(--color-border);
+}
+
+header .conteudo {
+    width: 100%;
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .conteudo .topo {
+    width: 100%;
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0px;
+}
+
+header .conteudo .topo .redes-sociais {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+header .conteudo .topo .redes-sociais a {
+    width: max-content;
+    display: block;
+    margin: 0px 12px;
+    color: var(--color-primary);
+}
+
+header .conteudo .topo .redes-sociais a i {
+    font-size: 22px;
+}
+
+header .conteudo .topo .contatos {
+    width: 100%;
+    display: inline-flex;
+    margin-top: 12px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+header .conteudo .topo .contatos a {
+    margin: 5px 0px;
+    color: var(--color-text-muted);
+    font-size: 14px;
+}
+
+header .conteudo .topo .contatos a i {
+    margin-right: 10px;
+    color: var(--color-primary);
+}
+
+header .conteudo .logo {
+    width: max-content;
+    max-width: 160px;
+    display: block;
+    margin: 16px 0;
+}
+
+header .conteudo .logo a {
+    display: block;
+    margin: 0 auto;
+    width: max-content;
+}
+
+header .conteudo .menu {
+    width: max-content;
+    display: block;
+}
+
+header .conteudo .menu nav {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--color-primary);
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 50px 25px;
+    position: fixed;
+    top: 0;
+    left: -100vw;
+    transition: 0.35s;
+}
+
+header .conteudo .menu.active nav {
+    left: 0;
+}
+
+header .conteudo .menu nav a {
+    padding: 17px 0px;
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+header .conteudo .menu nav a.ativo {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+header .conteudo .menu a i {
+    font-size: 40px;
+    color: #fff;
+}
+
+header .conteudo .menu.active a.btn-nav {
+    position: absolute;
+    z-index: 1;
+    transform: translateY(-170px) translateX(-40px);
+    transition: 0.35s;
+}
+
+@media only screen and (min-width: 758px) {
+    header .conteudo .topo .redes-sociais {
+        width: max-content;
+    }
+
+    header .conteudo .topo .redes-sociais a:first-child {
+        margin-left: 0px;
+    }
+
+    header .conteudo .topo .redes-sociais a:last-child {
+        margin-right: 0px;
+    }
+
+    header .conteudo .topo .redes-sociais a i {
+        font-size: 16px;
+    }
+
+    header .conteudo .topo .contatos {
+        flex-direction: row;
+        width: max-content;
+    }
+
+    header .conteudo .topo .contatos a {
+        margin: 0 35px 0 0;
+    }
+
+    header .conteudo .topo .contatos a:last-child {
+        margin: 0;
+    }
+}
+
+@media only screen and (min-width: 1160px) {
+    header .conteudo .logo {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    header .conteudo .menu {
+        width: 100%;
+    }
+
+    header .conteudo .menu nav {
+        max-width: 1000px;
+        height: auto;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+        margin: 0 auto;
+        padding: 0px 13px;
+        position: relative;
+        top: initial;
+        left: initial;
+    }
+
+    header .conteudo .menu nav::before {
+        width: 75px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: -75px;
+        content: " ";
+        background: linear-gradient(36deg, rgba(0, 0, 0, 0) 50%, var(--color-primary) 50%);
+    }
+
+    header .conteudo .menu nav::after {
+        width: 75px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right: -75px;
+        content: " ";
+        background: linear-gradient(-36deg, rgba(0, 0, 0, 0) 50%, var(--color-primary) 50%);
+    }
+
+    header .conteudo .menu a.btn-nav {
+        display: none;
+    }
+}
