@@ -1,0 +1,25 @@
+<div class="upload-imagem">
+  <label class="upload-imagem__campo">
+    <input
+      type="file"
+      accept="image/*"
+      (change)="aoSelecionarArquivo($event)"
+      [disabled]="enviando()"
+    />
+    <span>{{ enviando() ? 'Enviando...' : 'Selecionar imagem' }}</span>
+  </label>
+
+  @if (preview()) {
+    <img class="upload-imagem__preview" [src]="preview()" alt="Pré-visualização da imagem" />
+  }
+
+  @if (enviando()) {
+    <div class="upload-imagem__progresso">
+      <div class="upload-imagem__barra" [style.width.%]="progresso()"></div>
+    </div>
+  }
+
+  @if (erro()) {
+    <p class="upload-imagem__erro">{{ erro() }}</p>
+  }
+</div>
