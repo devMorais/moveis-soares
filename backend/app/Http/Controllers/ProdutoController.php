@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Services\Exceptions\ImagemInvalidaException;
 use App\Services\ImagemService;
+use App\Models\Categoria;
+use App\Models\Produto;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -13,6 +15,45 @@ class ProdutoController extends Controller
     public function __construct(
         private readonly ImagemService $imagemService
     ) {
+    }
+
+    /**
+     * Lista todos os produtos, com a categoria carregada junto (evita N+1).
+     */
+    public function index(): JsonResponse
+    {
+        $produtos = Produto::with('categoria')
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(fn (Produto $produto) => $produto->paraApi());
+
+        return response()->json($produtos);
+    }
+
+    /**
+     * Lista produtos de uma categoria especifica, pelo slug da categoria.
+     */
+    public function porCategoria(string $slug): JsonResponse
+    {
+        $categoria = Categoria::where('slug', $slug)->firstOrFail();
+
+        $produtos = $categoria->produtos()
+            ->with('categoria')
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(fn (Produto $produto) => $produto->paraApi());
+
+        return response()->json($produtos);
+    }
+
+    /**
+     * Retorna um unico produto pelo slug (para pagina de detalhe futura).
+     */
+    public function porSlug(string $slug): JsonResponse
+    {
+        $produto = Produto::with('categoria')->where('slug', $slug)->firstOrFail();
+
+        return response()->json($produto->paraApi());
     }
 
     /**
