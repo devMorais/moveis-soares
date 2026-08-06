@@ -56,3 +56,35 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Upload de imagens (Moveis Soares)
+
+Todo upload de imagem (produto, categoria, conteudo institucional) deve
+passar pelo `App\Services\ImagemService::processar()`. Ele:
+
+- Valida o tipo do arquivo (aceita apenas JPEG, PNG ou WebP) e o tamanho
+  maximo do arquivo original (8MB), lancando `ImagemInvalidaException`
+  quando invalido (o Controller deve capturar e responder 422).
+- Converte a imagem para o formato WebP.
+- Redimensiona/corta para um quadrado fixo de 800x800px, mantendo o
+  objeto centralizado.
+- Comprime com qualidade balanceada (80%).
+- Salva no disco `public`, em `storage/app/public/produtos/{uuid}.webp`.
+
+**Nenhum Controller deve chamar `$request->file(...)->store(...)`
+diretamente.** Sempre injete e use o `ImagemService`:
+
+```php
+public function store(Request $request, ImagemService $imagemService)
+{
+    $request->validate(['imagem' => 'required|file']);
+
+    try {
+        $caminho = $imagemService->processar($request->file('imagem'));
+    } catch (ImagemInvalidaException $e) {
+        return response()->json(['message' => $e->getMessage()], 422);
+    }
+
+    // ...
+}
+```
