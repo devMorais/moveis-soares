@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { UploadImagem } from '../../../../shared/components/upload-imagem/upload-imagem';
+import { environment } from '../../../../../environments/environment';
 
 interface Categoria {
   valor: string;
@@ -16,6 +17,8 @@ interface Categoria {
 })
 export class NovoProduto {
   private fb = new FormBuilder();
+
+  readonly uploadEndpoint = `${environment.apiUrl}/produtos/upload-imagem`;
 
   categorias: Categoria[] = [
     { valor: 'sala_estar', rotulo: 'Sala de Estar' },

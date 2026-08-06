@@ -40,7 +40,7 @@
     <div class="campo">
       <label>Imagem do produto</label>
       <app-upload-imagem
-        endpoint="/api/produtos/upload-imagem"
+        endpoint="{{ uploadEndpoint }}"
         (uploadConcluido)="aoConcluirUpload($event)"
       />
       @if (imagemUrl()) {
