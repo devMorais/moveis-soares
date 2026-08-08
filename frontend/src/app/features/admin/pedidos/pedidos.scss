@@ -47,6 +47,22 @@
     overflow: hidden;
 }
 
+.pedido-card--frete-combinar {
+    border-color: var(--admin-primary);
+}
+
+.badge-frete-combinar {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    background-color: rgba(230, 51, 41, 0.1);
+    color: var(--admin-primary);
+}
+
 .pedido-card__cabecalho {
     display: flex;
     align-items: center;

@@ -21,13 +21,18 @@
     } @else {
         <div class="lista-pedidos">
             @for (pedido of pedidos(); track pedido.id) {
-                <div class="pedido-card">
+                <div class="pedido-card" [class.pedido-card--frete-combinar]="pedido.freteACombinar">
                     <div class="pedido-card__cabecalho" (click)="alternarDetalhe(pedido)">
                         <div class="pedido-card__info">
                             <strong>#{{ pedido.id }} — {{ pedido.nomeCliente }}</strong>
                             <span>{{ pedido.telefoneCliente }} · {{ pedido.cidade }}</span>
                         </div>
                         <div class="pedido-card__resumo">
+                            @if (pedido.freteACombinar) {
+                                <span class="badge-frete-combinar">
+                                    <i class="fas fa-triangle-exclamation"></i> Frete a combinar
+                                </span>
+                            }
                             <span class="badge-status" [attr.data-status]="pedido.status">
                                 {{ rotuloStatus(pedido.status) }}
                             </span>
