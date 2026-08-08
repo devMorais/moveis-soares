@@ -14,5 +14,10 @@ class DatabaseSeeder extends Seeder
         $this->call(AdminUserSeeder::class);
         $this->call(CategoriaSeeder::class);
         $this->call(ProdutoSeeder::class);
+        $this->call(CidadeEntregaSeeder::class);
+
+        if (! app()->isProduction()) {
+            $this->call(PedidoDemoSeeder::class);
+        }
     }
 }

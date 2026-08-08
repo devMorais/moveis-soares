@@ -15,7 +15,12 @@ class Produto extends Model
         'preco',
         'preco_de',
         'imagem_url',
+        'imagens',
         'especificacao',
+        'descricao',
+        'altura_cm',
+        'largura_cm',
+        'profundidade_cm',
         'selo',
         'estoque',
         'ativo',
@@ -25,6 +30,7 @@ class Produto extends Model
         'preco' => 'decimal:2',
         'preco_de' => 'decimal:2',
         'ativo' => 'boolean',
+        'imagens' => 'array',
     ];
 
     public function categoria(): BelongsTo
@@ -52,7 +58,12 @@ class Produto extends Model
             'precoDe' => $this->preco_de !== null ? (float) $this->preco_de : null,
             'preco' => (float) $this->preco,
             'imagemUrl' => $this->imagem_url,
+            'imagens' => $this->imagens,
             'especificacao' => $this->especificacao,
+            'descricao' => $this->descricao,
+            'alturaCm' => $this->altura_cm,
+            'larguraCm' => $this->largura_cm,
+            'profundidadeCm' => $this->profundidade_cm,
             'selo' => $this->selo,
             'estoque' => $this->estoque,
         ];
