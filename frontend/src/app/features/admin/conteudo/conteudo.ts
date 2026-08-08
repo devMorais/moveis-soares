@@ -7,10 +7,9 @@ import { ToastService } from '../../../core/services/toast.service';
 import { UploadImagem } from '../../../shared/components/upload-imagem/upload-imagem';
 import { environment } from '../../../../environments/environment';
 
-type Aba = 'hero' | 'sobre' | 'contato';
+type Aba = 'sobre' | 'contato';
 
 const NOMES_ABA: Record<Aba, string> = {
-    hero: 'Início',
     sobre: 'Sobre',
     contato: 'Contato',
 };
@@ -31,19 +30,14 @@ export class Conteudo implements OnInit {
 
     uploadEndpoint = `${environment.apiUrl}/produtos/upload-imagem`;
     nomesAba = NOMES_ABA;
-    abasDisponiveis: Aba[] = ['hero', 'sobre', 'contato'];
+    abasDisponiveis: Aba[] = ['sobre', 'contato'];
 
-    abaAtiva = signal<Aba>('hero');
+    abaAtiva = signal<Aba>('sobre');
     salvando = signal(false);
     secoes = signal<SecaoVisibilidade[]>([]);
     salvandoVisibilidade = signal(false);
 
     secaoAtual = computed(() => this.secoes().find((s) => s.chave === this.abaAtiva()));
-
-    formHero = this.fb.nonNullable.group({
-        titulo: [''],
-        subtitulo: [''],
-    });
 
     formSobre = this.fb.nonNullable.group({
         titulo_historia: [''],
@@ -65,7 +59,6 @@ export class Conteudo implements OnInit {
             this.abaAtiva.set(abaUrl);
         }
 
-        this.conteudoService.buscar('hero').subscribe((dados) => this.formHero.patchValue(dados ?? {}));
         this.conteudoService.buscar('sobre').subscribe((dados) => this.formSobre.patchValue(dados ?? {}));
         this.conteudoService.buscar('contato').subscribe((dados) => this.formContato.patchValue(dados ?? {}));
         this.secoesService.listar().subscribe((secoes) => this.secoes.set(secoes));
@@ -104,7 +97,7 @@ export class Conteudo implements OnInit {
 
     salvar(): void {
         const aba = this.abaAtiva();
-        const form = aba === 'hero' ? this.formHero : aba === 'sobre' ? this.formSobre : this.formContato;
+        const form = aba === 'sobre' ? this.formSobre : this.formContato;
 
         this.salvando.set(true);
 

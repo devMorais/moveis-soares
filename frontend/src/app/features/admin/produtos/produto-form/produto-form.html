@@ -83,7 +83,7 @@
                     <div class="galeria-preview">
                         @for (url of imagens(); track url; let i = $index) {
                             <div class="galeria-preview__item" [class.galeria-preview__item--principal]="i === 0">
-                                <img [src]="url" alt="Foto do produto" />
+                                <img [src]="url" alt="Foto do produto" (click)="lightbox.abrir(url)" />
                                 @if (i === 0) {
                                     <span class="galeria-preview__badge">Principal</span>
                                 } @else {

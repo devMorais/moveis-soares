@@ -4,6 +4,26 @@
         Ajustes de SEO que afetam como o site aparece no Google e nas redes sociais.
     </p>
 
+    <form [formGroup]="formNotificacoes" (ngSubmit)="salvarNotificacoes()" class="form-seo">
+        <div class="secao">
+            <h2>Notificações do formulário "Fale Conosco"</h2>
+            <p class="secao__ajuda">
+                Para onde as mensagens enviadas pelo formulário de contato do site são encaminhadas.
+            </p>
+            <div class="campo">
+                <label for="notificacao_email">E-mail para receber leads</label>
+                <input type="email" id="notificacao_email" formControlName="notificacao_email" placeholder="contato@moveissoares.com.br">
+            </div>
+            <div class="campo">
+                <label for="notificacao_whatsapp">WhatsApp para receber leads (só números, com DDI)</label>
+                <input type="text" id="notificacao_whatsapp" formControlName="notificacao_whatsapp" placeholder="5561999999999">
+            </div>
+            <button type="submit" class="btn-salvar" [disabled]="salvandoNotificacoes()">
+                {{ salvandoNotificacoes() ? 'Salvando...' : 'Salvar notificações' }}
+            </button>
+        </div>
+    </form>
+
     @if (carregando()) {
         <p>Carregando...</p>
     } @else {

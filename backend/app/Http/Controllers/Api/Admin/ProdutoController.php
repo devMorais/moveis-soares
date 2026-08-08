@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PedidoItem;
 use App\Models\Produto;
+use App\Suporte\Helpers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -51,11 +53,41 @@ class ProdutoController extends Controller
         return response()->json($produto->fresh('categoria')->paraApi());
     }
 
+    public function atualizarStatus(int $id, Request $request): JsonResponse
+    {
+        $dados = $request->validate([
+            'ativo' => ['required', 'boolean'],
+        ]);
+
+        $produto = Produto::findOrFail($id);
+        $produto->update($dados);
+
+        return response()->json($produto->fresh('categoria')->paraApi());
+    }
+
+    /**
+     * So permite excluir de verdade um produto que nunca apareceu em
+     * nenhum pedido - pedido_itens guarda um snapshot (nome/preco), entao
+     * o pedido nao quebraria, mas apagar o produto original perde
+     * rastreabilidade. Nesses casos o admin deve usar update() com
+     * ativo=false (desativar) em vez de excluir.
+     */
     public function destroy(int $id): JsonResponse
     {
-        Produto::findOrFail($id)->delete();
+        $produto = Produto::findOrFail($id);
 
-        return response()->json(['message' => 'Produto removido.']);
+        $temHistorico = PedidoItem::where('produto_id', $produto->id)->exists();
+
+        if ($temHistorico) {
+            return response()->json(
+                Helpers::mensagemErro('Este produto já aparece em pedidos e não pode ser excluído. Desative-o para escondê-lo do site.'),
+                422
+            );
+        }
+
+        $produto->delete();
+
+        return response()->json(Helpers::mensagemSucesso('Produto removido.'));
     }
 
     private function validarDados(Request $request): array

@@ -26,10 +26,21 @@ export interface DadosConfiguracaoSeo {
     seo_indexar_site?: boolean;
 }
 
+export interface ConfiguracaoNotificacoes {
+    notificacaoEmail: string | null;
+    notificacaoWhatsapp: string | null;
+}
+
+export interface DadosConfiguracaoNotificacoes {
+    notificacao_email?: string | null;
+    notificacao_whatsapp?: string | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ConfiguracaoSeoAdminService {
     private http = inject(HttpClient);
     private baseUrl = `${environment.apiUrl}/admin/configuracoes/seo`;
+    private baseUrlNotificacoes = `${environment.apiUrl}/admin/configuracoes/notificacoes`;
 
     mostrar() {
         return this.http.get<ConfiguracaoSeo>(this.baseUrl);
@@ -37,5 +48,13 @@ export class ConfiguracaoSeoAdminService {
 
     atualizar(dados: DadosConfiguracaoSeo) {
         return this.http.put<ConfiguracaoSeo>(this.baseUrl, dados);
+    }
+
+    mostrarNotificacoes() {
+        return this.http.get<ConfiguracaoNotificacoes>(this.baseUrlNotificacoes);
+    }
+
+    atualizarNotificacoes(dados: DadosConfiguracaoNotificacoes) {
+        return this.http.put<ConfiguracaoNotificacoes>(this.baseUrlNotificacoes, dados);
     }
 }

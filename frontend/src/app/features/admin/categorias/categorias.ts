@@ -92,10 +92,7 @@ export class Categorias implements OnInit {
                 this.toast.sucesso('Categoria removida.');
                 this.carregar();
             },
-            error: (erro) => {
-                const mensagem = erro?.error?.message ?? 'Não foi possível remover a categoria.';
-                this.toast.erro(mensagem);
-            },
+            error: () => {}, // authInterceptor ja mostra o toast de erro
         });
     }
 }

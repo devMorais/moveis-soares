@@ -34,22 +34,6 @@
         </div>
     }
 
-    @if (abaAtiva() === 'hero') {
-        <form [formGroup]="formHero" (ngSubmit)="salvar()" class="form-secao">
-            <div class="campo">
-                <label for="hero-titulo">Título</label>
-                <input type="text" id="hero-titulo" formControlName="titulo">
-            </div>
-            <div class="campo">
-                <label for="hero-subtitulo">Subtítulo</label>
-                <input type="text" id="hero-subtitulo" formControlName="subtitulo">
-            </div>
-            <button type="submit" class="btn-salvar" [disabled]="salvando()">
-                {{ salvando() ? 'Salvando...' : 'Salvar' }}
-            </button>
-        </form>
-    }
-
     @if (abaAtiva() === 'sobre') {
         <form [formGroup]="formSobre" (ngSubmit)="salvar()" class="form-secao">
             <div class="campo">

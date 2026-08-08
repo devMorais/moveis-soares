@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CidadeEntrega;
+use App\Suporte\Helpers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -37,7 +38,7 @@ class CidadeEntregaController extends Controller
     {
         CidadeEntrega::findOrFail($id)->delete();
 
-        return response()->json(['message' => 'Cidade removida.']);
+        return response()->json(Helpers::mensagemSucesso('Cidade removida.'));
     }
 
     private function validarDados(Request $request): array

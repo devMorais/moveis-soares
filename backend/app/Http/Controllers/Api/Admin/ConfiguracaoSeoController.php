@@ -48,4 +48,30 @@ class ConfiguracaoSeoController extends Controller
             'indexarSite' => $config->seo_indexar_site,
         ];
     }
+
+    public function mostrarNotificacoes(): JsonResponse
+    {
+        return response()->json($this->notificacoesParaApi(ConfiguracaoSite::instancia()));
+    }
+
+    public function atualizarNotificacoes(Request $request): JsonResponse
+    {
+        $dados = $request->validate([
+            'notificacao_email' => ['nullable', 'email', 'max:255'],
+            'notificacao_whatsapp' => ['nullable', 'string', 'max:20'],
+        ]);
+
+        $config = ConfiguracaoSite::instancia();
+        $config->update($dados);
+
+        return response()->json($this->notificacoesParaApi($config->fresh()));
+    }
+
+    private function notificacoesParaApi(ConfiguracaoSite $config): array
+    {
+        return [
+            'notificacaoEmail' => $config->notificacao_email,
+            'notificacaoWhatsapp' => $config->notificacao_whatsapp,
+        ];
+    }
 }

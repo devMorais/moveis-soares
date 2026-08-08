@@ -7,6 +7,7 @@ import { ToastService } from '../../../../core/services/toast.service';
 import { environment } from '../../../../../environments/environment';
 import { CategoriaAdmin } from '../../../../core/types/categoria/categoria-admin.type';
 import { UploadImagem } from '../../../../shared/components/upload-imagem/upload-imagem';
+import { LightboxService } from '../../../../shared/components/lightbox/lightbox.service';
 
 @Component({
     selector: 'app-produto-form',
@@ -21,6 +22,7 @@ export class ProdutoForm implements OnInit {
     private toast = inject(ToastService);
     private route = inject(ActivatedRoute);
     private router = inject(Router);
+    lightbox = inject(LightboxService);
 
     readonly uploadEndpoint = `${environment.apiUrl}/produtos/upload-imagem`;
 

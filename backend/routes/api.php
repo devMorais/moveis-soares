@@ -67,8 +67,11 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::get('/produtos/{id}', [AdminProdutoController::class, 'mostrar']);
     Route::post('/produtos', [AdminProdutoController::class, 'store']);
     Route::put('/produtos/{id}', [AdminProdutoController::class, 'update']);
+    Route::patch('/produtos/{id}/status', [AdminProdutoController::class, 'atualizarStatus']);
     Route::delete('/produtos/{id}', [AdminProdutoController::class, 'destroy']);
 
     Route::get('/configuracoes/seo', [ConfiguracaoSeoController::class, 'mostrar']);
     Route::put('/configuracoes/seo', [ConfiguracaoSeoController::class, 'atualizar']);
+    Route::get('/configuracoes/notificacoes', [ConfiguracaoSeoController::class, 'mostrarNotificacoes']);
+    Route::put('/configuracoes/notificacoes', [ConfiguracaoSeoController::class, 'atualizarNotificacoes']);
 });

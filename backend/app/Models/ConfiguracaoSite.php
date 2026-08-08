@@ -19,6 +19,8 @@ class ConfiguracaoSite extends Model
         'seo_google_analytics_id',
         'seo_google_search_console_tag',
         'seo_indexar_site',
+        'notificacao_email',
+        'notificacao_whatsapp',
     ];
 
     protected $casts = [

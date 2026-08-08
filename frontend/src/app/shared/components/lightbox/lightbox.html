@@ -1,0 +1,8 @@
+@if (lightbox.imagemAtual(); as url) {
+    <div class="lightbox-fundo" (click)="lightbox.fechar()">
+        <button type="button" class="lightbox-fechar" (click)="lightbox.fechar()" aria-label="Fechar">
+            <i class="fas fa-xmark"></i>
+        </button>
+        <img [src]="url" alt="Foto ampliada" class="lightbox-imagem" (click)="$event.stopPropagation()">
+    </div>
+}

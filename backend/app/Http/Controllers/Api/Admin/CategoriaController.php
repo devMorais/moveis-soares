@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Categoria;
+use App\Suporte\Helpers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -52,14 +53,15 @@ class CategoriaController extends Controller
         $categoria = Categoria::withCount('produtos')->findOrFail($id);
 
         if ($categoria->produtos_count > 0) {
-            return response()->json([
-                'message' => 'Não é possível remover uma categoria com produtos cadastrados.',
-            ], 422);
+            return response()->json(
+                Helpers::mensagemErro('Não é possível remover uma categoria com produtos cadastrados.'),
+                422
+            );
         }
 
         $categoria->delete();
 
-        return response()->json(['message' => 'Categoria removida.']);
+        return response()->json(Helpers::mensagemSucesso('Categoria removida.'));
     }
 
     private function validarDados(Request $request): array

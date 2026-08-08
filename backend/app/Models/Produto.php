@@ -66,6 +66,7 @@ class Produto extends Model
             'profundidadeCm' => $this->profundidade_cm,
             'selo' => $this->selo,
             'estoque' => $this->estoque,
+            'ativo' => $this->ativo,
         ];
     }
 }

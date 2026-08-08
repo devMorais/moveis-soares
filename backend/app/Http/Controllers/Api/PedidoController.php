@@ -9,6 +9,7 @@ use App\Models\Pedido;
 use App\Models\PedidoItem;
 use App\Models\Produto;
 use App\Services\Payment\InfinitePayService;
+use App\Suporte\Helpers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -91,7 +92,7 @@ class PedidoController extends Controller
                 return $pedido;
             });
         } catch (\RuntimeException $e) {
-            return response()->json(['message' => $e->getMessage()], 422);
+            return response()->json(Helpers::mensagemErro($e->getMessage()), 422);
         }
 
         $orderNsu = 'pedido-' . $pedido->id . '-' . Str::random(6);
@@ -106,7 +107,7 @@ class PedidoController extends Controller
         );
 
         if ($resultado['erro']) {
-            return response()->json(['message' => $resultado['mensagem']], 502);
+            return response()->json(Helpers::mensagemErro($resultado['mensagem']), 502);
         }
 
         $pedido->update([

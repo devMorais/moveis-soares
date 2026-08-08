@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SecaoVisibilidade;
+use App\Suporte\Helpers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -31,9 +32,10 @@ class SecoesController extends Controller
         $secao = SecaoVisibilidade::where('chave', $dados['chave'])->firstOrFail();
 
         if ($secao->bloqueada && ! $dados['visivel']) {
-            return response()->json([
-                'message' => 'Esta seção não pode ser desativada.',
-            ], 422);
+            return response()->json(
+                Helpers::mensagemErro('Esta seção não pode ser desativada.'),
+                422
+            );
         }
 
         $secao->update(['visivel' => $dados['visivel']]);

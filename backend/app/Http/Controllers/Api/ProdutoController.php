@@ -7,6 +7,7 @@ use App\Services\Exceptions\ImagemInvalidaException;
 use App\Services\ImagemService;
 use App\Models\Categoria;
 use App\Models\Produto;
+use App\Suporte\Helpers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -23,7 +24,8 @@ class ProdutoController extends Controller
      */
     public function index(): JsonResponse
     {
-        $produtos = Produto::with('categoria')
+        $produtos = Produto::ativos()
+            ->with('categoria')
             ->orderByDesc('created_at')
             ->get()
             ->map(fn (Produto $produto) => $produto->paraApi());
@@ -39,6 +41,7 @@ class ProdutoController extends Controller
         $categoria = Categoria::where('slug', $slug)->firstOrFail();
 
         $produtos = $categoria->produtos()
+            ->ativos()
             ->with('categoria')
             ->orderByDesc('created_at')
             ->get()
@@ -52,7 +55,7 @@ class ProdutoController extends Controller
      */
     public function porSlug(string $slug): JsonResponse
     {
-        $produto = Produto::with('categoria')->where('slug', $slug)->firstOrFail();
+        $produto = Produto::ativos()->with('categoria')->where('slug', $slug)->firstOrFail();
 
         return response()->json($produto->paraApi());
     }
@@ -73,9 +76,7 @@ class ProdutoController extends Controller
         try {
             $caminhoRelativo = $this->imagemService->processar($request->file('imagem'));
         } catch (ImagemInvalidaException $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 422);
+            return response()->json(Helpers::mensagemErro($e->getMessage()), 422);
         }
 
         return response()->json([

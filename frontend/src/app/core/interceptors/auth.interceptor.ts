@@ -6,8 +6,8 @@ import { AuthService } from '../services/auth.service';
 import { ToastService } from '../services/toast.service';
 import { environment } from '../../../environments/environment';
 
-// Formato de erro de validação do Laravel: { errors: { campo: string | string[] } }
-type LaravelValidationErrors = Record<string, string | string[]>;
+// Formato padrao de erro da API: { mensagem, tipo, erros?: { campo: string | string[] } }
+type ErrosValidacao = Record<string, string | string[]>;
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
     const auth = inject(AuthService);
@@ -28,21 +28,21 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                     auth.clearSession();
                     router.navigate(['/admin/login']);
                 } else if (err.status === 422) {
-                    const erros = err.error?.errors as LaravelValidationErrors | undefined;
+                    const erros = err.error?.erros as ErrosValidacao | undefined;
                     if (erros) {
                         Object.values(erros).forEach((mensagens) => {
                             const lista = Array.isArray(mensagens) ? mensagens : [mensagens];
                             lista.forEach((msg) => toast.erro(msg, 'Dados inválidos'));
                         });
                     } else {
-                        toast.erro(err.error?.message || 'Dados inválidos.', 'Atenção');
+                        toast.erro(err.error?.mensagem || 'Dados inválidos.', 'Atenção');
                     }
                 } else if (err.status === 429) {
                     toast.aviso('Muitas tentativas. Aguarde um momento.', 'Limite atingido');
                 } else if (err.status === 500) {
-                    toast.erro('Erro interno. Tente novamente.', 'Erro no servidor');
-                } else if (err.status >= 400 && err.error?.message) {
-                    toast.erro(err.error.message, 'Erro');
+                    toast.erro(err.error?.mensagem || 'Erro interno. Tente novamente.', 'Erro no servidor');
+                } else if (err.status >= 400 && err.error?.mensagem) {
+                    toast.erro(err.error.mensagem, 'Erro');
                 }
             }
 

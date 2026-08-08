@@ -19,6 +19,7 @@ export class Configuracoes implements OnInit {
     uploadEndpoint = `${environment.apiUrl}/produtos/upload-imagem`;
     carregando = signal(true);
     salvando = signal(false);
+    salvandoNotificacoes = signal(false);
 
     form = this.fb.nonNullable.group({
         seo_titulo_site: [''],
@@ -30,6 +31,11 @@ export class Configuracoes implements OnInit {
         seo_google_analytics_id: [''],
         seo_google_search_console_tag: [''],
         seo_indexar_site: [true],
+    });
+
+    formNotificacoes = this.fb.nonNullable.group({
+        notificacao_email: [''],
+        notificacao_whatsapp: [''],
     });
 
     ngOnInit(): void {
@@ -49,6 +55,13 @@ export class Configuracoes implements OnInit {
                 this.carregando.set(false);
             },
             error: () => this.carregando.set(false),
+        });
+
+        this.seoService.mostrarNotificacoes().subscribe((dados) => {
+            this.formNotificacoes.patchValue({
+                notificacao_email: dados.notificacaoEmail ?? '',
+                notificacao_whatsapp: dados.notificacaoWhatsapp ?? '',
+            });
         });
     }
 
@@ -71,6 +84,21 @@ export class Configuracoes implements OnInit {
             error: () => {
                 this.salvando.set(false);
                 this.toast.erro('Não foi possível salvar as configurações.');
+            },
+        });
+    }
+
+    salvarNotificacoes(): void {
+        this.salvandoNotificacoes.set(true);
+
+        this.seoService.atualizarNotificacoes(this.formNotificacoes.getRawValue()).subscribe({
+            next: () => {
+                this.salvandoNotificacoes.set(false);
+                this.toast.sucesso('Notificações de contato salvas.');
+            },
+            error: () => {
+                this.salvandoNotificacoes.set(false);
+                this.toast.erro('Não foi possível salvar as notificações.');
             },
         });
     }

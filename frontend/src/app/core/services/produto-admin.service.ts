@@ -42,6 +42,10 @@ export class ProdutoAdminService {
     }
 
     remover(id: number) {
-        return this.http.delete<{ message: string }>(`${this.baseUrl}/${id}`);
+        return this.http.delete<{ mensagem: string }>(`${this.baseUrl}/${id}`);
+    }
+
+    alternarAtivo(id: number, ativo: boolean) {
+        return this.http.patch<Produto>(`${this.baseUrl}/${id}/status`, { ativo });
     }
 }
