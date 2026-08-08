@@ -6,6 +6,7 @@ import { Navbar } from './shared/components/layout/navbar/navbar';
 import { Footer } from './shared/components/layout/footer/footer';
 import { WhatsappFab } from './shared/components/layout/whatsapp-fab/whatsapp-fab';
 import { CarrinhoLateral } from './shared/components/carrinho-lateral/carrinho-lateral';
+import { Seo } from './core/services/seo';
 
 @Component({
     selector: 'app-root',
@@ -15,6 +16,7 @@ import { CarrinhoLateral } from './shared/components/carrinho-lateral/carrinho-l
 })
 export class App {
     private router = inject(Router);
+    private seo = inject(Seo);
 
     /**
      * O painel /admin tem layout próprio, independente do site público.
@@ -27,4 +29,8 @@ export class App {
         ),
         { initialValue: this.router.url.startsWith('/admin') },
     );
+
+    constructor() {
+        this.seo.carregarConfiguracaoGlobal();
+    }
 }

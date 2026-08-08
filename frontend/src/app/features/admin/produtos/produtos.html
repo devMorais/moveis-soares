@@ -1,0 +1,53 @@
+<div class="produtos-pagina">
+    <div class="produtos-pagina__cabecalho">
+        <div>
+            <h1>Produtos</h1>
+            <p class="produtos-pagina__descricao">Gerencie o catálogo exibido no site.</p>
+        </div>
+        <a routerLink="/admin/produtos/novo" class="btn-novo">
+            <i class="fas fa-plus"></i> Novo produto
+        </a>
+    </div>
+
+    @if (carregando()) {
+        <p>Carregando...</p>
+    } @else {
+        <table class="tabela-produtos">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Nome</th>
+                    <th>Categoria</th>
+                    <th>Preço</th>
+                    <th>Estoque</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (produto of produtos(); track produto.id) {
+                    <tr>
+                        <td>
+                            <img [src]="produto.imagemUrl" [alt]="produto.nome" class="tabela-produtos__thumb">
+                        </td>
+                        <td>{{ produto.nome }}</td>
+                        <td>{{ produto.categoria }}</td>
+                        <td>R$ {{ produto.preco }}</td>
+                        <td>{{ produto.estoque ?? '—' }}</td>
+                        <td class="tabela-produtos__acoes">
+                            <a [routerLink]="['/admin/produtos', produto.id, 'editar']" aria-label="Editar">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <button type="button" (click)="remover(produto)" aria-label="Remover">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                } @empty {
+                    <tr>
+                        <td colspan="6">Nenhum produto cadastrado ainda.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

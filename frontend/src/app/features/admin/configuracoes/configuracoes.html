@@ -1,0 +1,88 @@
+<div class="configuracoes-pagina">
+    <h1>Configurações</h1>
+    <p class="configuracoes-pagina__descricao">
+        Ajustes de SEO que afetam como o site aparece no Google e nas redes sociais.
+    </p>
+
+    @if (carregando()) {
+        <p>Carregando...</p>
+    } @else {
+        <form [formGroup]="form" (ngSubmit)="salvar()" class="form-seo">
+            <div class="secao">
+                <h2>Identidade</h2>
+                <div class="campo">
+                    <label for="titulo_site">Nome do site</label>
+                    <input type="text" id="titulo_site" formControlName="seo_titulo_site" placeholder="Móveis Soares">
+                    <span class="campo__ajuda">Aparece na aba do navegador junto com o título de cada página.</span>
+                </div>
+            </div>
+
+            <div class="secao">
+                <h2>SEO padrão</h2>
+                <p class="secao__ajuda">
+                    Usado quando uma página não define seu próprio título/descrição (ex: home).
+                </p>
+                <div class="campo">
+                    <label for="titulo_padrao">Título padrão</label>
+                    <input type="text" id="titulo_padrao" formControlName="seo_titulo_padrao" placeholder="Móveis Soares - Móveis de qualidade para sua casa">
+                </div>
+                <div class="campo">
+                    <label for="descricao_padrao">Descrição padrão</label>
+                    <textarea id="descricao_padrao" rows="3" formControlName="seo_descricao_padrao" placeholder="Descrição que aparece no Google abaixo do título (até 160 caracteres)."></textarea>
+                </div>
+                <div class="campo">
+                    <label for="palavras_chave">Palavras-chave (separadas por vírgula)</label>
+                    <input type="text" id="palavras_chave" formControlName="seo_palavras_chave" placeholder="móveis, sofás, guarda-roupas, Brasília">
+                </div>
+            </div>
+
+            <div class="secao">
+                <h2>Compartilhamento (redes sociais)</h2>
+                <div class="campo">
+                    <label>Imagem de compartilhamento (OG Image)</label>
+                    <span class="campo__ajuda">Aparece quando o site é compartilhado no WhatsApp, Instagram, Facebook etc.</span>
+                    <app-upload-imagem [endpoint]="uploadEndpoint" (uploadConcluido)="aoDefinirOgImage($event)" />
+                    @if (form.controls.seo_og_image_url.value) {
+                        <img [src]="form.controls.seo_og_image_url.value" alt="Prévia da imagem de compartilhamento" class="preview-imagem">
+                    }
+                </div>
+            </div>
+
+            <div class="secao">
+                <h2>Favicon</h2>
+                <div class="campo">
+                    <app-upload-imagem [endpoint]="uploadEndpoint" (uploadConcluido)="aoDefinirFavicon($event)" />
+                    @if (form.controls.seo_favicon_url.value) {
+                        <img [src]="form.controls.seo_favicon_url.value" alt="Prévia do favicon" class="preview-favicon">
+                    }
+                </div>
+            </div>
+
+            <div class="secao">
+                <h2>Rastreamento e indexação</h2>
+                <div class="campo">
+                    <label for="ga_id">Google Analytics (ID de medição)</label>
+                    <input type="text" id="ga_id" formControlName="seo_google_analytics_id" placeholder="G-XXXXXXXXXX">
+                </div>
+                <div class="campo">
+                    <label for="gsc_tag">Google Search Console (meta tag de verificação)</label>
+                    <input type="text" id="gsc_tag" formControlName="seo_google_search_console_tag" placeholder="conteúdo da tag google-site-verification">
+                </div>
+                <label class="campo-checkbox">
+                    <input type="checkbox" formControlName="seo_indexar_site">
+                    Permitir que o Google indexe este site
+                </label>
+                @if (!form.controls.seo_indexar_site.value) {
+                    <span class="aviso">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        Com isso desligado, o site fica marcado como "não indexar" (noindex) e não deve aparecer nas buscas do Google.
+                    </span>
+                }
+            </div>
+
+            <button type="submit" class="btn-salvar" [disabled]="salvando()">
+                {{ salvando() ? 'Salvando...' : 'Salvar configurações' }}
+            </button>
+        </form>
+    }
+</div>

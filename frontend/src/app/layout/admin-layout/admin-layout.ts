@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
@@ -7,6 +7,13 @@ interface ItemMenu {
     label: string;
     icone: string;
     exato?: boolean;
+    queryParams?: Record<string, string>;
+}
+
+interface ItemDropdown {
+    label: string;
+    icone: string;
+    itens: ItemMenu[];
 }
 
 @Component({
@@ -18,17 +25,33 @@ interface ItemMenu {
 export class AdminLayout {
     auth = inject(AuthService);
 
-    itens: ItemMenu[] = [
-        { rota: '/admin', label: 'Início', icone: 'fa-gauge', exato: true },
-        { rota: '/admin/conteudo', label: 'Conteúdo', icone: 'fa-file-lines' },
-        { rota: '/admin/secoes', label: 'Seções', icone: 'fa-toggle-on' },
-        { rota: '/admin/instagram', label: 'Instagram', icone: 'fa-camera' },
+    itemInicio: ItemMenu = { rota: '/admin', label: 'Início', icone: 'fa-gauge', exato: true };
+
+    dropdownConteudo: ItemDropdown = {
+        label: 'Conteúdo',
+        icone: 'fa-file-lines',
+        itens: [
+            { rota: '/admin/conteudo', label: 'Início do site', icone: 'fa-house', queryParams: { aba: 'hero' } },
+            { rota: '/admin/conteudo', label: 'Sobre', icone: 'fa-circle-info', queryParams: { aba: 'sobre' } },
+            { rota: '/admin/conteudo', label: 'Contato', icone: 'fa-envelope', queryParams: { aba: 'contato' } },
+        ],
+    };
+
+    itensPrincipais: ItemMenu[] = [
         { rota: '/admin/categorias', label: 'Categorias', icone: 'fa-tags' },
         { rota: '/admin/produtos', label: 'Produtos', icone: 'fa-couch' },
         { rota: '/admin/entrega', label: 'Entrega', icone: 'fa-truck' },
         { rota: '/admin/pedidos', label: 'Pedidos', icone: 'fa-box' },
-        { rota: '/admin/configuracoes', label: 'Configurações', icone: 'fa-gear' },
     ];
+
+    itemInstagram: ItemMenu = { rota: '/admin/instagram', label: 'Instagram', icone: 'fa-camera' };
+    itemConfiguracoes: ItemMenu = { rota: '/admin/configuracoes', label: 'Configurações', icone: 'fa-gear' };
+
+    dropdownAberto = signal(false);
+
+    alternarDropdown(): void {
+        this.dropdownAberto.update((atual) => !atual);
+    }
 
     sair(): void {
         this.auth.logout();

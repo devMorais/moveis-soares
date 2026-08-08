@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { PedidoService } from '../../core/services/pedido.service';
+import { PedidoService, StatusPedidoResposta } from '../../core/services/pedido.service';
 import { SITE_INFO } from '../../core/constants/site-info';
 
 type EstadoRetorno = 'verificando' | 'pago' | 'pendente' | 'erro';
@@ -18,6 +18,7 @@ export class PedidoRetorno implements OnInit {
     info = SITE_INFO;
     estado = signal<EstadoRetorno>('verificando');
     pedidoId = signal<number | null>(null);
+    pedido = signal<StatusPedidoResposta | null>(null);
 
     /** Numero de tentativas de polling antes de desistir e mostrar "pendente". */
     private readonly MAX_TENTATIVAS = 5;
@@ -39,6 +40,8 @@ export class PedidoRetorno implements OnInit {
     private checarStatus(id: number): void {
         this.pedidoService.verificarStatus(id).subscribe({
             next: (resposta) => {
+                this.pedido.set(resposta);
+
                 if (resposta.status === 'PAGO') {
                     this.estado.set('pago');
                     return;
@@ -60,8 +63,8 @@ export class PedidoRetorno implements OnInit {
         const pedido = this.pedidoId();
         const texto = encodeURIComponent(
             pedido
-                ? `Olá! Fiz o pedido #${pedido} no site e gostaria de confirmar o pagamento.`
-                : `Olá! Fiz um pedido no site e gostaria de confirmar o pagamento.`,
+                ? `Olá! Tenho uma dúvida sobre o meu pedido #${pedido}.`
+                : `Olá! Tenho uma dúvida sobre meu pedido.`,
         );
         return `https://wa.me/${this.info.phoneWhatsapp}?text=${texto}`;
     }

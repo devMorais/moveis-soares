@@ -13,12 +13,36 @@
                     <div class="retorno-icone retorno-icone--sucesso">
                         <i class="fas fa-check"></i>
                     </div>
-                    <h1>Pagamento confirmado!</h1>
+                    <h1>Pedido confirmado!</h1>
                     <p>
-                        Recebemos seu pedido @if (pedidoId()) {#{{ pedidoId() }}} com sucesso.
+                        Recebemos seu pagamento @if (pedidoId()) {do pedido <strong>#{{ pedidoId() }}</strong>}.
                         Em breve entraremos em contato para combinar a entrega.
                     </p>
-                    <a routerLink="/" class="btn btn-voltar">Voltar para a loja</a>
+
+                    @if (pedido(); as p) {
+                        <div class="retorno-resumo">
+                            <div class="retorno-resumo__linha">
+                                <span>Pagamento via</span>
+                                <strong>{{ p.metodoPagamento === 'PIX' ? 'PIX' : 'Cartão' }}</strong>
+                            </div>
+                            <ul class="retorno-resumo__itens">
+                                @for (item of p.itens; track item.nomeProduto) {
+                                    <li>{{ item.quantidade }}x {{ item.nomeProduto }}</li>
+                                }
+                            </ul>
+                            <div class="retorno-resumo__total">
+                                <span>Total pago</span>
+                                <strong>R$ {{ p.valorTotal }}</strong>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="retorno-acoes">
+                        <a routerLink="/" class="btn btn-voltar">Voltar para a loja</a>
+                        <a [href]="linkWhatsapp" target="_blank" rel="noopener" class="link-whatsapp">
+                            <i class="fab fa-whatsapp"></i> Dúvidas? Fale conosco
+                        </a>
+                    </div>
                 }
                 @case ('pendente') {
                     <div class="retorno-icone retorno-icone--aviso">

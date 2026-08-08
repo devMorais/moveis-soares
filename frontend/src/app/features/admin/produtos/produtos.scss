@@ -1,0 +1,80 @@
+.produtos-pagina__cabecalho {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.produtos-pagina h1 {
+    font-size: 20px;
+    margin-bottom: 6px;
+}
+
+.produtos-pagina__descricao {
+    color: var(--admin-text-muted);
+    font-size: 14px;
+}
+
+.btn-novo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    background-color: var(--admin-primary);
+    color: #fff;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.tabela-produtos {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.tabela-produtos th,
+.tabela-produtos td {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 13px;
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.tabela-produtos th {
+    color: var(--admin-text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+.tabela-produtos__thumb {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+}
+
+.tabela-produtos__acoes {
+    display: flex;
+    gap: 10px;
+}
+
+.tabela-produtos__acoes a,
+.tabela-produtos__acoes button {
+    background: none;
+    border: none;
+    color: var(--admin-text-muted);
+    cursor: pointer;
+}
+
+.tabela-produtos__acoes a:hover,
+.tabela-produtos__acoes button:hover {
+    color: var(--admin-primary);
+}

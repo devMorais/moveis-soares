@@ -1,8 +1,11 @@
 <?php
 use App\Http\Controllers\Api\Admin\AuthController;
+use App\Http\Controllers\Api\Admin\CategoriaController as AdminCategoriaController;
 use App\Http\Controllers\Api\Admin\CidadeEntregaController as AdminCidadeEntregaController;
+use App\Http\Controllers\Api\Admin\ConfiguracaoSeoController;
 use App\Http\Controllers\Api\Admin\ConteudoController;
 use App\Http\Controllers\Api\Admin\PedidoController as AdminPedidoController;
+use App\Http\Controllers\Api\Admin\ProdutoController as AdminProdutoController;
 use App\Http\Controllers\Api\Admin\SecoesController;
 use App\Http\Controllers\Api\CidadeEntregaController;
 use App\Http\Controllers\Api\ConfiguracaoController;
@@ -28,6 +31,7 @@ Route::get('/produtos/{slug}', [ProdutoController::class, 'porSlug']);
 Route::get('/produtos', [ProdutoController::class, 'index']);
 Route::post('/contato', [ContatoController::class, 'enviar']);
 Route::get('/modulos', [ConfiguracaoController::class, 'modulos']);
+Route::get('/seo', [ConfiguracaoController::class, 'seo']);
 Route::get('/site', [SiteController::class, 'conteudo']);
 Route::get('/cidades-entrega', [CidadeEntregaController::class, 'listar']);
 Route::post('/pedidos', [PedidoController::class, 'criar']);
@@ -53,4 +57,18 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::get('/pedidos', [AdminPedidoController::class, 'index']);
     Route::get('/pedidos/{id}', [AdminPedidoController::class, 'mostrar']);
     Route::patch('/pedidos/{id}/status', [AdminPedidoController::class, 'atualizarStatus']);
+
+    Route::get('/categorias', [AdminCategoriaController::class, 'index']);
+    Route::post('/categorias', [AdminCategoriaController::class, 'store']);
+    Route::put('/categorias/{id}', [AdminCategoriaController::class, 'update']);
+    Route::delete('/categorias/{id}', [AdminCategoriaController::class, 'destroy']);
+
+    Route::get('/produtos', [AdminProdutoController::class, 'index']);
+    Route::get('/produtos/{id}', [AdminProdutoController::class, 'mostrar']);
+    Route::post('/produtos', [AdminProdutoController::class, 'store']);
+    Route::put('/produtos/{id}', [AdminProdutoController::class, 'update']);
+    Route::delete('/produtos/{id}', [AdminProdutoController::class, 'destroy']);
+
+    Route::get('/configuracoes/seo', [ConfiguracaoSeoController::class, 'mostrar']);
+    Route::put('/configuracoes/seo', [ConfiguracaoSeoController::class, 'atualizar']);
 });

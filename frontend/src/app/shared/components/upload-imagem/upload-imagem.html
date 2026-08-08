@@ -3,10 +3,11 @@
     <input
       type="file"
       accept="image/*"
+      [multiple]="multiplo()"
       (change)="aoSelecionarArquivo($event)"
       [disabled]="enviando()"
     />
-    <span>{{ enviando() ? 'Enviando...' : 'Selecionar imagem' }}</span>
+    <span>{{ enviando() ? 'Enviando...' : (multiplo() ? 'Selecionar imagens' : 'Selecionar imagem') }}</span>
   </label>
 
   @if (preview()) {

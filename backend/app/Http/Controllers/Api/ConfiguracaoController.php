@@ -17,4 +17,25 @@ class ConfiguracaoController extends Controller
     {
         return response()->json(ConfiguracaoSite::modulos());
     }
+
+    /**
+     * SEO publico da instalacao - consumido pelo Seo service do frontend
+     * pra montar title/meta/OG padrao e pelo <head> pra GA/GSC/robots.
+     */
+    public function seo(): JsonResponse
+    {
+        $config = ConfiguracaoSite::instancia();
+
+        return response()->json([
+            'tituloSite' => $config->seo_titulo_site,
+            'tituloPadrao' => $config->seo_titulo_padrao,
+            'descricaoPadrao' => $config->seo_descricao_padrao,
+            'palavrasChave' => $config->seo_palavras_chave,
+            'ogImageUrl' => $config->seo_og_image_url,
+            'faviconUrl' => $config->seo_favicon_url,
+            'googleAnalyticsId' => $config->seo_google_analytics_id,
+            'googleSearchConsoleTag' => $config->seo_google_search_console_tag,
+            'indexarSite' => $config->seo_indexar_site,
+        ]);
+    }
 }

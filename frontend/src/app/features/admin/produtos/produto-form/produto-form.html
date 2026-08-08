@@ -1,0 +1,109 @@
+<section class="produto-form">
+    <h1>{{ editando ? 'Editar produto' : 'Novo produto' }}</h1>
+
+    @if (carregando()) {
+        <p>Carregando...</p>
+    } @else {
+        <form [formGroup]="form" (ngSubmit)="salvar()">
+            <div class="campo">
+                <label for="nome">Nome</label>
+                <input id="nome" type="text" formControlName="nome" />
+                @if (form.controls.nome.touched && form.controls.nome.invalid) {
+                    <span class="erro">Informe um nome com pelo menos 3 caracteres.</span>
+                }
+            </div>
+
+            <div class="campo">
+                <label for="categoria_id">Categoria</label>
+                <select id="categoria_id" formControlName="categoria_id">
+                    <option [ngValue]="null" disabled>Selecione</option>
+                    @for (categoria of categorias(); track categoria.id) {
+                        <option [ngValue]="categoria.id">{{ categoria.nome }}</option>
+                    }
+                </select>
+                @if (form.controls.categoria_id.touched && form.controls.categoria_id.invalid) {
+                    <span class="erro">Selecione uma categoria.</span>
+                }
+            </div>
+
+            <div class="campo-grid">
+                <div class="campo">
+                    <label for="preco">Preço (R$)</label>
+                    <input id="preco" type="number" step="0.01" formControlName="preco" />
+                    @if (form.controls.preco.touched && form.controls.preco.invalid) {
+                        <span class="erro">Informe um preço válido.</span>
+                    }
+                </div>
+                <div class="campo">
+                    <label for="preco_de">Preço "de" (riscado, opcional)</label>
+                    <input id="preco_de" type="number" step="0.01" formControlName="preco_de" />
+                </div>
+                <div class="campo">
+                    <label for="estoque">Estoque</label>
+                    <input id="estoque" type="number" min="0" formControlName="estoque" />
+                </div>
+            </div>
+
+            <div class="campo">
+                <label for="especificacao">Especificação curta</label>
+                <input id="especificacao" type="text" formControlName="especificacao" placeholder="Ex: 6 PORTAS | ACABAMENTO OFF-WHITE" />
+            </div>
+
+            <div class="campo">
+                <label for="descricao">Descrição</label>
+                <textarea id="descricao" rows="4" formControlName="descricao"></textarea>
+            </div>
+
+            <div class="campo-grid">
+                <div class="campo">
+                    <label for="altura_cm">Altura (cm)</label>
+                    <input id="altura_cm" type="number" min="0" formControlName="altura_cm" />
+                </div>
+                <div class="campo">
+                    <label for="largura_cm">Largura (cm)</label>
+                    <input id="largura_cm" type="number" min="0" formControlName="largura_cm" />
+                </div>
+                <div class="campo">
+                    <label for="profundidade_cm">Profundidade (cm)</label>
+                    <input id="profundidade_cm" type="number" min="0" formControlName="profundidade_cm" />
+                </div>
+            </div>
+
+            <div class="campo">
+                <label for="selo">Selo (opcional)</label>
+                <input id="selo" type="text" formControlName="selo" placeholder="Ex: Lançamento, Oferta" />
+            </div>
+
+            <div class="campo">
+                <label>Fotos do produto</label>
+                <p class="campo__ajuda">A primeira foto é a principal (aparece nas listas). Envie quantas quiser para a galeria.</p>
+                <app-upload-imagem [endpoint]="uploadEndpoint" [multiplo]="true" (uploadConcluido)="aoConcluirUpload($event)" />
+
+                @if (imagens().length > 0) {
+                    <div class="galeria-preview">
+                        @for (url of imagens(); track url; let i = $index) {
+                            <div class="galeria-preview__item" [class.galeria-preview__item--principal]="i === 0">
+                                <img [src]="url" alt="Foto do produto" />
+                                @if (i === 0) {
+                                    <span class="galeria-preview__badge">Principal</span>
+                                } @else {
+                                    <button type="button" (click)="definirComoPrincipal(i)" class="galeria-preview__acao">Tornar principal</button>
+                                }
+                                <button type="button" (click)="removerImagem(i)" class="galeria-preview__remover" aria-label="Remover foto">
+                                    <i class="fas fa-xmark"></i>
+                                </button>
+                            </div>
+                        }
+                    </div>
+                }
+                @if (imagemPendente) {
+                    <span class="erro">Envie ao menos uma foto do produto.</span>
+                }
+            </div>
+
+            <button type="submit" class="btn-salvar" [disabled]="salvando()">
+                {{ salvando() ? 'Salvando...' : 'Salvar produto' }}
+            </button>
+        </form>
+    }
+</section>

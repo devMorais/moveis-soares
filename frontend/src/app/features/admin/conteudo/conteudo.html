@@ -2,10 +2,37 @@
     <h1>Conteúdo do site</h1>
 
     <div class="abas">
-        <button type="button" [class.ativa]="abaAtiva() === 'hero'" (click)="trocarAba('hero')">Início</button>
-        <button type="button" [class.ativa]="abaAtiva() === 'sobre'" (click)="trocarAba('sobre')">Sobre</button>
-        <button type="button" [class.ativa]="abaAtiva() === 'contato'" (click)="trocarAba('contato')">Contato</button>
+        @for (aba of abasDisponiveis; track aba) {
+            <button type="button" [class.ativa]="abaAtiva() === aba" (click)="trocarAba(aba)">
+                {{ nomesAba[aba] }}
+            </button>
+        }
     </div>
+
+    @if (secaoAtual(); as secao) {
+        <div class="visibilidade-bar">
+            <div>
+                <strong>Visível no site</strong>
+                @if (secao.bloqueada) {
+                    <span class="visibilidade-bar__badge">sempre visível</span>
+                } @else {
+                    <span class="visibilidade-bar__ajuda">
+                        Desligue para ocultar esta seção sem apagar o conteúdo.
+                    </span>
+                }
+            </div>
+            <button
+                type="button"
+                class="toggle"
+                [class.ativo]="secao.visivel"
+                [class.desabilitado]="secao.bloqueada"
+                [disabled]="secao.bloqueada || salvandoVisibilidade()"
+                (click)="alternarVisibilidade()"
+            >
+                <span class="toggle__bola"></span>
+            </button>
+        </div>
+    }
 
     @if (abaAtiva() === 'hero') {
         <form [formGroup]="formHero" (ngSubmit)="salvar()" class="form-secao">

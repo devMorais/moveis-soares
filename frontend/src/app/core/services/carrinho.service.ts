@@ -71,6 +71,7 @@ export class CarrinhoService {
                     imagemUrl: produto.imagemUrl,
                     preco: produto.preco,
                     quantidade,
+                    estoque: produto.estoque,
                 },
             ];
         });
@@ -78,15 +79,26 @@ export class CarrinhoService {
         return true;
     }
 
-    atualizarQuantidade(produtoId: number, quantidade: number): void {
+    /**
+     * Retorna false (e nao aplica a mudanca) se a nova quantidade
+     * ultrapassar o estoque salvo no item - o chamador decide como avisar.
+     */
+    atualizarQuantidade(produtoId: number, quantidade: number): boolean {
         if (quantidade <= 0) {
             this.removerItem(produtoId);
-            return;
+            return true;
+        }
+
+        const item = this.itens().find((i) => i.produtoId === produtoId);
+        if (item?.estoque !== undefined && quantidade > item.estoque) {
+            return false;
         }
 
         this.itens.update((atuais) =>
-            atuais.map((item) => (item.produtoId === produtoId ? { ...item, quantidade } : item)),
+            atuais.map((i) => (i.produtoId === produtoId ? { ...i, quantidade } : i)),
         );
+
+        return true;
     }
 
     removerItem(produtoId: number): void {

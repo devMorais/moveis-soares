@@ -130,7 +130,7 @@ class PedidoController extends Controller
      */
     public function verificarStatus(int $id): JsonResponse
     {
-        $pedido = Pedido::findOrFail($id);
+        $pedido = Pedido::with('itens')->findOrFail($id);
 
         if ($pedido->status !== 'PAGO' && $pedido->infinitepay_order_nsu) {
             $infinitePay = new InfinitePayService($pedido->id);
@@ -145,6 +145,16 @@ class PedidoController extends Controller
             }
         }
 
-        return response()->json(['status' => $pedido->fresh()->status]);
+        $pedido->refresh();
+
+        return response()->json([
+            'status' => $pedido->status,
+            'valorTotal' => (float) $pedido->valor_total,
+            'metodoPagamento' => $pedido->metodo_pagamento,
+            'itens' => $pedido->itens->map(fn ($item) => [
+                'nomeProduto' => $item->nome_produto,
+                'quantidade' => $item->quantidade,
+            ]),
+        ]);
     }
 }

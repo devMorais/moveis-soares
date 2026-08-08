@@ -17,6 +17,13 @@ export interface CriarPedidoPayload {
     itens: PedidoItemPayload[];
 }
 
+export interface StatusPedidoResposta {
+    status: string;
+    valorTotal: number;
+    metodoPagamento: string | null;
+    itens: { nomeProduto: string; quantidade: number }[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
     private http = inject(HttpClient);
@@ -27,6 +34,6 @@ export class PedidoService {
     }
 
     verificarStatus(id: number) {
-        return this.http.get<{ status: string }>(`${this.baseUrl}/pedidos/${id}/status`);
+        return this.http.get<StatusPedidoResposta>(`${this.baseUrl}/pedidos/${id}/status`);
     }
 }

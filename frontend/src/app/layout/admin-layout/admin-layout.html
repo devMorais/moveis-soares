@@ -2,16 +2,59 @@
     <aside class="admin-sidebar">
         <div class="admin-sidebar__marca">Móveis Soares</div>
         <nav class="admin-sidebar__menu">
-            @for (item of itens; track item.rota) {
-                <a
-                    [routerLink]="item.rota"
-                    routerLinkActive="ativo"
-                    [routerLinkActiveOptions]="{ exact: item.exato ?? false }"
+            <a
+                [routerLink]="itemInicio.rota"
+                routerLinkActive="ativo"
+                [routerLinkActiveOptions]="{ exact: true }"
+            >
+                <i class="fas" [class]="itemInicio.icone"></i>
+                {{ itemInicio.label }}
+            </a>
+
+            <div class="admin-sidebar__dropdown">
+                <button
+                    type="button"
+                    class="admin-sidebar__dropdown-cabecalho"
+                    [class.ativo]="dropdownAberto()"
+                    (click)="alternarDropdown()"
                 >
+                    <i class="fas" [class]="dropdownConteudo.icone"></i>
+                    {{ dropdownConteudo.label }}
+                    <i class="fas fa-chevron-down admin-sidebar__dropdown-seta" [class.aberta]="dropdownAberto()"></i>
+                </button>
+                @if (dropdownAberto()) {
+                    <div class="admin-sidebar__submenu">
+                        @for (item of dropdownConteudo.itens; track item.label) {
+                            <a
+                                [routerLink]="item.rota"
+                                [queryParams]="item.queryParams"
+                                routerLinkActive="ativo"
+                                [routerLinkActiveOptions]="{ exact: false }"
+                            >
+                                {{ item.label }}
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+
+            @for (item of itensPrincipais; track item.rota) {
+                <a [routerLink]="item.rota" routerLinkActive="ativo">
                     <i class="fas" [class]="item.icone"></i>
                     {{ item.label }}
                 </a>
             }
+
+            <div class="admin-sidebar__separador"></div>
+
+            <a [routerLink]="itemInstagram.rota" routerLinkActive="ativo">
+                <i class="fas" [class]="itemInstagram.icone"></i>
+                {{ itemInstagram.label }}
+            </a>
+            <a [routerLink]="itemConfiguracoes.rota" routerLinkActive="ativo">
+                <i class="fas" [class]="itemConfiguracoes.icone"></i>
+                {{ itemConfiguracoes.label }}
+            </a>
         </nav>
         <button type="button" class="admin-sidebar__sair" (click)="sair()">
             <i class="fas fa-arrow-right-from-bracket"></i>

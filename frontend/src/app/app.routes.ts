@@ -9,11 +9,13 @@ import { PedidoRetorno } from './features/pedido-retorno/pedido-retorno';
 import { Login } from './features/admin/login/login';
 import { Dashboard } from './features/admin/dashboard/dashboard';
 import { Conteudo } from './features/admin/conteudo/conteudo';
-import { Secoes } from './features/admin/secoes/secoes';
 import { Instagram } from './features/admin/instagram/instagram';
+import { Categorias } from './features/admin/categorias/categorias';
+import { Produtos } from './features/admin/produtos/produtos';
+import { ProdutoForm } from './features/admin/produtos/produto-form/produto-form';
 import { Entrega } from './features/admin/entrega/entrega';
 import { Pedidos } from './features/admin/pedidos/pedidos';
-import { NovoProduto } from './features/admin/produtos/novo-produto/novo-produto';
+import { Configuracoes } from './features/admin/configuracoes/configuracoes';
 import { AdminLayout } from './layout/admin-layout/admin-layout';
 import { authGuard } from './core/guards/auth.guard';
 
@@ -33,11 +35,14 @@ export const routes: Routes = [
         children: [
             { path: '', component: Dashboard },
             { path: 'conteudo', component: Conteudo },
-            { path: 'secoes', component: Secoes },
             { path: 'instagram', component: Instagram },
+            { path: 'categorias', component: Categorias },
+            { path: 'produtos', component: Produtos },
+            { path: 'produtos/novo', component: ProdutoForm },
+            { path: 'produtos/:id/editar', component: ProdutoForm },
             { path: 'entrega', component: Entrega },
             { path: 'pedidos', component: Pedidos },
-            { path: 'produtos/novo', component: NovoProduto },
+            { path: 'configuracoes', component: Configuracoes },
         ],
     },
     { path: '**', redirectTo: '' },
