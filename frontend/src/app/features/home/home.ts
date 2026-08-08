@@ -6,13 +6,12 @@ import { CategoriaService } from '../../core/services/categoria';
 import { Produto } from '../../core/types/produto/produto.type';
 import { Categoria } from '../../core/types/categoria/categoria.type';
 import { SITE_INFO } from '../../core/constants/site-info';
-import { InstagramSecao } from './instagram-secao/instagram-secao';
 
 const INTERVALO_AUTOPLAY_MS = 5000;
 
 @Component({
     selector: 'app-home',
-    imports: [RouterLink, InstagramSecao],
+    imports: [RouterLink],
     templateUrl: './home.html',
     styleUrl: './home.scss',
 })
