@@ -6,7 +6,7 @@
     justify-content: center;
     min-height: 340px;
     padding: 128px 24px 60px;
-    background-image: linear-gradient(180deg, rgba(10, 10, 12, 0.55) 0%, rgba(10, 10, 12, 0.85) 100%), url("/assets/images/fundos/sobre-topo.jpg");
+    background-image: linear-gradient(180deg, rgba(10, 10, 12, 0.55) 0%, rgba(10, 10, 12, 0.85) 100%), url("/assets/images/fundos/sobre-topo.webp");
     background-size: cover;
     background-position: center;
     border-bottom: 3px solid var(--color-primary);
@@ -50,7 +50,7 @@
     width: 100%;
     display: block;
     padding: 80px 0px;
-    background-image: linear-gradient(180deg, rgba(10, 10, 12, 0.88) 0%, rgba(10, 10, 12, 0.93) 100%), url("/assets/images/fundos/sobre-diferenciais.jpg");
+    background-image: linear-gradient(180deg, rgba(10, 10, 12, 0.88) 0%, rgba(10, 10, 12, 0.93) 100%), url("/assets/images/fundos/sobre-diferenciais.webp");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -94,7 +94,7 @@
     width: 100%;
     display: block;
     padding: 70px 0px;
-    background-image: linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 82%, black) 0%, rgba(10, 10, 12, 0.88) 100%), url("/assets/images/fundos/cta.jpg");
+    background-image: linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 82%, black) 0%, rgba(10, 10, 12, 0.88) 100%), url("/assets/images/fundos/cta.webp");
     background-size: cover;
     background-position: center;
     text-align: center;

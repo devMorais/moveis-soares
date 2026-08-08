@@ -7,5 +7,5 @@ export const SITE_INFO = {
     hours: 'Seg. a Sáb., 9h às 18h',
     instagramUrl: 'https://www.instagram.com/moveis.soares_df/',
     facebookUrl: '',
-    logoUrl: 'assets/images/logo.png',
+    logoUrl: 'assets/images/logo.webp',
 };

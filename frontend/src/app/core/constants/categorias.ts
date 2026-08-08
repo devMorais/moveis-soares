@@ -10,8 +10,8 @@ export interface Categoria {
  * do produto mais recente cadastrado naquela categoria.
  */
 export const CATEGORIAS: Categoria[] = [
-    { slug: 'quarto', nome: 'Quarto', imagemUrl: 'assets/images/produtos/guarda-roupa-off-white-6-portas.jpg' },
-    { slug: 'sala', nome: 'Sala', imagemUrl: 'assets/images/produtos/buffet-amendoa.jpg' },
-    { slug: 'escritorio', nome: 'Escritório', imagemUrl: 'assets/images/produtos/guarda-roupa-classico-4-portas.jpg' },
-    { slug: 'cozinha', nome: 'Cozinha', imagemUrl: 'assets/images/produtos/guarda-roupa-glossy-4-portas.jpg' },
+    { slug: 'quarto', nome: 'Quarto', imagemUrl: 'assets/images/produtos/guarda-roupa-off-white-6-portas.webp' },
+    { slug: 'sala', nome: 'Sala', imagemUrl: 'assets/images/produtos/buffet-amendoa.webp' },
+    { slug: 'escritorio', nome: 'Escritório', imagemUrl: 'assets/images/produtos/guarda-roupa-classico-4-portas.webp' },
+    { slug: 'cozinha', nome: 'Cozinha', imagemUrl: 'assets/images/produtos/guarda-roupa-glossy-4-portas.webp' },
 ];
