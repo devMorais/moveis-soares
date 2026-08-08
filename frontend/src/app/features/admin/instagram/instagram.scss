@@ -1,0 +1,17 @@
+.instagram-admin h1 {
+    font-size: 20px;
+    margin-bottom: 6px;
+}
+
+.instagram-admin__descricao {
+    color: var(--admin-text-muted);
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+.instagram-admin__preview {
+    min-height: 320px;
+    background-color: var(--admin-bg);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+}

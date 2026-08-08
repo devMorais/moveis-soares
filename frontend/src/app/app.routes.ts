@@ -8,6 +8,7 @@ import { Login } from './features/admin/login/login';
 import { Dashboard } from './features/admin/dashboard/dashboard';
 import { Conteudo } from './features/admin/conteudo/conteudo';
 import { Secoes } from './features/admin/secoes/secoes';
+import { Instagram } from './features/admin/instagram/instagram';
 import { NovoProduto } from './features/admin/produtos/novo-produto/novo-produto';
 import { AdminLayout } from './layout/admin-layout/admin-layout';
 import { authGuard } from './core/guards/auth.guard';
@@ -27,6 +28,7 @@ export const routes: Routes = [
             { path: '', component: Dashboard },
             { path: 'conteudo', component: Conteudo },
             { path: 'secoes', component: Secoes },
+            { path: 'instagram', component: Instagram },
             { path: 'produtos/novo', component: NovoProduto },
         ],
     },
