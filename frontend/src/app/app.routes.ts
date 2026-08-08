@@ -12,6 +12,7 @@ import { Conteudo } from './features/admin/conteudo/conteudo';
 import { Secoes } from './features/admin/secoes/secoes';
 import { Instagram } from './features/admin/instagram/instagram';
 import { Entrega } from './features/admin/entrega/entrega';
+import { Pedidos } from './features/admin/pedidos/pedidos';
 import { NovoProduto } from './features/admin/produtos/novo-produto/novo-produto';
 import { AdminLayout } from './layout/admin-layout/admin-layout';
 import { authGuard } from './core/guards/auth.guard';
@@ -35,6 +36,7 @@ export const routes: Routes = [
             { path: 'secoes', component: Secoes },
             { path: 'instagram', component: Instagram },
             { path: 'entrega', component: Entrega },
+            { path: 'pedidos', component: Pedidos },
             { path: 'produtos/novo', component: NovoProduto },
         ],
     },

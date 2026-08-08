@@ -2,6 +2,7 @@
 use App\Http\Controllers\Api\Admin\AuthController;
 use App\Http\Controllers\Api\Admin\CidadeEntregaController as AdminCidadeEntregaController;
 use App\Http\Controllers\Api\Admin\ConteudoController;
+use App\Http\Controllers\Api\Admin\PedidoController as AdminPedidoController;
 use App\Http\Controllers\Api\Admin\SecoesController;
 use App\Http\Controllers\Api\CidadeEntregaController;
 use App\Http\Controllers\Api\ConfiguracaoController;
@@ -48,4 +49,8 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('/cidades-entrega', [AdminCidadeEntregaController::class, 'store']);
     Route::put('/cidades-entrega/{id}', [AdminCidadeEntregaController::class, 'update']);
     Route::delete('/cidades-entrega/{id}', [AdminCidadeEntregaController::class, 'destroy']);
+
+    Route::get('/pedidos', [AdminPedidoController::class, 'index']);
+    Route::get('/pedidos/{id}', [AdminPedidoController::class, 'mostrar']);
+    Route::patch('/pedidos/{id}/status', [AdminPedidoController::class, 'atualizarStatus']);
 });
