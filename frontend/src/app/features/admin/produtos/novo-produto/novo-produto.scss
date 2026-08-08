@@ -1,0 +1,35 @@
+.novo-produto {
+  max-width: 480px;
+  margin: 2rem auto;
+
+  .campo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+
+    label {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .erro {
+      color: #c0392b;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+    }
+
+    .ok {
+      color: #27ae60;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+    }
+  }
+
+  .alerta--sucesso {
+    background: #eafaf1;
+    color: #1e824c;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+}

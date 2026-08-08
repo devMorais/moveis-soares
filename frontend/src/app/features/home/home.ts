@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { PRODUTOS_MOCK } from '../../core/constants/produtos-mock';
-import { CATEGORIAS } from '../../core/constants/categorias';
+import { ProdutoService } from '../../core/services/produto';
+import { CategoriaService } from '../../core/services/categoria';
+import { Produto } from '../../core/types/produto/produto.type';
+import { Categoria } from '../../core/types/categoria/categoria.type';
 import { SITE_INFO } from '../../core/constants/site-info';
 
 const INTERVALO_AUTOPLAY_MS = 5000;
@@ -15,10 +17,12 @@ const INTERVALO_AUTOPLAY_MS = 5000;
 })
 export class Home implements OnInit, OnDestroy {
     private platformId = inject(PLATFORM_ID);
+    private produtoService = inject(ProdutoService);
+    private categoriaService = inject(CategoriaService);
 
     info = SITE_INFO;
-    categorias = CATEGORIAS;
-    produtos = signal(PRODUTOS_MOCK);
+    categorias = signal<Categoria[]>([]);
+    produtos = signal<Produto[]>([]);
 
     /** Só os produtos com selo entram no carrossel de destaque do hero. */
     destaques = computed(() => this.produtos().filter((p) => p.selo));
@@ -27,7 +31,6 @@ export class Home implements OnInit, OnDestroy {
     private timerId?: ReturnType<typeof setInterval>;
 
     categoriaAtiva = signal<string | null>(null);
-
     produtosFiltrados = computed(() => {
         const categoria = this.categoriaAtiva();
         if (!categoria) return this.produtos();
@@ -35,6 +38,8 @@ export class Home implements OnInit, OnDestroy {
     });
 
     ngOnInit(): void {
+        this.produtoService.listar().subscribe((produtos) => this.produtos.set(produtos));
+        this.categoriaService.listar().subscribe((categorias) => this.categorias.set(categorias));
         this.iniciarAutoplay();
     }
 

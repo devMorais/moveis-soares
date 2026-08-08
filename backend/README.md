@@ -59,25 +59,29 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ## Upload de imagens (Moveis Soares)
 
-Todo upload de imagem (produto, categoria, conteudo institucional) deve
-passar pelo `App\Services\ImagemService::processar()`. Ele:
+Todo upload de imagem no painel (produtos, categorias, conteudo institucional)
+deve passar pelo `App\Services\ImagemService`, atraves do metodo `processar()`.
+
+**Nenhum Controller deve chamar `$request->file(...)->store(...)` diretamente.**
+Isso garante que toda imagem salva no sistema segue o mesmo padrao:
 
 - Valida o tipo do arquivo (aceita apenas JPEG, PNG ou WebP) e o tamanho
   maximo do arquivo original (8MB), lancando `ImagemInvalidaException`
   quando invalido (o Controller deve capturar e responder 422).
-- Converte a imagem para o formato WebP.
-- Redimensiona/corta para um quadrado fixo de 800x800px, mantendo o
-  objeto centralizado.
-- Comprime com qualidade balanceada (80%).
+- Convertida para o formato **WebP**.
+- Redimensionada e cortada para um quadrado fixo de **800x800px** (centralizado).
+- Comprimida com qualidade de **80%**.
 - Salva no disco `public`, em `storage/app/public/produtos/{uuid}.webp`.
 
-**Nenhum Controller deve chamar `$request->file(...)->store(...)`
-diretamente.** Sempre injete e use o `ImagemService`:
+Exemplo de uso em um Controller:
 
 ```php
-public function store(Request $request, ImagemService $imagemService)
+use App\Services\ImagemService;
+use App\Services\Exceptions\ImagemInvalidaException;
+
+public function uploadImagem(Request $request, ImagemService $imagemService)
 {
-    $request->validate(['imagem' => 'required|file']);
+    $request->validate(['imagem' => ['required', 'file']]);
 
     try {
         $caminho = $imagemService->processar($request->file('imagem'));
@@ -85,6 +89,6 @@ public function store(Request $request, ImagemService $imagemService)
         return response()->json(['message' => $e->getMessage()], 422);
     }
 
-    // ...
+    return response()->json(['url' => Storage::disk('public')->url($caminho)]);
 }
 ```
