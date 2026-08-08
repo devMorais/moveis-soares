@@ -1,0 +1,73 @@
+<div class="conteudo-pagina">
+    <h1>Conteúdo do site</h1>
+
+    <div class="abas">
+        <button type="button" [class.ativa]="abaAtiva() === 'hero'" (click)="trocarAba('hero')">Início</button>
+        <button type="button" [class.ativa]="abaAtiva() === 'sobre'" (click)="trocarAba('sobre')">Sobre</button>
+        <button type="button" [class.ativa]="abaAtiva() === 'contato'" (click)="trocarAba('contato')">Contato</button>
+    </div>
+
+    @if (abaAtiva() === 'hero') {
+        <form [formGroup]="formHero" (ngSubmit)="salvar()" class="form-secao">
+            <div class="campo">
+                <label for="hero-titulo">Título</label>
+                <input type="text" id="hero-titulo" formControlName="titulo">
+            </div>
+            <div class="campo">
+                <label for="hero-subtitulo">Subtítulo</label>
+                <input type="text" id="hero-subtitulo" formControlName="subtitulo">
+            </div>
+            <button type="submit" class="btn-salvar" [disabled]="salvando()">
+                {{ salvando() ? 'Salvando...' : 'Salvar' }}
+            </button>
+        </form>
+    }
+
+    @if (abaAtiva() === 'sobre') {
+        <form [formGroup]="formSobre" (ngSubmit)="salvar()" class="form-secao">
+            <div class="campo">
+                <label for="sobre-titulo">Título da história</label>
+                <input type="text" id="sobre-titulo" formControlName="titulo_historia">
+            </div>
+            <div class="campo">
+                <label for="sobre-texto">Texto</label>
+                <textarea id="sobre-texto" formControlName="texto_historia" rows="5"></textarea>
+            </div>
+            <div class="campo">
+                <label>Imagem</label>
+                <app-upload-imagem [endpoint]="uploadEndpoint" (uploadConcluido)="aoImagemProcessada($event)" />
+            </div>
+            <button type="submit" class="btn-salvar" [disabled]="salvando()">
+                {{ salvando() ? 'Salvando...' : 'Salvar' }}
+            </button>
+        </form>
+    }
+
+    @if (abaAtiva() === 'contato') {
+        <form [formGroup]="formContato" (ngSubmit)="salvar()" class="form-secao">
+            <div class="campo">
+                <label for="contato-telefone">Telefone (exibido)</label>
+                <input type="text" id="contato-telefone" formControlName="telefone_display">
+            </div>
+            <div class="campo">
+                <label for="contato-whatsapp">WhatsApp (só números, com DDI)</label>
+                <input type="text" id="contato-whatsapp" formControlName="telefone_whatsapp">
+            </div>
+            <div class="campo">
+                <label for="contato-email">E-mail</label>
+                <input type="email" id="contato-email" formControlName="email">
+            </div>
+            <div class="campo">
+                <label for="contato-endereco">Endereço</label>
+                <input type="text" id="contato-endereco" formControlName="endereco">
+            </div>
+            <div class="campo">
+                <label for="contato-horario">Horário de atendimento</label>
+                <input type="text" id="contato-horario" formControlName="horario">
+            </div>
+            <button type="submit" class="btn-salvar" [disabled]="salvando()">
+                {{ salvando() ? 'Salvando...' : 'Salvar' }}
+            </button>
+        </form>
+    }
+</div>
