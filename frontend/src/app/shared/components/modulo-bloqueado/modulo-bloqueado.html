@@ -1,0 +1,15 @@
+@if (habilitado) {
+    <ng-content />
+} @else {
+    <div class="modulo-bloqueado">
+        <ng-content />
+        <div class="modulo-bloqueado__overlay">
+            <i class="fas fa-lock"></i>
+            <p>{{ mensagem() }}</p>
+            <a [href]="linkWhatsapp" target="_blank" rel="noopener" class="modulo-bloqueado__cta">
+                <i class="fab fa-whatsapp"></i>
+                Falar com a Dolen
+            </a>
+        </div>
+    </div>
+}

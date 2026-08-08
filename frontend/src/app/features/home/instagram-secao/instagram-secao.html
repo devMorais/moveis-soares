@@ -1,0 +1,15 @@
+<section class="instagram-secao">
+    <div class="container">
+        <h2 class="titulo">Siga a gente no Instagram</h2>
+        <app-modulo-bloqueado
+            nomeModulo="instagram"
+            mensagem="Mostre seu feed do Instagram direto no site fazendo upgrade do seu plano."
+        >
+            <div class="instagram-secao__grid">
+                @for (item of postsPreview; track item) {
+                    <div class="instagram-secao__placeholder"></div>
+                }
+            </div>
+        </app-modulo-bloqueado>
+    </div>
+</section>

@@ -1,0 +1,42 @@
+.modulo-bloqueado {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.modulo-bloqueado__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px;
+    text-align: center;
+    background: rgba(10, 10, 12, 0.88);
+    backdrop-filter: blur(3px);
+}
+
+.modulo-bloqueado__overlay i.fa-lock {
+    font-size: 28px;
+    color: #fff;
+}
+
+.modulo-bloqueado__overlay p {
+    max-width: 320px;
+    color: #f0f0f2;
+    font-size: 14px;
+}
+
+.modulo-bloqueado__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: #25d366;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 4px;
+}
