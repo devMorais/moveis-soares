@@ -88,7 +88,7 @@
 
         <div class="grid-produtos">
             @for (produto of produtosFiltrados(); track produto.id) {
-                <div class="card-produto">
+                <a [routerLink]="['/produto', produto.slug]" class="card-produto">
                     <div class="imagem">
                         <img [src]="produto.imagemUrl" [alt]="produto.nome" loading="lazy">
                         @if (produto.precoDe) {
@@ -105,13 +105,15 @@
                             <span class="por">R$ {{ produto.preco }}</span>
                         </div>
                     </div>
-                </div>
+                </a>
             } @empty {
                 <p class="vazio">Nenhum produto encontrado nessa categoria.</p>
             }
         </div>
     </div>
 </section>
+
+<app-instagram-secao />
 
 <section class="quem-somos">
     <div class="container">

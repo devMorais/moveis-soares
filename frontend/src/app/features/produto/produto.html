@@ -1,0 +1,103 @@
+@if (carregando()) {
+    <div class="produto-estado">
+        <p>Carregando...</p>
+    </div>
+} @else if (naoEncontrado() || !produto()) {
+    <div class="produto-estado">
+        <p>Produto não encontrado.</p>
+        <a routerLink="/" class="btn">Voltar para a home</a>
+    </div>
+} @else {
+    <section class="produto-pagina">
+        <div class="container">
+            <nav class="breadcrumb">
+                <a routerLink="/">Home</a>
+                <span>/</span>
+                @if (produto()!.categoriaSlug) {
+                    <a [routerLink]="['/categoria', produto()!.categoriaSlug]">{{ produto()!.categoria }}</a>
+                } @else {
+                    <span>{{ produto()!.categoria }}</span>
+                }
+                <span>/</span>
+                <span>{{ produto()!.nome }}</span>
+            </nav>
+
+            <div class="produto-grid">
+                <div class="produto-galeria">
+                    <pinch-zoom class="produto-galeria__zoom" [properties]="{ backgroundColor: 'transparent', limitZoom: 3 }">
+                        <img [src]="imagemAtual()" [alt]="produto()!.nome">
+                    </pinch-zoom>
+
+                    @if (galeria().length > 1) {
+                        <div class="produto-galeria__miniaturas">
+                            @for (imagem of galeria(); track imagem; let i = $index) {
+                                <button
+                                    type="button"
+                                    class="miniatura"
+                                    [class.ativa]="i === indiceImagemAtual()"
+                                    (click)="selecionarImagem(i)"
+                                >
+                                    <img [src]="imagem" [alt]="produto()!.nome + ' - foto ' + (i + 1)">
+                                </button>
+                            }
+                        </div>
+                    }
+                </div>
+
+                <div class="produto-info">
+                    @if (produto()!.selo) {
+                        <span class="selo">{{ produto()!.selo }}</span>
+                    }
+
+                    <h1>{{ produto()!.nome }}</h1>
+
+                    @if (produto()!.categoriaSlug) {
+                        <a [routerLink]="['/categoria', produto()!.categoriaSlug]" class="produto-info__categoria">
+                            {{ produto()!.categoria }}
+                        </a>
+                    }
+
+                    <div class="preco">
+                        @if (produto()!.precoDe) {
+                            <span class="de">R$ {{ produto()!.precoDe }}</span>
+                        }
+                        <span class="por">R$ {{ produto()!.preco }}</span>
+                    </div>
+
+                    @if (produto()!.descricao) {
+                        <p class="descricao">{{ produto()!.descricao }}</p>
+                    }
+
+                    @if (temMedidas()) {
+                        <div class="medidas">
+                            <strong>Medidas:</strong>
+                            @if (produto()!.alturaCm) {
+                                {{ produto()!.alturaCm }}cm (A)
+                            }
+                            @if (produto()!.larguraCm) {
+                                x {{ produto()!.larguraCm }}cm (L)
+                            }
+                            @if (produto()!.profundidadeCm) {
+                                x {{ produto()!.profundidadeCm }}cm (P)
+                            }
+                        </div>
+                    }
+
+                    @if (semEstoque()) {
+                        <p class="indisponivel">Produto indisponível no momento.</p>
+                    } @else {
+                        <div class="quantidade">
+                            <button type="button" (click)="diminuirQuantidade()" aria-label="Diminuir quantidade">-</button>
+                            <span>{{ quantidade() }}</span>
+                            <button type="button" (click)="aumentarQuantidade()" aria-label="Aumentar quantidade">+</button>
+                        </div>
+
+                        <button type="button" class="btn btn-comprar" (click)="adicionarAoCarrinho()">
+                            Adicionar ao carrinho
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+}

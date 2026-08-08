@@ -32,6 +32,7 @@
     "@angular/router": "^20.3.0",
     "@angular/ssr": "^20.3.3",
     "@fortawesome/fontawesome-free": "^7.3.1",
+    "@meddv/ngx-pinch-zoom": "^20.0.0",
     "express": "^5.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
