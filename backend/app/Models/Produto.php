@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -16,16 +17,23 @@ class Produto extends Model
         'imagem_url',
         'especificacao',
         'selo',
+        'ativo',
     ];
 
     protected $casts = [
         'preco' => 'decimal:2',
         'preco_de' => 'decimal:2',
+        'ativo' => 'boolean',
     ];
 
     public function categoria(): BelongsTo
     {
         return $this->belongsTo(Categoria::class);
+    }
+
+    public function scopeAtivos(Builder $query): Builder
+    {
+        return $query->where('ativo', true);
     }
 
     /**
