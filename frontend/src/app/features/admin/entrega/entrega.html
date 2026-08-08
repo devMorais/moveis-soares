@@ -1,0 +1,81 @@
+<div class="entrega-pagina">
+    <h1>Cidades de entrega</h1>
+    <p class="entrega-pagina__descricao">
+        Cadastre as cidades atendidas e o valor do frete de cada uma. Cadastre também uma opção
+        de "Retirada no local" se fizer sentido pro seu negócio.
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="salvar()" class="form-cidade">
+        <div class="campo">
+            <label for="nome_cidade">Cidade</label>
+            <input type="text" id="nome_cidade" formControlName="nome_cidade">
+        </div>
+        <div class="campo campo--pequeno">
+            <label for="uf">UF</label>
+            <input type="text" id="uf" formControlName="uf" maxlength="2">
+        </div>
+        <div class="campo campo--pequeno">
+            <label for="valor_frete">Frete (R$)</label>
+            <input type="number" id="valor_frete" formControlName="valor_frete" step="0.01" min="0">
+        </div>
+        <div class="campo campo--pequeno">
+            <label for="prazo_dias_estimado">Prazo (dias)</label>
+            <input type="number" id="prazo_dias_estimado" formControlName="prazo_dias_estimado" min="0">
+        </div>
+        <label class="campo-checkbox">
+            <input type="checkbox" formControlName="eh_retirada_local">
+            Retirada no local
+        </label>
+        <div class="form-cidade__acoes">
+            <button type="submit" class="btn-salvar" [disabled]="salvando()">
+                {{ editandoId() ? 'Atualizar' : 'Adicionar' }}
+            </button>
+            @if (editandoId()) {
+                <button type="button" class="btn-cancelar" (click)="cancelarEdicao()">Cancelar</button>
+            }
+        </div>
+    </form>
+
+    @if (carregando()) {
+        <p>Carregando...</p>
+    } @else {
+        <table class="tabela-cidades">
+            <thead>
+                <tr>
+                    <th>Cidade</th>
+                    <th>UF</th>
+                    <th>Frete</th>
+                    <th>Prazo</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (cidade of cidades(); track cidade.id) {
+                    <tr>
+                        <td>
+                            {{ cidade.nomeCidade }}
+                            @if (cidade.ehRetiradaLocal) {
+                                <span class="badge">retirada</span>
+                            }
+                        </td>
+                        <td>{{ cidade.uf }}</td>
+                        <td>R$ {{ cidade.valorFrete }}</td>
+                        <td>{{ cidade.prazoDiasEstimado ? cidade.prazoDiasEstimado + ' dias' : '-' }}</td>
+                        <td class="tabela-cidades__acoes">
+                            <button type="button" (click)="editar(cidade)" aria-label="Editar">
+                                <i class="fas fa-pen"></i>
+                            </button>
+                            <button type="button" (click)="remover(cidade)" aria-label="Remover">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                } @empty {
+                    <tr>
+                        <td colspan="5">Nenhuma cidade cadastrada ainda.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

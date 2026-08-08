@@ -1,0 +1,69 @@
+.retorno-pagina {
+    padding: 120px 0 80px;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+}
+
+.retorno-card {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    background-color: var(--color-surface);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.retorno-icone {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 24px;
+}
+
+.retorno-icone--carregando {
+    background-color: var(--color-bg);
+    color: var(--color-primary);
+}
+
+.retorno-icone--sucesso {
+    background-color: rgba(34, 197, 94, 0.12);
+    color: #22c55e;
+}
+
+.retorno-icone--aviso,
+.retorno-icone--erro {
+    background-color: rgba(230, 51, 41, 0.1);
+    color: var(--color-primary);
+}
+
+.retorno-card h1 {
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.retorno-card p {
+    font-size: 14px;
+    color: var(--color-text-muted);
+    margin-bottom: 20px;
+}
+
+.btn-voltar {
+    display: inline-block;
+}
+
+.btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: #25d366;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 4px;
+}

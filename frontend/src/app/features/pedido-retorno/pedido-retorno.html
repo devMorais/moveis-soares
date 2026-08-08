@@ -1,0 +1,51 @@
+<section class="retorno-pagina">
+    <div class="container">
+        <div class="retorno-card">
+            @switch (estado()) {
+                @case ('verificando') {
+                    <div class="retorno-icone retorno-icone--carregando">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                    </div>
+                    <h1>Confirmando seu pagamento...</h1>
+                    <p>Isso leva só alguns segundos. Não feche esta página.</p>
+                }
+                @case ('pago') {
+                    <div class="retorno-icone retorno-icone--sucesso">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h1>Pagamento confirmado!</h1>
+                    <p>
+                        Recebemos seu pedido @if (pedidoId()) {#{{ pedidoId() }}} com sucesso.
+                        Em breve entraremos em contato para combinar a entrega.
+                    </p>
+                    <a routerLink="/" class="btn btn-voltar">Voltar para a loja</a>
+                }
+                @case ('pendente') {
+                    <div class="retorno-icone retorno-icone--aviso">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <h1>Ainda estamos confirmando</h1>
+                    <p>
+                        Seu pagamento pode levar mais alguns minutos para ser confirmado. Se preferir,
+                        fale com a gente pelo WhatsApp que confirmamos na hora.
+                    </p>
+                    <a [href]="linkWhatsapp" target="_blank" rel="noopener" class="btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i> Falar pelo WhatsApp
+                    </a>
+                }
+                @case ('erro') {
+                    <div class="retorno-icone retorno-icone--erro">
+                        <i class="fas fa-triangle-exclamation"></i>
+                    </div>
+                    <h1>Não encontramos seu pedido</h1>
+                    <p>
+                        Se você já pagou, fale com a gente pelo WhatsApp que confirmamos manualmente.
+                    </p>
+                    <a [href]="linkWhatsapp" target="_blank" rel="noopener" class="btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i> Falar pelo WhatsApp
+                    </a>
+                }
+            }
+        </div>
+    </div>
+</section>

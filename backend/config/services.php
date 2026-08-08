@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'infinitepay' => [
+        'handle' => env('INFINITEPAY_HANDLE'),
+        'url' => env('INFINITEPAY_URL', 'https://api.checkout.infinitepay.io'),
+        'webhook_url' => env('INFINITEPAY_WEBHOOK_URL'),
+        'redirect_url' => env('INFINITEPAY_REDIRECT_URL'),
+    ],
+
 ];

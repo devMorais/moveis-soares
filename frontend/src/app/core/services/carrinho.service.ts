@@ -1,31 +1,19 @@
 import { Injectable, PLATFORM_ID, computed, effect, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Produto } from '../types/produto/produto.type';
-
-export interface ItemCarrinho {
-    produtoId: number;
-    nome: string;
-    slug?: string;
-    imagemUrl: string;
-    preco: number;
-    quantidade: number;
-}
+import { ItemCarrinho } from '../types/carrinho/item-carrinho.type';
 
 const CHAVE_STORAGE = 'carrinho';
 
-/**
- * Versao minima do carrinho (persistencia em localStorage) - o escopo
- * completo (painel lateral, contador no header) fica para MS-PED-01.
- * Criado aqui como pre-requisito direto do botao "Adicionar ao carrinho"
- * da pagina de produto (MS-PUB-04).
- */
 @Injectable({ providedIn: 'root' })
 export class CarrinhoService {
     private platformId = inject(PLATFORM_ID);
 
     itens = signal<ItemCarrinho[]>(this.carregarDoStorage());
+    aberto = signal(false);
 
     subtotal = computed(() => this.itens().reduce((soma, item) => soma + item.preco * item.quantidade, 0));
+    totalItens = computed(() => this.itens().reduce((soma, item) => soma + item.quantidade, 0));
 
     constructor() {
         effect(() => {
@@ -44,13 +32,33 @@ export class CarrinhoService {
         return bruto ? JSON.parse(bruto) : [];
     }
 
-    adicionar(produto: Produto, quantidade: number): void {
+    abrir(): void {
+        this.aberto.set(true);
+    }
+
+    fechar(): void {
+        this.aberto.set(false);
+    }
+
+    /**
+     * Retorna false (e nao adiciona nada) se a quantidade pedida ultrapassar
+     * o estoque disponivel do produto - o chamador decide como avisar o
+     * usuario.
+     */
+    adicionar(produto: Produto, quantidade: number): boolean {
+        const jaNoCarrinho = this.itens().find((item) => item.produtoId === produto.id)?.quantidade ?? 0;
+        const quantidadeFinal = jaNoCarrinho + quantidade;
+
+        if (produto.estoque !== undefined && quantidadeFinal > produto.estoque) {
+            return false;
+        }
+
         this.itens.update((atuais) => {
             const existente = atuais.find((item) => item.produtoId === produto.id);
 
             if (existente) {
                 return atuais.map((item) =>
-                    item.produtoId === produto.id ? { ...item, quantidade: item.quantidade + quantidade } : item,
+                    item.produtoId === produto.id ? { ...item, quantidade: quantidadeFinal } : item,
                 );
             }
 
@@ -66,9 +74,26 @@ export class CarrinhoService {
                 },
             ];
         });
+
+        return true;
+    }
+
+    atualizarQuantidade(produtoId: number, quantidade: number): void {
+        if (quantidade <= 0) {
+            this.removerItem(produtoId);
+            return;
+        }
+
+        this.itens.update((atuais) =>
+            atuais.map((item) => (item.produtoId === produtoId ? { ...item, quantidade } : item)),
+        );
     }
 
     removerItem(produtoId: number): void {
         this.itens.update((atuais) => atuais.filter((item) => item.produtoId !== produtoId));
+    }
+
+    limpar(): void {
+        this.itens.set([]);
     }
 }

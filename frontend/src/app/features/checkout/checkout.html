@@ -1,0 +1,79 @@
+<section class="checkout-pagina">
+    <div class="container">
+        <h1>Finalizar compra</h1>
+
+        <div class="checkout-grid">
+            <form [formGroup]="form" (ngSubmit)="finalizar()" class="checkout-form">
+                <div class="campo">
+                    <label for="nome">Nome completo</label>
+                    <input type="text" id="nome" formControlName="nome">
+                </div>
+                <div class="campo">
+                    <label for="telefone">WhatsApp</label>
+                    <input type="tel" id="telefone" formControlName="telefone">
+                </div>
+                <div class="campo">
+                    <label for="endereco">Endereço completo</label>
+                    <input type="text" id="endereco" formControlName="endereco">
+                </div>
+                <div class="campo">
+                    <label for="cidadeTexto">Cidade</label>
+                    <input type="text" id="cidadeTexto" formControlName="cidadeTexto" list="lista-cidades" placeholder="Digite ou escolha sua cidade">
+                    <datalist id="lista-cidades">
+                        @for (cidade of cidades(); track cidade.id) {
+                            <option [value]="cidade.nomeCidade"></option>
+                        }
+                    </datalist>
+                    <div class="cidades-sugestoes">
+                        @for (cidade of cidades(); track cidade.id) {
+                            <button type="button" (click)="selecionarCidade(cidade)">{{ cidade.nomeCidade }}</button>
+                        }
+                    </div>
+                </div>
+
+                @if (form.controls.cidadeTexto.value && !cidadeEncontrada()) {
+                    <div class="aviso-frete-combinar">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <p>
+                            Sua cidade não está na nossa lista de entrega automática — vamos combinar o
+                            frete com você pelo WhatsApp assim que confirmarmos seu pedido.
+                        </p>
+                        <a [href]="linkWhatsapp" target="_blank" rel="noopener" class="btn-whatsapp">
+                            <i class="fab fa-whatsapp"></i> Falar agora pelo WhatsApp
+                        </a>
+                    </div>
+                }
+
+                <button type="submit" class="btn btn-finalizar" [disabled]="enviando()">
+                    {{ enviando() ? 'Processando...' : 'Ir para pagamento' }}
+                </button>
+            </form>
+
+            <div class="checkout-resumo">
+                <h2>Resumo do pedido</h2>
+                @for (item of carrinho.itens(); track item.produtoId) {
+                    <div class="checkout-resumo__item">
+                        <span>{{ item.quantidade }}x {{ item.nome }}</span>
+                        <span>R$ {{ item.preco * item.quantidade }}</span>
+                    </div>
+                }
+                <div class="checkout-resumo__linha">
+                    <span>Subtotal</span>
+                    <span>R$ {{ carrinho.subtotal() }}</span>
+                </div>
+                <div class="checkout-resumo__linha">
+                    <span>Frete</span>
+                    @if (cidadeEncontrada()) {
+                        <span>R$ {{ freteACobrar() }}</span>
+                    } @else {
+                        <span>A combinar</span>
+                    }
+                </div>
+                <div class="checkout-resumo__total">
+                    <span>Total</span>
+                    <strong>R$ {{ totalPedido() }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

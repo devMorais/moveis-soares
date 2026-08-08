@@ -1,0 +1,49 @@
+@if (carrinho.aberto()) {
+    <div class="carrinho-fundo" (click)="carrinho.fechar()"></div>
+}
+
+<aside class="carrinho-painel" [class.aberto]="carrinho.aberto()">
+    <div class="carrinho-topo">
+        <h2>Seu carrinho</h2>
+        <button type="button" class="carrinho-fechar" (click)="carrinho.fechar()" aria-label="Fechar carrinho">
+            <i class="fas fa-xmark"></i>
+        </button>
+    </div>
+
+    @if (carrinho.itens().length === 0) {
+        <p class="carrinho-vazio">Seu carrinho está vazio.</p>
+    } @else {
+        <div class="carrinho-itens">
+            @for (item of carrinho.itens(); track item.produtoId) {
+                <div class="carrinho-item">
+                    <img [src]="item.imagemUrl" [alt]="item.nome">
+                    <div class="carrinho-item__info">
+                        <p class="carrinho-item__nome">{{ item.nome }}</p>
+                        <p class="carrinho-item__preco">R$ {{ item.preco }}</p>
+                        <div class="carrinho-item__quantidade">
+                            <button type="button" (click)="diminuir(item.produtoId, item.quantidade)" aria-label="Diminuir">-</button>
+                            <span>{{ item.quantidade }}</span>
+                            <button type="button" (click)="aumentar(item.produtoId, item.quantidade)" aria-label="Aumentar">+</button>
+                        </div>
+                    </div>
+                    <div class="carrinho-item__lado">
+                        <span class="carrinho-item__subtotal">R$ {{ item.preco * item.quantidade }}</span>
+                        <button type="button" class="carrinho-item__remover" (click)="carrinho.removerItem(item.produtoId)" aria-label="Remover item">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="carrinho-rodape">
+            <div class="carrinho-subtotal">
+                <span>Subtotal</span>
+                <strong>R$ {{ carrinho.subtotal() }}</strong>
+            </div>
+            <button type="button" class="btn btn-finalizar" (click)="finalizarCompra()">
+                Finalizar compra
+            </button>
+        </div>
+    }
+</aside>

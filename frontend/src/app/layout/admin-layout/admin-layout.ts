@@ -25,6 +25,7 @@ export class AdminLayout {
         { rota: '/admin/instagram', label: 'Instagram', icone: 'fa-camera' },
         { rota: '/admin/categorias', label: 'Categorias', icone: 'fa-tags' },
         { rota: '/admin/produtos', label: 'Produtos', icone: 'fa-couch' },
+        { rota: '/admin/entrega', label: 'Entrega', icone: 'fa-truck' },
         { rota: '/admin/pedidos', label: 'Pedidos', icone: 'fa-box' },
         { rota: '/admin/configuracoes', label: 'Configurações', icone: 'fa-gear' },
     ];

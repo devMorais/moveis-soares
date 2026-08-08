@@ -87,7 +87,14 @@ export class Produto implements OnInit {
         const produto = this.produto();
         if (!produto || this.semEstoque()) return;
 
-        this.carrinhoService.adicionar(produto, this.quantidade());
+        const conseguiu = this.carrinhoService.adicionar(produto, this.quantidade());
+
+        if (!conseguiu) {
+            this.toast.erro(`Não há estoque suficiente de "${produto.nome}" para essa quantidade.`);
+            return;
+        }
+
         this.toast.sucesso(`${produto.nome} adicionado ao carrinho.`);
+        this.carrinhoService.abrir();
     }
 }

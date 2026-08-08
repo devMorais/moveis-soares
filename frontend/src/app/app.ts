@@ -5,10 +5,11 @@ import { filter, map, startWith } from 'rxjs/operators';
 import { Navbar } from './shared/components/layout/navbar/navbar';
 import { Footer } from './shared/components/layout/footer/footer';
 import { WhatsappFab } from './shared/components/layout/whatsapp-fab/whatsapp-fab';
+import { CarrinhoLateral } from './shared/components/carrinho-lateral/carrinho-lateral';
 
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet, Navbar, Footer, WhatsappFab],
+    imports: [RouterOutlet, Navbar, Footer, WhatsappFab, CarrinhoLateral],
     templateUrl: './app.html',
     styleUrl: './app.scss',
 })

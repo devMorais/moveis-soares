@@ -4,11 +4,14 @@ import { Sobre } from './features/sobre/sobre';
 import { Contato } from './features/contato/contato';
 import { Categoria } from './features/categoria/categoria';
 import { Produto } from './features/produto/produto';
+import { Checkout } from './features/checkout/checkout';
+import { PedidoRetorno } from './features/pedido-retorno/pedido-retorno';
 import { Login } from './features/admin/login/login';
 import { Dashboard } from './features/admin/dashboard/dashboard';
 import { Conteudo } from './features/admin/conteudo/conteudo';
 import { Secoes } from './features/admin/secoes/secoes';
 import { Instagram } from './features/admin/instagram/instagram';
+import { Entrega } from './features/admin/entrega/entrega';
 import { NovoProduto } from './features/admin/produtos/novo-produto/novo-produto';
 import { AdminLayout } from './layout/admin-layout/admin-layout';
 import { authGuard } from './core/guards/auth.guard';
@@ -19,6 +22,8 @@ export const routes: Routes = [
     { path: 'contato', component: Contato },
     { path: 'categoria/:slug', component: Categoria },
     { path: 'produto/:slug', component: Produto },
+    { path: 'checkout', component: Checkout },
+    { path: 'checkout/retorno', component: PedidoRetorno },
     { path: 'admin/login', component: Login },
     {
         path: 'admin',
@@ -29,6 +34,7 @@ export const routes: Routes = [
             { path: 'conteudo', component: Conteudo },
             { path: 'secoes', component: Secoes },
             { path: 'instagram', component: Instagram },
+            { path: 'entrega', component: Entrega },
             { path: 'produtos/novo', component: NovoProduto },
         ],
     },

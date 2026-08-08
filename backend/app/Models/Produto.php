@@ -17,6 +17,7 @@ class Produto extends Model
         'imagem_url',
         'especificacao',
         'selo',
+        'estoque',
         'ativo',
     ];
 
@@ -53,6 +54,7 @@ class Produto extends Model
             'imagemUrl' => $this->imagem_url,
             'especificacao' => $this->especificacao,
             'selo' => $this->selo,
+            'estoque' => $this->estoque,
         ];
     }
 }

@@ -11,6 +11,12 @@
             <a routerLink="/sobre" routerLinkActive="ativo" (click)="fecharMenu()">Sobre</a>
             <a routerLink="/contato" routerLinkActive="ativo" (click)="fecharMenu()">Fale Conosco</a>
         </nav>
+        <button type="button" class="btn-carrinho" (click)="carrinho.abrir()" aria-label="Abrir carrinho">
+            <i class="fas fa-bag-shopping"></i>
+            @if (carrinho.totalItens() > 0) {
+                <span class="btn-carrinho__contador">{{ carrinho.totalItens() }}</span>
+            }
+        </button>
         <button type="button" class="btn-menu" (click)="toggleMenu()" [attr.aria-expanded]="menuAberto()" aria-label="Abrir menu">
             <span></span>
             <span></span>
