@@ -1,0 +1,17 @@
+/**
+ * Identidade visual PROPRIA do painel administrativo - independente da
+ * identidade vermelho/preto do site publico do cliente. O admin precisa
+ * ser usavel e profissional mesmo que a cor de marca do cliente mude.
+ */
+:root {
+    --admin-bg: #f4f5f7;
+    --admin-surface: #ffffff;
+    --admin-border: #e2e4e9;
+    --admin-text: #1a1d24;
+    --admin-text-muted: #6b7280;
+    --admin-primary: #2563eb;
+    --admin-primary-hover: #1d4ed8;
+    --admin-danger: #dc2626;
+    --admin-success: #16a34a;
+    --admin-font: 'Inter', system-ui, sans-serif;
+}

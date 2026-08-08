@@ -1,0 +1,114 @@
+.admin-shell {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--admin-bg);
+    font-family: var(--admin-font);
+    color: var(--admin-text);
+}
+
+.admin-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--admin-surface);
+    border-right: 1px solid var(--admin-border);
+    padding: 20px 0;
+}
+
+.admin-sidebar__marca {
+    padding: 0 20px 20px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.admin-sidebar__menu {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.admin-sidebar__menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    color: var(--admin-text-muted);
+    font-size: 14px;
+    font-weight: 500;
+    border-left: 3px solid transparent;
+}
+
+.admin-sidebar__menu a i {
+    width: 16px;
+    text-align: center;
+}
+
+.admin-sidebar__menu a:hover {
+    background-color: var(--admin-bg);
+    color: var(--admin-text);
+}
+
+.admin-sidebar__menu a.ativo {
+    background-color: var(--admin-bg);
+    color: var(--admin-primary);
+    border-left-color: var(--admin-primary);
+}
+
+.admin-sidebar__sair {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 20px 0;
+    padding: 10px 0;
+    background: none;
+    border: none;
+    border-top: 1px solid var(--admin-border);
+    color: var(--admin-text-muted);
+    font-family: var(--admin-font);
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.admin-sidebar__sair:hover {
+    color: var(--admin-danger);
+}
+
+.admin-conteudo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.admin-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    background-color: var(--admin-surface);
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-topo__usuario {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--admin-text-muted);
+}
+
+.admin-topo__ver-site {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--admin-primary);
+}
+
+.admin-pagina {
+    flex: 1;
+    padding: 24px;
+}

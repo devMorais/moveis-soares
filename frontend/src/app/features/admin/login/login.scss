@@ -1,0 +1,86 @@
+.login-pagina {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--admin-bg);
+    font-family: var(--admin-font);
+}
+
+.login-card {
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 32px 28px;
+    background-color: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.login-titulo {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--admin-text);
+    text-align: center;
+}
+
+.login-subtitulo {
+    margin-top: -12px;
+    font-size: 13px;
+    color: var(--admin-text-muted);
+    text-align: center;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.campo label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--admin-text);
+}
+
+.campo input {
+    padding: 10px 12px;
+    background-color: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    color: var(--admin-text);
+    font-family: var(--admin-font);
+    font-size: 14px;
+}
+
+.campo input:focus {
+    outline: none;
+    border-color: var(--admin-primary);
+}
+
+.btn-entrar {
+    margin-top: 8px;
+    padding: 11px;
+    background-color: var(--admin-primary);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: var(--admin-font);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-entrar:hover:not(:disabled) {
+    background-color: var(--admin-primary-hover);
+}
+
+.btn-entrar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

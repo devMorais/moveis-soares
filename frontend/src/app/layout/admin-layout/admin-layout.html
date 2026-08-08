@@ -1,0 +1,38 @@
+<div class="admin-shell">
+    <aside class="admin-sidebar">
+        <div class="admin-sidebar__marca">Móveis Soares</div>
+        <nav class="admin-sidebar__menu">
+            @for (item of itens; track item.rota) {
+                <a
+                    [routerLink]="item.rota"
+                    routerLinkActive="ativo"
+                    [routerLinkActiveOptions]="{ exact: item.exato ?? false }"
+                >
+                    <i class="fas" [class]="item.icone"></i>
+                    {{ item.label }}
+                </a>
+            }
+        </nav>
+        <button type="button" class="admin-sidebar__sair" (click)="sair()">
+            <i class="fas fa-arrow-right-from-bracket"></i>
+            Sair
+        </button>
+    </aside>
+
+    <div class="admin-conteudo">
+        <header class="admin-topo">
+            <span class="admin-topo__usuario">
+                <i class="fas fa-circle-user"></i>
+                {{ auth.currentUser()?.name }}
+            </span>
+            <a routerLink="/" target="_blank" class="admin-topo__ver-site">
+                <i class="fas fa-arrow-up-right-from-square"></i>
+                Ver site
+            </a>
+        </header>
+
+        <main class="admin-pagina">
+            <router-outlet />
+        </main>
+    </div>
+</div>
