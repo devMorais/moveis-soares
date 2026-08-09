@@ -12,21 +12,21 @@
                 <h2 class="titulo">Informações de contato</h2>
                 <p>
                     <i class="fas fa-location-dot"></i>
-                    {{ info.address }}
+                    {{ info().endereco }}
                 </p>
                 <p>
                     <i class="fas fa-mobile-screen-button"></i>
-                    <a [href]="'tel:+' + info.phoneWhatsapp">{{ info.phoneDisplay }}</a>
+                    <a [href]="'tel:+' + info().telefoneWhatsapp">{{ info().telefoneDisplay }}</a>
                 </p>
                 <p>
                     <i class="far fa-envelope"></i>
-                    <a [href]="'mailto:' + info.email">{{ info.email }}</a>
+                    <a [href]="'mailto:' + info().email">{{ info().email }}</a>
                 </p>
                 <p>
                     <i class="far fa-clock"></i>
-                    {{ info.hours }}
+                    {{ info().horario }}
                 </p>
-                <a class="btn btn-whatsapp" [href]="'https://wa.me/' + info.phoneWhatsapp" target="_blank" rel="noopener">
+                <a class="btn btn-whatsapp" [href]="'https://wa.me/' + info().telefoneWhatsapp" target="_blank" rel="noopener">
                     <i class="fab fa-whatsapp"></i> Chamar no WhatsApp
                 </a>
             </div>

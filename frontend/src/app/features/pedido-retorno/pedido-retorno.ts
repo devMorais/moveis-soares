@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PedidoService, StatusPedidoResposta } from '../../core/services/pedido.service';
-import { SITE_INFO } from '../../core/constants/site-info';
+import { SiteService } from '../../core/services/site.service';
 
 type EstadoRetorno = 'verificando' | 'pago' | 'pendente' | 'erro';
 
@@ -14,8 +14,8 @@ type EstadoRetorno = 'verificando' | 'pago' | 'pendente' | 'erro';
 export class PedidoRetorno implements OnInit {
     private route = inject(ActivatedRoute);
     private pedidoService = inject(PedidoService);
+    private site = inject(SiteService);
 
-    info = SITE_INFO;
     estado = signal<EstadoRetorno>('verificando');
     pedidoId = signal<number | null>(null);
     pedido = signal<StatusPedidoResposta | null>(null);
@@ -66,6 +66,6 @@ export class PedidoRetorno implements OnInit {
                 ? `Olá! Tenho uma dúvida sobre o meu pedido #${pedido}.`
                 : `Olá! Tenho uma dúvida sobre meu pedido.`,
         );
-        return `https://wa.me/${this.info.phoneWhatsapp}?text=${texto}`;
+        return `https://wa.me/${this.site.conteudo().contato?.telefoneWhatsapp}?text=${texto}`;
     }
 }

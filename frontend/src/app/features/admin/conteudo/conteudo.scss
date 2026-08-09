@@ -106,6 +106,43 @@
     border-radius: 8px;
 }
 
+.form-secao__subtitulo {
+    font-size: 15px;
+    font-weight: 700;
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--admin-border);
+}
+
+.form-secao__subtitulo:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+.lista-itens {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+}
+
+.lista-itens__item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    background-color: var(--admin-bg);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+}
+
+.lista-itens__rotulo {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--admin-text-muted);
+}
+
 .campo {
     display: flex;
     flex-direction: column;

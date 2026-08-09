@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\SecaoContato;
+use App\Models\SecaoCta;
 use App\Models\SecaoHero;
+use App\Models\SecaoInstitucional;
 use App\Models\SecaoSobre;
 use App\Models\SecaoVisibilidade;
 use Illuminate\Http\JsonResponse;
@@ -23,6 +25,8 @@ class SiteController extends Controller
             'hero' => SecaoHero::first(),
             'sobre' => SecaoSobre::first(),
             'contato' => SecaoContato::first(),
+            'institucional' => SecaoInstitucional::first(),
+            'cta' => SecaoCta::all()->keyBy('chave'),
             'secoesVisiveis' => SecaoVisibilidade::mapaDeVisibilidade(),
         ]);
     }

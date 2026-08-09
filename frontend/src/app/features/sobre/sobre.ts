@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SITE_INFO } from '../../core/constants/site-info';
+import { SiteService } from '../../core/services/site.service';
+
+const ICONES_DIFERENCIAIS = ['fa-star', 'fa-tag', 'fa-truck', 'fa-comments'];
 
 @Component({
     selector: 'app-sobre',
@@ -9,5 +12,17 @@ import { SITE_INFO } from '../../core/constants/site-info';
     styleUrl: './sobre.scss',
 })
 export class Sobre {
-    info = SITE_INFO;
+    private site = inject(SiteService);
+
+    marca = SITE_INFO;
+
+    sobre = computed(() => this.site.conteudo().sobre);
+    cta = computed(() => this.site.conteudo().cta['sobre']);
+
+    diferenciais = computed(() =>
+        (this.sobre()?.diferenciais ?? []).map((item, indice) => ({
+            ...item,
+            icone: ICONES_DIFERENCIAIS[indice] ?? 'fa-star',
+        })),
+    );
 }

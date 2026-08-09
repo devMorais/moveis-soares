@@ -5,7 +5,7 @@ import { CarrinhoService } from '../../core/services/carrinho.service';
 import { CidadeEntregaService } from '../../core/services/cidade-entrega.service';
 import { PedidoService } from '../../core/services/pedido.service';
 import { ToastService } from '../../core/services/toast.service';
-import { SITE_INFO } from '../../core/constants/site-info';
+import { SiteService } from '../../core/services/site.service';
 import { CidadeEntrega } from '../../core/types/cidade-entrega/cidade-entrega.type';
 
 @Component({
@@ -20,9 +20,9 @@ export class Checkout implements OnInit {
     private pedidoService = inject(PedidoService);
     private toast = inject(ToastService);
     private router = inject(Router);
+    private site = inject(SiteService);
 
     carrinho = inject(CarrinhoService);
-    info = SITE_INFO;
 
     cidades = signal<CidadeEntrega[]>([]);
     enviando = signal(false);
@@ -62,7 +62,7 @@ export class Checkout implements OnInit {
         const texto = encodeURIComponent(
             `Olá! Fiz um pedido no site e minha cidade não está na lista de entrega automática. Podemos combinar o frete?`,
         );
-        return `https://wa.me/${this.info.phoneWhatsapp}?text=${texto}`;
+        return `https://wa.me/${this.site.conteudo().contato?.telefoneWhatsapp}?text=${texto}`;
     }
 
     finalizar(): void {

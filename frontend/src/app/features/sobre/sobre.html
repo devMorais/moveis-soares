@@ -1,6 +1,6 @@
 <section class="topo-pagina">
     <div class="container">
-        <h1 class="titulo">Sobre a {{ info.businessName }}</h1>
+        <h1 class="titulo">Sobre a {{ marca.businessName }}</h1>
         <p class="subtitulo">Qualidade e preço justo pra cada ambiente da sua casa.</p>
     </div>
 </section>
@@ -9,17 +9,10 @@
     <div class="container">
         <div class="conteudo">
             <div class="texto">
-                <h2 class="titulo">Nossa história</h2>
-                <p>
-                    A {{ info.businessName }} nasceu do compromisso de oferecer móveis de
-                    qualidade com preço que cabe no bolso das famílias. Do escritório ao
-                    quarto, da sala à cozinha, cada peça é escolhida pensando em durabilidade
-                    e acabamento.
-                </p>
-                <p>
-                    Acompanhamos as novidades do mercado pra trazer sempre opções atuais,
-                    sem abrir mão da qualidade que o cliente vê e sente assim que o móvel chega em casa.
-                </p>
+                <h2 class="titulo">{{ sobre()?.tituloHistoria }}</h2>
+                @for (paragrafo of (sobre()?.textoHistoria ?? '').split('\n\n'); track paragrafo) {
+                    <p>{{ paragrafo }}</p>
+                }
             </div>
         </div>
     </div>
@@ -28,28 +21,15 @@
 <section class="diferenciais">
     <div class="container">
         <div class="conteudo">
-            <h2 class="titulo">Por que escolher a {{ info.businessName }}</h2>
+            <h2 class="titulo">Por que escolher a {{ marca.businessName }}</h2>
             <div class="itens">
-                <div class="item">
-                    <i class="fas fa-star"></i>
-                    <h3 class="titulo">Qualidade que você vê</h3>
-                    <p>Acabamento cuidadoso e materiais resistentes em cada peça do catálogo.</p>
-                </div>
-                <div class="item">
-                    <i class="fas fa-tag"></i>
-                    <h3 class="titulo">Preço justo</h3>
-                    <p>Móveis bonitos e duráveis sem pesar no orçamento da sua casa.</p>
-                </div>
-                <div class="item">
-                    <i class="fas fa-truck"></i>
-                    <h3 class="titulo">Entrega combinada com você</h3>
-                    <p>Alinhamos prazo e forma de entrega direto com o cliente, sem surpresas.</p>
-                </div>
-                <div class="item">
-                    <i class="fas fa-comments"></i>
-                    <h3 class="titulo">Atendimento próximo</h3>
-                    <p>Tiramos suas dúvidas pelo WhatsApp antes, durante e depois da compra.</p>
-                </div>
+                @for (item of diferenciais(); track item.titulo) {
+                    <div class="item">
+                        <i class="fas" [class]="item.icone"></i>
+                        <h3 class="titulo">{{ item.titulo }}</h3>
+                        <p>{{ item.texto }}</p>
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -58,8 +38,8 @@
 <section class="cta">
     <div class="container">
         <div class="conteudo">
-            <h2 class="titulo">Vamos renovar sua casa?</h2>
-            <p>Entre em contato e converse com a nossa equipe sobre o móvel ideal pra você.</p>
+            <h2 class="titulo">{{ cta()?.titulo }}</h2>
+            <p>{{ cta()?.texto }}</p>
             <div class="botoes">
                 <a routerLink="/contato" class="btn">Fale Conosco</a>
             </div>

@@ -12,5 +12,10 @@ class SecaoSobre extends Model
         'titulo_historia',
         'texto_historia',
         'imagem_url',
+        'diferenciais',
+    ];
+
+    protected $casts = [
+        'diferenciais' => 'array',
     ];
 }

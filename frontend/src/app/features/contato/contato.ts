@@ -1,7 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SITE_INFO } from '../../core/constants/site-info';
 import { ContatoService } from '../../core/services/contato';
+import { SiteService } from '../../core/services/site.service';
 
 @Component({
     selector: 'app-contato',
@@ -12,8 +12,9 @@ import { ContatoService } from '../../core/services/contato';
 export class Contato {
     private fb = inject(FormBuilder);
     private contatoService = inject(ContatoService);
+    private site = inject(SiteService);
 
-    info = SITE_INFO;
+    info = computed(() => this.site.conteudo().contato);
     enviando = signal(false);
     status = signal<'sucesso' | 'erro' | null>(null);
 

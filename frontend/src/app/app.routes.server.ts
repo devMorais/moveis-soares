@@ -12,9 +12,13 @@ export const serverRoutes: ServerRoute[] = [
     path: 'produto/:slug',
     renderMode: RenderMode.Server
   },
+  // O painel /admin inteiro depende de estado de browser (token no
+  // localStorage, guard de autenticacao) - nunca deve ser prerenderizado
+  // nem passar por SSR, senao a primeira renderizacao nao sabe se o
+  // usuario esta logado e a sessao "cai" ate a hidratacao terminar.
   {
-    path: 'admin/produtos/:id/editar',
-    renderMode: RenderMode.Server
+    path: 'admin/**',
+    renderMode: RenderMode.Client
   },
   {
     path: '**',

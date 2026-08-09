@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Admin\CategoriaController as AdminCategoriaControll
 use App\Http\Controllers\Api\Admin\CidadeEntregaController as AdminCidadeEntregaController;
 use App\Http\Controllers\Api\Admin\ConfiguracaoSeoController;
 use App\Http\Controllers\Api\Admin\ConteudoController;
+use App\Http\Controllers\Api\Admin\ConteudoCtaController;
 use App\Http\Controllers\Api\Admin\PedidoController as AdminPedidoController;
 use App\Http\Controllers\Api\Admin\ProdutoController as AdminProdutoController;
 use App\Http\Controllers\Api\Admin\SecoesController;
@@ -45,6 +46,9 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
 
     Route::get('/conteudo/{slug}', [ConteudoController::class, 'mostrar']);
     Route::put('/conteudo/{slug}', [ConteudoController::class, 'atualizar']);
+
+    Route::get('/conteudo-cta/{chave}', [ConteudoCtaController::class, 'mostrar']);
+    Route::put('/conteudo-cta/{chave}', [ConteudoCtaController::class, 'atualizar']);
 
     Route::get('/secoes', [SecoesController::class, 'listar']);
     Route::patch('/secoes', [SecoesController::class, 'atualizar']);

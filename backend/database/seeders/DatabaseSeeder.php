@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoriaSeeder::class);
         $this->call(ProdutoSeeder::class);
         $this->call(CidadeEntregaSeeder::class);
+        $this->call(ConteudoInstitucionalSeeder::class);
 
         if (! app()->isProduction()) {
             $this->call(PedidoDemoSeeder::class);

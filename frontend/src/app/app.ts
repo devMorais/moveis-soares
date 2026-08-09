@@ -7,6 +7,7 @@ import { Footer } from './shared/components/layout/footer/footer';
 import { WhatsappFab } from './shared/components/layout/whatsapp-fab/whatsapp-fab';
 import { CarrinhoLateral } from './shared/components/carrinho-lateral/carrinho-lateral';
 import { Seo } from './core/services/seo';
+import { SiteService } from './core/services/site.service';
 
 @Component({
     selector: 'app-root',
@@ -17,6 +18,7 @@ import { Seo } from './core/services/seo';
 export class App {
     private router = inject(Router);
     private seo = inject(Seo);
+    private site = inject(SiteService);
 
     /**
      * O painel /admin tem layout próprio, independente do site público.
@@ -32,5 +34,6 @@ export class App {
 
     constructor() {
         this.seo.carregarConfiguracaoGlobal();
+        this.site.carregar();
     }
 }

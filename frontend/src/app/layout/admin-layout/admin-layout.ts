@@ -32,6 +32,7 @@ export class AdminLayout {
         label: 'Conteúdo',
         icone: 'fa-file-lines',
         itens: [
+            { rota: '/admin/conteudo', label: 'Início', icone: 'fa-house', queryParams: { aba: 'inicio' } },
             { rota: '/admin/conteudo', label: 'Sobre', icone: 'fa-circle-info', queryParams: { aba: 'sobre' } },
             { rota: '/admin/conteudo', label: 'Contato', icone: 'fa-envelope', queryParams: { aba: 'contato' } },
         ],

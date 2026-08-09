@@ -34,8 +34,54 @@
         </div>
     }
 
+    @if (abaAtiva() === 'inicio') {
+        <form [formGroup]="formInicio" (ngSubmit)="salvar()" class="form-secao">
+            <h2 class="form-secao__subtitulo">Bloco "Quem somos"</h2>
+            <div class="campo">
+                <label for="inicio-resumo-titulo">Título</label>
+                <input type="text" id="inicio-resumo-titulo" formControlName="resumo_titulo">
+            </div>
+            <div class="campo">
+                <label for="inicio-resumo-texto">Texto resumido</label>
+                <textarea id="inicio-resumo-texto" formControlName="resumo_texto" rows="3"></textarea>
+            </div>
+
+            <h2 class="form-secao__subtitulo">3 destaques da home</h2>
+            <div class="lista-itens" formArrayName="itens">
+                @for (item of itensInicio.controls; track $index) {
+                    <div class="lista-itens__item" [formGroupName]="$index">
+                        <span class="lista-itens__rotulo">{{ rotulosInstitucional[$index] }}</span>
+                        <div class="campo">
+                            <label>Título</label>
+                            <input type="text" formControlName="titulo">
+                        </div>
+                        <div class="campo">
+                            <label>Texto</label>
+                            <input type="text" formControlName="texto">
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <h2 class="form-secao__subtitulo">Banner final (call-to-action)</h2>
+            <div class="campo">
+                <label for="inicio-cta-titulo">Título</label>
+                <input type="text" id="inicio-cta-titulo" formControlName="cta_titulo">
+            </div>
+            <div class="campo">
+                <label for="inicio-cta-texto">Texto</label>
+                <input type="text" id="inicio-cta-texto" formControlName="cta_texto">
+            </div>
+
+            <button type="submit" class="btn-salvar" [disabled]="salvando()">
+                {{ salvando() ? 'Salvando...' : 'Salvar' }}
+            </button>
+        </form>
+    }
+
     @if (abaAtiva() === 'sobre') {
         <form [formGroup]="formSobre" (ngSubmit)="salvar()" class="form-secao">
+            <h2 class="form-secao__subtitulo">Nossa história</h2>
             <div class="campo">
                 <label for="sobre-titulo">Título da história</label>
                 <input type="text" id="sobre-titulo" formControlName="titulo_historia">
@@ -48,6 +94,34 @@
                 <label>Imagem</label>
                 <app-upload-imagem [endpoint]="uploadEndpoint" (uploadConcluido)="aoImagemProcessada($event)" />
             </div>
+
+            <h2 class="form-secao__subtitulo">Por que escolher (4 diferenciais)</h2>
+            <div class="lista-itens" formArrayName="diferenciais">
+                @for (item of diferenciaisSobre.controls; track $index) {
+                    <div class="lista-itens__item" [formGroupName]="$index">
+                        <span class="lista-itens__rotulo">{{ rotulosDiferenciais[$index] }}</span>
+                        <div class="campo">
+                            <label>Título</label>
+                            <input type="text" formControlName="titulo">
+                        </div>
+                        <div class="campo">
+                            <label>Texto</label>
+                            <input type="text" formControlName="texto">
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <h2 class="form-secao__subtitulo">Banner final (call-to-action)</h2>
+            <div class="campo">
+                <label for="sobre-cta-titulo">Título</label>
+                <input type="text" id="sobre-cta-titulo" formControlName="cta_titulo">
+            </div>
+            <div class="campo">
+                <label for="sobre-cta-texto">Texto</label>
+                <input type="text" id="sobre-cta-texto" formControlName="cta_texto">
+            </div>
+
             <button type="submit" class="btn-salvar" [disabled]="salvando()">
                 {{ salvando() ? 'Salvando...' : 'Salvar' }}
             </button>

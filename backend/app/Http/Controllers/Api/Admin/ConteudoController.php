@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\SecaoContato;
 use App\Models\SecaoHero;
+use App\Models\SecaoInstitucional;
 use App\Models\SecaoSobre;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,7 +16,8 @@ class ConteudoController extends Controller
     /**
      * Cada secao institucional guarda uma unica linha de configuracao
      * (nao e uma lista). Mapear slug -> Model + campos aceitos evita um
-     * Controller por secao.
+     * Controller por secao. 'cta' fica de fora (tem uma linha por chave,
+     * tratado em ConteudoCtaController).
      */
     private const SECOES = [
         'hero' => [
@@ -24,11 +26,15 @@ class ConteudoController extends Controller
         ],
         'sobre' => [
             'model' => SecaoSobre::class,
-            'campos' => ['titulo_historia', 'texto_historia', 'imagem_url'],
+            'campos' => ['titulo_historia', 'texto_historia', 'imagem_url', 'diferenciais'],
         ],
         'contato' => [
             'model' => SecaoContato::class,
             'campos' => ['telefone_display', 'telefone_whatsapp', 'email', 'endereco', 'horario'],
+        ],
+        'institucional' => [
+            'model' => SecaoInstitucional::class,
+            'campos' => ['itens', 'resumo_titulo', 'resumo_texto'],
         ],
     ];
 
@@ -43,9 +49,13 @@ class ConteudoController extends Controller
     {
         $config = self::SECOES[$slug] ?? throw new NotFoundHttpException("Seção '{$slug}' não existe.");
 
-        $dados = $request->validate(
-            collect($config['campos'])->mapWithKeys(fn (string $campo) => [$campo => ['sometimes', 'nullable', 'string']])->all()
-        );
+        $regras = collect($config['campos'])->mapWithKeys(function (string $campo) {
+            $tipo = in_array($campo, ['diferenciais', 'itens'], true) ? 'array' : 'string';
+
+            return [$campo => ['sometimes', 'nullable', $tipo]];
+        })->all();
+
+        $dados = $request->validate($regras);
 
         $model = $config['model']::first() ?? new ($config['model'])();
         $model->fill($dados);

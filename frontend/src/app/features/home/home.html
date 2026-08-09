@@ -51,21 +51,13 @@
 <section class="institucional">
     <div class="container">
         <div class="itens">
-            <div class="item">
-                <i class="fas fa-truck"></i>
-                <h3>Entrega combinada com você</h3>
-                <p>Alinhamos prazo e forma de entrega direto com o cliente, sem surpresas.</p>
-            </div>
-            <div class="item">
-                <i class="fas fa-star"></i>
-                <h3>Qualidade que você vê</h3>
-                <p>Acabamento cuidadoso e materiais resistentes em cada peça do catálogo.</p>
-            </div>
-            <div class="item">
-                <i class="fas fa-comments"></i>
-                <h3>Atendimento próximo</h3>
-                <p>Tiramos suas dúvidas pelo WhatsApp antes, durante e depois da compra.</p>
-            </div>
+            @for (item of itensInstitucional(); track item.titulo) {
+                <div class="item">
+                    <i class="fas" [class]="item.icone"></i>
+                    <h3>{{ item.titulo }}</h3>
+                    <p>{{ item.texto }}</p>
+                </div>
+            }
         </div>
     </div>
 </section>
@@ -117,12 +109,8 @@
     <div class="container">
         <div class="conteudo">
             <div class="texto">
-                <h2 class="titulo">Quem somos</h2>
-                <p>
-                    A {{ info.businessName }} monta cada ambiente da sua casa com móveis de
-                    qualidade e acabamento pensado pra durar — do escritório à sala, do
-                    quarto à cozinha.
-                </p>
+                <h2 class="titulo">{{ institucional()?.resumoTitulo }}</h2>
+                <p>{{ institucional()?.resumoTexto }}</p>
                 <a routerLink="/sobre" class="btn">Conheça nossa história</a>
             </div>
         </div>
@@ -132,11 +120,11 @@
 <section class="cta">
     <div class="container">
         <div class="conteudo">
-            <h2 class="titulo">Pronto pra renovar sua casa?</h2>
-            <p>Fale agora com a nossa equipe e tire suas dúvidas sobre entrega e formas de pagamento.</p>
+            <h2 class="titulo">{{ cta()?.titulo }}</h2>
+            <p>{{ cta()?.texto }}</p>
             <div class="botoes">
                 <a routerLink="/contato" class="btn">Fale Conosco</a>
-                <a [href]="'https://wa.me/' + info.phoneWhatsapp" target="_blank" rel="noopener" class="btn btn-whatsapp">
+                <a [href]="'https://wa.me/' + contato()?.telefoneWhatsapp" target="_blank" rel="noopener" class="btn btn-whatsapp">
                     <i class="fab fa-whatsapp"></i> Chamar no WhatsApp
                 </a>
             </div>

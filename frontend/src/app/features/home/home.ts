@@ -6,8 +6,10 @@ import { CategoriaService } from '../../core/services/categoria';
 import { Produto } from '../../core/types/produto/produto.type';
 import { Categoria } from '../../core/types/categoria/categoria.type';
 import { SITE_INFO } from '../../core/constants/site-info';
+import { SiteService } from '../../core/services/site.service';
 
 const INTERVALO_AUTOPLAY_MS = 5000;
+const ICONES_INSTITUCIONAL = ['fa-truck', 'fa-star', 'fa-comments'];
 
 @Component({
     selector: 'app-home',
@@ -19,10 +21,22 @@ export class Home implements OnInit, OnDestroy {
     private platformId = inject(PLATFORM_ID);
     private produtoService = inject(ProdutoService);
     private categoriaService = inject(CategoriaService);
+    private site = inject(SiteService);
 
     info = SITE_INFO;
     categorias = signal<Categoria[]>([]);
     produtos = signal<Produto[]>([]);
+
+    institucional = computed(() => this.site.conteudo().institucional);
+    cta = computed(() => this.site.conteudo().cta['home']);
+    contato = computed(() => this.site.conteudo().contato);
+
+    itensInstitucional = computed(() =>
+        (this.institucional()?.itens ?? []).map((item, indice) => ({
+            ...item,
+            icone: ICONES_INSTITUCIONAL[indice] ?? 'fa-star',
+        })),
+    );
 
     /** Só os produtos com selo entram no carrossel de destaque do hero. */
     destaques = computed(() => this.produtos().filter((p) => p.selo));

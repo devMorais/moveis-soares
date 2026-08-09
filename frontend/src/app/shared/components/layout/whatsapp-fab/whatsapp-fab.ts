@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
-import { SITE_INFO } from '../../../../core/constants/site-info';
+import { Component, computed, inject } from '@angular/core';
+import { SiteService } from '../../../../core/services/site.service';
 
 @Component({
     selector: 'app-whatsapp-fab',
     template: `
         <a
             class="whatsapp-float"
-            [href]="'https://wa.me/' + info.phoneWhatsapp + '?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20saber%20mais%20sobre%20os%20m%C3%B3veis.'"
+            [href]="'https://wa.me/' + telefoneWhatsapp() + '?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20saber%20mais%20sobre%20os%20m%C3%B3veis.'"
             target="_blank"
             rel="noopener"
             aria-label="Fale conosco pelo WhatsApp"
@@ -41,5 +41,7 @@ import { SITE_INFO } from '../../../../core/constants/site-info';
     `],
 })
 export class WhatsappFab {
-    info = SITE_INFO;
+    private site = inject(SiteService);
+
+    telefoneWhatsapp = computed(() => this.site.conteudo().contato?.telefoneWhatsapp);
 }
