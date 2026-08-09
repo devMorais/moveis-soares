@@ -26,34 +26,10 @@
     @if (carregando()) {
         <p>Carregando...</p>
     } @else {
-        <table class="tabela-categorias">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Produtos</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (categoria of categorias(); track categoria.id) {
-                    <tr>
-                        <td>{{ categoria.nome }}</td>
-                        <td>{{ categoria.totalProdutos }}</td>
-                        <td class="tabela-categorias__acoes">
-                            <button type="button" (click)="editar(categoria)" aria-label="Editar">
-                                <i class="fas fa-pen"></i>
-                            </button>
-                            <button type="button" (click)="remover(categoria)" aria-label="Remover">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                } @empty {
-                    <tr>
-                        <td colspan="3">Nenhuma categoria cadastrada ainda.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <app-datatable
+            [linhas]="categorias()"
+            [colunas]="colunas"
+            [mensagemVazio]="'<span>Nenhuma categoria cadastrada ainda.</span>'"
+        />
     }
 </div>

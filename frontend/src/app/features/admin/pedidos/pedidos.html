@@ -19,67 +19,59 @@
     @if (carregando()) {
         <p>Carregando...</p>
     } @else {
-        <div class="lista-pedidos">
-            @for (pedido of pedidos(); track pedido.id) {
-                <div class="pedido-card" [class.pedido-card--frete-combinar]="pedido.freteACombinar">
-                    <div class="pedido-card__cabecalho" (click)="alternarDetalhe(pedido)">
-                        <div class="pedido-card__info">
-                            <strong>#{{ pedido.id }} — {{ pedido.nomeCliente }}</strong>
-                            <span>{{ pedido.telefoneCliente }} · {{ pedido.cidade }}</span>
-                        </div>
-                        <div class="pedido-card__resumo">
-                            @if (pedido.freteACombinar) {
-                                <span class="badge-frete-combinar">
-                                    <i class="fas fa-triangle-exclamation"></i> Frete a combinar
-                                </span>
-                            }
-                            <span class="badge-status" [attr.data-status]="pedido.status">
-                                {{ rotuloStatus(pedido.status) }}
-                            </span>
-                            <strong>R$ {{ pedido.valorTotal }}</strong>
-                            <i class="fas" [class.fa-chevron-down]="expandidoId() !== pedido.id" [class.fa-chevron-up]="expandidoId() === pedido.id"></i>
-                        </div>
-                    </div>
-
-                    @if (expandidoId() === pedido.id) {
-                        <div class="pedido-card__detalhe">
-                            <p><strong>Endereço:</strong> {{ pedido.endereco }}</p>
-                            <p>
-                                <strong>Frete:</strong>
-                                @if (pedido.freteACombinar) {
-                                    A combinar
-                                } @else {
-                                    R$ {{ pedido.valorFrete }}
-                                }
-                            </p>
-                            @if (pedido.metodoPagamento) {
-                                <p><strong>Pagamento:</strong> {{ pedido.metodoPagamento }}</p>
-                            }
-                            <p><strong>Itens:</strong></p>
-                            <ul class="pedido-card__itens">
-                                @for (item of pedido.itens; track item.nomeProduto) {
-                                    <li>{{ item.quantidade }}x {{ item.nomeProduto }} — R$ {{ item.precoUnitario }}</li>
-                                }
-                            </ul>
-
-                            <div class="campo-status">
-                                <label [for]="'status-' + pedido.id">Alterar status</label>
-                                <select
-                                    [id]="'status-' + pedido.id"
-                                    [ngModel]="pedido.status"
-                                    (ngModelChange)="mudarStatus(pedido, $event)"
-                                >
-                                    @for (status of statusOpcoes; track status) {
-                                        <option [value]="status">{{ rotuloStatus(status) }}</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                    }
-                </div>
-            } @empty {
-                <p>Nenhum pedido encontrado.</p>
-            }
-        </div>
+        <app-datatable
+            [linhas]="pedidos()"
+            [colunas]="colunas"
+            [mensagemVazio]="'<span>Nenhum pedido encontrado.</span>'"
+        />
     }
 </div>
+
+@if (pedidoSelecionado(); as pedido) {
+    <div class="modal-fundo" (click)="fecharDetalhe()">
+        <div class="modal-detalhe" (click)="$event.stopPropagation()">
+            <div class="modal-detalhe__topo">
+                <h2>Pedido #{{ pedido.id }} — {{ pedido.nomeCliente }}</h2>
+                <button type="button" class="modal-detalhe__fechar" (click)="fecharDetalhe()" aria-label="Fechar">
+                    <i class="fas fa-xmark"></i>
+                </button>
+            </div>
+
+            <p><strong>Telefone:</strong> {{ pedido.telefoneCliente }}</p>
+            <p><strong>Endereço:</strong> {{ pedido.endereco }}</p>
+            <p><strong>Cidade:</strong> {{ pedido.cidade }}</p>
+            <p>
+                <strong>Frete:</strong>
+                @if (pedido.freteACombinar) {
+                    A combinar
+                } @else {
+                    R$ {{ pedido.valorFrete }}
+                }
+            </p>
+            @if (pedido.metodoPagamento) {
+                <p><strong>Pagamento:</strong> {{ pedido.metodoPagamento }}</p>
+            }
+
+            <p class="modal-detalhe__subtitulo">Itens</p>
+            <ul class="modal-detalhe__itens">
+                @for (item of pedido.itens; track item.nomeProduto) {
+                    <li>{{ item.quantidade }}x {{ item.nomeProduto }} — R$ {{ item.precoUnitario }}</li>
+                }
+            </ul>
+            <p class="modal-detalhe__total"><strong>Total:</strong> R$ {{ pedido.valorTotal }}</p>
+
+            <div class="campo-status">
+                <label [for]="'status-' + pedido.id">Alterar status</label>
+                <select
+                    [id]="'status-' + pedido.id"
+                    [ngModel]="pedido.status"
+                    (ngModelChange)="mudarStatus(pedido, $event)"
+                >
+                    @for (status of statusOpcoes; track status) {
+                        <option [value]="status">{{ rotuloStatus(status) }}</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+}

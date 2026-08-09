@@ -12,58 +12,10 @@
     @if (carregando()) {
         <p>Carregando...</p>
     } @else {
-        <table class="tabela-produtos">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Nome</th>
-                    <th>Categoria</th>
-                    <th>Preço</th>
-                    <th>Estoque</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (produto of produtos(); track produto.id) {
-                    <tr [class.tabela-produtos__linha--inativa]="produto.ativo === false">
-                        <td>
-                            <img
-                                [src]="produto.imagemUrl"
-                                [alt]="produto.nome"
-                                class="tabela-produtos__thumb"
-                                (click)="lightbox.abrir(produto.imagemUrl)"
-                            >
-                        </td>
-                        <td>{{ produto.nome }}</td>
-                        <td>{{ produto.categoria }}</td>
-                        <td>R$ {{ produto.preco }}</td>
-                        <td>{{ produto.estoque ?? '—' }}</td>
-                        <td>
-                            <button
-                                type="button"
-                                class="badge-status"
-                                [class.badge-status--ativo]="produto.ativo !== false"
-                                (click)="alternarAtivo(produto)"
-                            >
-                                {{ produto.ativo === false ? 'Inativo' : 'Ativo' }}
-                            </button>
-                        </td>
-                        <td class="tabela-produtos__acoes">
-                            <a [routerLink]="['/admin/produtos', produto.id, 'editar']" aria-label="Editar">
-                                <i class="fas fa-pen"></i>
-                            </a>
-                            <button type="button" (click)="remover(produto)" aria-label="Remover">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                } @empty {
-                    <tr>
-                        <td colspan="7">Nenhum produto cadastrado ainda.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <app-datatable
+            [linhas]="produtos()"
+            [colunas]="colunas"
+            [mensagemVazio]="'<span>Nenhum produto cadastrado ainda.</span>'"
+        />
     }
 </div>

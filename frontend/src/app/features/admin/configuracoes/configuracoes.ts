@@ -5,6 +5,15 @@ import { ToastService } from '../../../core/services/toast.service';
 import { UploadImagem } from '../../../shared/components/upload-imagem/upload-imagem';
 import { environment } from '../../../../environments/environment';
 
+type Aba = 'notificacoes' | 'identidade' | 'compartilhamento' | 'rastreamento';
+
+const NOMES_ABA: Record<Aba, string> = {
+    notificacoes: 'Notificações',
+    identidade: 'Identidade e SEO',
+    compartilhamento: 'Compartilhamento',
+    rastreamento: 'Rastreamento',
+};
+
 @Component({
     selector: 'app-admin-configuracoes',
     imports: [ReactiveFormsModule, UploadImagem],
@@ -17,6 +26,10 @@ export class Configuracoes implements OnInit {
     private toast = inject(ToastService);
 
     uploadEndpoint = `${environment.apiUrl}/produtos/upload-imagem`;
+    nomesAba = NOMES_ABA;
+    abasDisponiveis: Aba[] = ['notificacoes', 'identidade', 'compartilhamento', 'rastreamento'];
+    abaAtiva = signal<Aba>('notificacoes');
+
     carregando = signal(true);
     salvando = signal(false);
     salvandoNotificacoes = signal(false);
@@ -54,15 +67,25 @@ export class Configuracoes implements OnInit {
                 });
                 this.carregando.set(false);
             },
-            error: () => this.carregando.set(false),
+            error: () => {
+                this.carregando.set(false);
+                this.toast.erro('Não foi possível carregar as configurações de SEO salvas.');
+            },
         });
 
-        this.seoService.mostrarNotificacoes().subscribe((dados) => {
-            this.formNotificacoes.patchValue({
-                notificacao_email: dados.notificacaoEmail ?? '',
-                notificacao_whatsapp: dados.notificacaoWhatsapp ?? '',
-            });
+        this.seoService.mostrarNotificacoes().subscribe({
+            next: (dados) => {
+                this.formNotificacoes.patchValue({
+                    notificacao_email: dados.notificacaoEmail ?? '',
+                    notificacao_whatsapp: dados.notificacaoWhatsapp ?? '',
+                });
+            },
+            error: () => this.toast.erro('Não foi possível carregar as notificações salvas.'),
         });
+    }
+
+    trocarAba(aba: Aba): void {
+        this.abaAtiva.set(aba);
     }
 
     aoDefinirOgImage(url: string): void {

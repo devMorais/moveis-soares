@@ -1,14 +1,16 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ColDef } from 'ag-grid-community';
 import { CategoriaAdminService } from '../../../core/services/categoria-admin.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { environment } from '../../../../environments/environment';
 import { CategoriaAdmin } from '../../../core/types/categoria/categoria-admin.type';
 import { UploadImagem } from '../../../shared/components/upload-imagem/upload-imagem';
+import { Datatable } from '../../../shared/components/datatable/datatable';
 
 @Component({
     selector: 'app-admin-categorias',
-    imports: [ReactiveFormsModule, UploadImagem],
+    imports: [ReactiveFormsModule, UploadImagem, Datatable],
     templateUrl: './categorias.html',
     styleUrl: './categorias.scss',
 })
@@ -28,6 +30,30 @@ export class Categorias implements OnInit {
     form = this.fb.nonNullable.group({
         nome: ['', Validators.required],
     });
+
+    colunas: ColDef<CategoriaAdmin>[] = [
+        { field: 'nome', headerName: 'Nome', flex: 2, sortable: true, filter: true },
+        { field: 'totalProdutos', headerName: 'Produtos', flex: 1, sortable: true },
+        {
+            headerName: '',
+            flex: 1,
+            sortable: false,
+            filter: false,
+            cellRenderer: () => `
+                <div class="acoes-celula">
+                    <button type="button" class="acoes-celula__btn" data-acao="editar" aria-label="Editar"><i class="fas fa-pen"></i></button>
+                    <button type="button" class="acoes-celula__btn" data-acao="remover" aria-label="Remover"><i class="fas fa-trash"></i></button>
+                </div>
+            `,
+            onCellClicked: (event) => {
+                const alvo = event.event?.target as HTMLElement;
+                const acao = alvo?.closest('[data-acao]')?.getAttribute('data-acao');
+                if (!event.data) return;
+                if (acao === 'editar') this.editar(event.data);
+                if (acao === 'remover') this.remover(event.data);
+            },
+        },
+    ];
 
     ngOnInit(): void {
         this.carregar();

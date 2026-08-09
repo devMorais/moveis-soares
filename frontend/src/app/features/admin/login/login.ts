@@ -34,6 +34,7 @@ export class Login {
         this.auth.login(this.form.getRawValue()).subscribe({
             next: () => {
                 this.enviando.set(false);
+                this.toast.sucesso('Login realizado com sucesso.');
                 this.router.navigate(['/admin']);
             },
             error: () => {

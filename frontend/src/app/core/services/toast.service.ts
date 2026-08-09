@@ -15,9 +15,11 @@ export class ToastService {
 
     private mostrar(msg: ToastMsg): void {
         this.mensagens.update((atuais) => [...atuais, msg]);
-        setTimeout(() => {
-            this.mensagens.update((atuais) => atuais.filter((m) => m !== msg));
-        }, msg.life);
+        setTimeout(() => this.fechar(msg), msg.life);
+    }
+
+    fechar(msg: ToastMsg): void {
+        this.mensagens.update((atuais) => atuais.filter((m) => m !== msg));
     }
 
     sucesso(mensagem: string, titulo = 'Sucesso') {

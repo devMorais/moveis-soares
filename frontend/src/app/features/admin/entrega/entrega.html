@@ -39,43 +39,10 @@
     @if (carregando()) {
         <p>Carregando...</p>
     } @else {
-        <table class="tabela-cidades">
-            <thead>
-                <tr>
-                    <th>Cidade</th>
-                    <th>UF</th>
-                    <th>Frete</th>
-                    <th>Prazo</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (cidade of cidades(); track cidade.id) {
-                    <tr>
-                        <td>
-                            {{ cidade.nomeCidade }}
-                            @if (cidade.ehRetiradaLocal) {
-                                <span class="badge">retirada</span>
-                            }
-                        </td>
-                        <td>{{ cidade.uf }}</td>
-                        <td>R$ {{ cidade.valorFrete }}</td>
-                        <td>{{ cidade.prazoDiasEstimado ? cidade.prazoDiasEstimado + ' dias' : '-' }}</td>
-                        <td class="tabela-cidades__acoes">
-                            <button type="button" (click)="editar(cidade)" aria-label="Editar">
-                                <i class="fas fa-pen"></i>
-                            </button>
-                            <button type="button" (click)="remover(cidade)" aria-label="Remover">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                } @empty {
-                    <tr>
-                        <td colspan="5">Nenhuma cidade cadastrada ainda.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <app-datatable
+            [linhas]="cidades()"
+            [colunas]="colunas"
+            [mensagemVazio]="'<span>Nenhuma cidade cadastrada ainda.</span>'"
+        />
     }
 </div>

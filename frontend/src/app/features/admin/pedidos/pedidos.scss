@@ -34,123 +34,75 @@
     color: #fff;
 }
 
-.lista-pedidos {
+.modal-fundo {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
-.pedido-card {
+.modal-detalhe {
+    width: 100%;
+    max-width: 520px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 24px;
     background-color: var(--admin-surface);
-    border: 1px solid var(--admin-border);
-    border-radius: 8px;
-    overflow: hidden;
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--admin-text);
 }
 
-.pedido-card--frete-combinar {
-    border-color: var(--admin-primary);
-}
-
-.badge-frete-combinar {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
-    background-color: rgba(230, 51, 41, 0.1);
-    color: var(--admin-primary);
-}
-
-.pedido-card__cabecalho {
+.modal-detalhe__topo {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: 16px;
-    padding: 14px 16px;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.modal-detalhe__topo h2 {
+    font-size: 16px;
+}
+
+.modal-detalhe__fechar {
+    background: none;
+    border: none;
+    color: var(--admin-text-muted);
+    font-size: 16px;
     cursor: pointer;
 }
 
-.pedido-card__info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+.modal-detalhe p {
+    margin-top: 8px;
 }
 
-.pedido-card__info strong {
-    font-size: 14px;
-    color: var(--admin-text);
+.modal-detalhe__subtitulo {
+    margin-top: 16px;
+    font-weight: 700;
 }
 
-.pedido-card__info span {
-    font-size: 12px;
-    color: var(--admin-text-muted);
-}
-
-.pedido-card__resumo {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    font-size: 13px;
-    color: var(--admin-text);
-}
-
-.pedido-card__resumo i {
-    color: var(--admin-text-muted);
-    font-size: 12px;
-}
-
-.badge-status {
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    background-color: var(--admin-bg);
-    color: var(--admin-text-muted);
-}
-
-.badge-status[data-status="PAGO"],
-.badge-status[data-status="ENTREGUE"] {
-    background-color: rgba(34, 197, 94, 0.12);
-    color: #16a34a;
-}
-
-.badge-status[data-status="EM_PREPARACAO"],
-.badge-status[data-status="ENVIADO"] {
-    background-color: rgba(59, 130, 246, 0.12);
-    color: #2563eb;
-}
-
-.badge-status[data-status="AGUARDANDO"] {
-    background-color: rgba(230, 51, 41, 0.1);
-    color: var(--admin-primary);
-}
-
-.pedido-card__detalhe {
-    padding: 0 16px 16px;
-    border-top: 1px solid var(--admin-border);
-    font-size: 13px;
-    color: var(--admin-text);
-}
-
-.pedido-card__detalhe p {
-    margin-top: 12px;
-}
-
-.pedido-card__itens {
+.modal-detalhe__itens {
     margin: 6px 0 0;
     padding-left: 18px;
     color: var(--admin-text-muted);
+}
+
+.modal-detalhe__total {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--admin-border);
 }
 
 .campo-status {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    margin-top: 16px;
-    max-width: 240px;
+    margin-top: 20px;
 }
 
 .campo-status label {

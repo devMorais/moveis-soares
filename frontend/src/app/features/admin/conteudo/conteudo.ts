@@ -1,6 +1,7 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { ConteudoAdminService } from '../../../core/services/conteudo-admin.service';
 import { SecaoVisibilidade, SecoesAdminService } from '../../../core/services/secoes-admin.service';
 import { ToastService } from '../../../core/services/toast.service';
@@ -92,20 +93,26 @@ export class Conteudo implements OnInit {
             this.abaAtiva.set(abaUrl);
         }
 
+        const erroAoCarregar = () => this.toast.erro('Não foi possível carregar todo o conteúdo salvo. Recarregue a página antes de editar.');
+
         this.conteudoService.buscar<{
             itens?: { titulo: string; texto: string }[];
             resumo_titulo?: string;
             resumo_texto?: string;
-        }>('institucional').subscribe((dados) => {
-            this.formInicio.patchValue({
-                resumo_titulo: dados?.resumo_titulo ?? '',
-                resumo_texto: dados?.resumo_texto ?? '',
-            });
-            this.preencherItens(this.itensInicio, dados?.itens ?? [], 3);
+        }>('institucional').subscribe({
+            next: (dados) => {
+                this.formInicio.patchValue({
+                    resumo_titulo: dados?.resumo_titulo ?? '',
+                    resumo_texto: dados?.resumo_texto ?? '',
+                });
+                this.preencherItens(this.itensInicio, dados?.itens ?? [], 3);
+            },
+            error: erroAoCarregar,
         });
 
-        this.conteudoService.buscarCta<{ titulo?: string; texto?: string }>('home').subscribe((dados) => {
-            this.formInicio.patchValue({ cta_titulo: dados?.titulo ?? '', cta_texto: dados?.texto ?? '' });
+        this.conteudoService.buscarCta<{ titulo?: string; texto?: string }>('home').subscribe({
+            next: (dados) => this.formInicio.patchValue({ cta_titulo: dados?.titulo ?? '', cta_texto: dados?.texto ?? '' }),
+            error: erroAoCarregar,
         });
 
         this.conteudoService.buscar<{
@@ -113,21 +120,32 @@ export class Conteudo implements OnInit {
             texto_historia?: string;
             imagem_url?: string;
             diferenciais?: { titulo: string; texto: string }[];
-        }>('sobre').subscribe((dados) => {
-            this.formSobre.patchValue({
-                titulo_historia: dados?.titulo_historia ?? '',
-                texto_historia: dados?.texto_historia ?? '',
-                imagem_url: dados?.imagem_url ?? '',
-            });
-            this.preencherItens(this.diferenciaisSobre, dados?.diferenciais ?? [], 4);
+        }>('sobre').subscribe({
+            next: (dados) => {
+                this.formSobre.patchValue({
+                    titulo_historia: dados?.titulo_historia ?? '',
+                    texto_historia: dados?.texto_historia ?? '',
+                    imagem_url: dados?.imagem_url ?? '',
+                });
+                this.preencherItens(this.diferenciaisSobre, dados?.diferenciais ?? [], 4);
+            },
+            error: erroAoCarregar,
         });
 
-        this.conteudoService.buscarCta<{ titulo?: string; texto?: string }>('sobre').subscribe((dados) => {
-            this.formSobre.patchValue({ cta_titulo: dados?.titulo ?? '', cta_texto: dados?.texto ?? '' });
+        this.conteudoService.buscarCta<{ titulo?: string; texto?: string }>('sobre').subscribe({
+            next: (dados) => this.formSobre.patchValue({ cta_titulo: dados?.titulo ?? '', cta_texto: dados?.texto ?? '' }),
+            error: erroAoCarregar,
         });
 
-        this.conteudoService.buscar('contato').subscribe((dados) => this.formContato.patchValue(dados ?? {}));
-        this.secoesService.listar().subscribe((secoes) => this.secoes.set(secoes));
+        this.conteudoService.buscar('contato').subscribe({
+            next: (dados) => this.formContato.patchValue(dados ?? {}),
+            error: erroAoCarregar,
+        });
+
+        this.secoesService.listar().subscribe({
+            next: (secoes) => this.secoes.set(secoes),
+            error: erroAoCarregar,
+        });
     }
 
     private preencherItens(array: FormArray, itens: { titulo: string; texto: string }[], tamanho: number): void {
@@ -173,12 +191,14 @@ export class Conteudo implements OnInit {
 
         if (aba === 'inicio') {
             const valores = this.formInicio.getRawValue();
-            this.conteudoService.atualizar('institucional', {
-                resumo_titulo: valores.resumo_titulo,
-                resumo_texto: valores.resumo_texto,
-                itens: valores.itens,
-            }).subscribe();
-            this.conteudoService.atualizarCta('home', { titulo: valores.cta_titulo, texto: valores.cta_texto }).subscribe({
+            forkJoin([
+                this.conteudoService.atualizar('institucional', {
+                    resumo_titulo: valores.resumo_titulo,
+                    resumo_texto: valores.resumo_texto,
+                    itens: valores.itens,
+                }),
+                this.conteudoService.atualizarCta('home', { titulo: valores.cta_titulo, texto: valores.cta_texto }),
+            ]).subscribe({
                 next: () => this.aoSalvarComSucesso(),
                 error: () => this.aoFalharSalvar(),
             });
@@ -187,13 +207,15 @@ export class Conteudo implements OnInit {
 
         if (aba === 'sobre') {
             const valores = this.formSobre.getRawValue();
-            this.conteudoService.atualizar('sobre', {
-                titulo_historia: valores.titulo_historia,
-                texto_historia: valores.texto_historia,
-                imagem_url: valores.imagem_url,
-                diferenciais: valores.diferenciais,
-            }).subscribe();
-            this.conteudoService.atualizarCta('sobre', { titulo: valores.cta_titulo, texto: valores.cta_texto }).subscribe({
+            forkJoin([
+                this.conteudoService.atualizar('sobre', {
+                    titulo_historia: valores.titulo_historia,
+                    texto_historia: valores.texto_historia,
+                    imagem_url: valores.imagem_url,
+                    diferenciais: valores.diferenciais,
+                }),
+                this.conteudoService.atualizarCta('sobre', { titulo: valores.cta_titulo, texto: valores.cta_texto }),
+            ]).subscribe({
                 next: () => this.aoSalvarComSucesso(),
                 error: () => this.aoFalharSalvar(),
             });
