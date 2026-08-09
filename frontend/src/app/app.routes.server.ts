@@ -12,6 +12,12 @@ export const serverRoutes: ServerRoute[] = [
     path: 'produto/:slug',
     renderMode: RenderMode.Server
   },
+  // Pagina de acompanhamento de pedido - dado sensivel ao token, sempre
+  // busca dado fresco no cliente, nunca deve ser pre-renderizada.
+  {
+    path: 'pedido/acompanhar/:token',
+    renderMode: RenderMode.Client
+  },
   // O painel /admin inteiro depende de estado de browser (token no
   // localStorage, guard de autenticacao) - nunca deve ser prerenderizado
   // nem passar por SSR, senao a primeira renderizacao nao sabe se o

@@ -20,4 +20,8 @@ export class PedidoAdminService {
     atualizarStatus(id: number, status: StatusPedido) {
         return this.http.patch<Pedido>(`${this.baseUrl}/${id}/status`, { status });
     }
+
+    assumirAtendimento(id: number) {
+        return this.http.patch<Pedido>(`${this.baseUrl}/${id}/atendente`, {});
+    }
 }

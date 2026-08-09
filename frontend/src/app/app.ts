@@ -7,12 +7,13 @@ import { Footer } from './shared/components/layout/footer/footer';
 import { WhatsappFab } from './shared/components/layout/whatsapp-fab/whatsapp-fab';
 import { CarrinhoLateral } from './shared/components/carrinho-lateral/carrinho-lateral';
 import { Toast } from './shared/components/toast/toast';
+import { ConfirmDialog } from './shared/components/confirm-dialog/confirm-dialog';
 import { Seo } from './core/services/seo';
 import { SiteService } from './core/services/site.service';
 
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet, Navbar, Footer, WhatsappFab, CarrinhoLateral, Toast],
+    imports: [RouterOutlet, Navbar, Footer, WhatsappFab, CarrinhoLateral, Toast, ConfirmDialog],
     templateUrl: './app.html',
     styleUrl: './app.scss',
 })

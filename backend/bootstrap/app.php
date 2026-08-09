@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
@@ -18,7 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'role' => \App\Http\Middleware\EnsureUserHasRole::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         /**
@@ -45,6 +48,13 @@ return Application::configure(basePath: dirname(__DIR__))
                     'mensagem' => 'É necessário estar autenticado.',
                     'tipo' => 'erro',
                 ], 401);
+            }
+
+            if ($e instanceof AuthorizationException) {
+                return new JsonResponse([
+                    'mensagem' => $e->getMessage() ?: 'Você não tem permissão para acessar este recurso.',
+                    'tipo' => 'erro',
+                ], 403);
             }
 
             if ($e instanceof ModelNotFoundException || $e instanceof NotFoundHttpException) {

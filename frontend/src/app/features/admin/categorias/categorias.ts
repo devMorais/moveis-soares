@@ -1,8 +1,10 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ColDef } from 'ag-grid-community';
 import { CategoriaAdminService } from '../../../core/services/categoria-admin.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { environment } from '../../../../environments/environment';
 import { CategoriaAdmin } from '../../../core/types/categoria/categoria-admin.type';
 import { UploadImagem } from '../../../shared/components/upload-imagem/upload-imagem';
@@ -18,8 +20,12 @@ export class Categorias implements OnInit {
     private fb = inject(FormBuilder);
     private categoriasService = inject(CategoriaAdminService);
     private toast = inject(ToastService);
+    private confirmDialog = inject(ConfirmDialogService);
+    private auth = inject(AuthService);
 
     readonly uploadEndpoint = `${environment.apiUrl}/produtos/upload-imagem`;
+
+    isAdmin = computed(() => this.auth.currentUser()?.role === 'admin');
 
     categorias = signal<CategoriaAdmin[]>([]);
     carregando = signal(true);
@@ -31,29 +37,39 @@ export class Categorias implements OnInit {
         nome: ['', Validators.required],
     });
 
-    colunas: ColDef<CategoriaAdmin>[] = [
-        { field: 'nome', headerName: 'Nome', flex: 2, sortable: true, filter: true },
-        { field: 'totalProdutos', headerName: 'Produtos', flex: 1, sortable: true },
-        {
-            headerName: '',
-            flex: 1,
-            sortable: false,
-            filter: false,
-            cellRenderer: () => `
-                <div class="acoes-celula">
-                    <button type="button" class="acoes-celula__btn" data-acao="editar" aria-label="Editar"><i class="fas fa-pen"></i></button>
-                    <button type="button" class="acoes-celula__btn" data-acao="remover" aria-label="Remover"><i class="fas fa-trash"></i></button>
-                </div>
-            `,
-            onCellClicked: (event) => {
-                const alvo = event.event?.target as HTMLElement;
-                const acao = alvo?.closest('[data-acao]')?.getAttribute('data-acao');
-                if (!event.data) return;
-                if (acao === 'editar') this.editar(event.data);
-                if (acao === 'remover') this.remover(event.data);
+    colunas = computed<ColDef<CategoriaAdmin>[]>(() => {
+        const base: ColDef<CategoriaAdmin>[] = [
+            { field: 'nome', headerName: 'Nome', flex: 2, sortable: true, filter: true },
+            { field: 'totalProdutos', headerName: 'Produtos', flex: 1, sortable: true },
+        ];
+
+        const btnRemover = this.isAdmin()
+            ? `<button type="button" class="acoes-celula__btn" data-acao="remover" aria-label="Remover"><i class="fas fa-trash"></i></button>`
+            : '';
+
+        return [
+            ...base,
+            {
+                headerName: '',
+                flex: 1,
+                sortable: false,
+                filter: false,
+                cellRenderer: () => `
+                    <div class="acoes-celula">
+                        <button type="button" class="acoes-celula__btn" data-acao="editar" aria-label="Editar"><i class="fas fa-pen"></i></button>
+                        ${btnRemover}
+                    </div>
+                `,
+                onCellClicked: (event) => {
+                    const alvo = event.event?.target as HTMLElement;
+                    const acao = alvo?.closest('[data-acao]')?.getAttribute('data-acao');
+                    if (!event.data) return;
+                    if (acao === 'editar') this.editar(event.data);
+                    if (acao === 'remover') this.remover(event.data);
+                },
             },
-        },
-    ];
+        ];
+    });
 
     ngOnInit(): void {
         this.carregar();
@@ -112,7 +128,13 @@ export class Categorias implements OnInit {
         });
     }
 
-    remover(categoria: CategoriaAdmin): void {
+    async remover(categoria: CategoriaAdmin): Promise<void> {
+        const confirmado = await this.confirmDialog.confirmar({
+            titulo: 'Remover categoria',
+            mensagem: `Tem certeza que deseja remover "${categoria.nome}"? Essa ação não pode ser desfeita.`,
+        });
+        if (!confirmado) return;
+
         this.categoriasService.remover(categoria.id).subscribe({
             next: () => {
                 this.toast.sucesso('Categoria removida.');

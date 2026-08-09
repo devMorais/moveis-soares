@@ -13,7 +13,7 @@ class PedidoController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $query = Pedido::with('itens')->latest();
+        $query = Pedido::with(['itens', 'atendente'])->latest();
 
         if ($status = $request->query('status')) {
             $query->where('status', $status);
@@ -24,7 +24,7 @@ class PedidoController extends Controller
 
     public function mostrar(int $id): JsonResponse
     {
-        return response()->json(Pedido::with('itens')->findOrFail($id)->paraApi());
+        return response()->json(Pedido::with(['itens', 'atendente'])->findOrFail($id)->paraApi());
     }
 
     public function atualizarStatus(int $id, Request $request): JsonResponse
@@ -35,6 +35,19 @@ class PedidoController extends Controller
 
         $pedido = Pedido::findOrFail($id);
         $pedido->update(['status' => $dados['status']]);
+
+        return response()->json($pedido->paraApi());
+    }
+
+    /**
+     * O usuario logado assume o atendimento do pedido - nao recebe
+     * atendente por body, e sempre "eu, quem esta logado, assumo".
+     */
+    public function assumirAtendimento(int $id, Request $request): JsonResponse
+    {
+        $pedido = Pedido::with(['itens', 'atendente'])->findOrFail($id);
+        $pedido->update(['atendente_id' => $request->user()->id]);
+        $pedido->refresh();
 
         return response()->json($pedido->paraApi());
     }

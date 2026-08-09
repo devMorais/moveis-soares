@@ -1,38 +1,103 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ColDef } from 'ag-grid-community';
 import { ConfiguracaoSeoAdminService } from '../../../core/services/configuracao-seo-admin.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { UsuarioAdmin, UsuarioAdminService } from '../../../core/services/usuario-admin.service';
+import { UserRole } from '../../../core/types/auth/auth-user.type';
 import { UploadImagem } from '../../../shared/components/upload-imagem/upload-imagem';
+import { Datatable } from '../../../shared/components/datatable/datatable';
 import { environment } from '../../../../environments/environment';
 
-type Aba = 'notificacoes' | 'identidade' | 'compartilhamento' | 'rastreamento';
+const ROTULOS_PAPEL: Record<UserRole, string> = {
+    admin: 'Administrador',
+    atendente: 'Atendente',
+};
+
+type Aba = 'notificacoes' | 'identidade' | 'compartilhamento' | 'rastreamento' | 'usuarios';
 
 const NOMES_ABA: Record<Aba, string> = {
     notificacoes: 'Notificações',
     identidade: 'Identidade e SEO',
     compartilhamento: 'Compartilhamento',
     rastreamento: 'Rastreamento',
+    usuarios: 'Usuários',
 };
 
 @Component({
     selector: 'app-admin-configuracoes',
-    imports: [ReactiveFormsModule, UploadImagem],
+    imports: [ReactiveFormsModule, UploadImagem, Datatable],
     templateUrl: './configuracoes.html',
     styleUrl: './configuracoes.scss',
 })
 export class Configuracoes implements OnInit {
     private fb = inject(FormBuilder);
     private seoService = inject(ConfiguracaoSeoAdminService);
+    private usuariosService = inject(UsuarioAdminService);
     private toast = inject(ToastService);
+    private confirmDialog = inject(ConfirmDialogService);
+    auth = inject(AuthService);
+
+    rotulosPapel = ROTULOS_PAPEL;
 
     uploadEndpoint = `${environment.apiUrl}/produtos/upload-imagem`;
     nomesAba = NOMES_ABA;
-    abasDisponiveis: Aba[] = ['notificacoes', 'identidade', 'compartilhamento', 'rastreamento'];
+    abasDisponiveis: Aba[] = ['notificacoes', 'identidade', 'compartilhamento', 'rastreamento', 'usuarios'];
     abaAtiva = signal<Aba>('notificacoes');
 
     carregando = signal(true);
     salvando = signal(false);
     salvandoNotificacoes = signal(false);
+
+    usuarios = signal<UsuarioAdmin[]>([]);
+    carregandoUsuarios = signal(false);
+    salvandoUsuario = signal(false);
+    usuarioEmEdicao = signal<UsuarioAdmin | null>(null);
+    formularioUsuarioAberto = signal(false);
+
+    colunasUsuarios: ColDef<UsuarioAdmin>[] = [
+        { field: 'name', headerName: 'Nome', flex: 2, sortable: true, filter: true },
+        { field: 'email', headerName: 'E-mail', flex: 2, sortable: true, filter: true },
+        {
+            field: 'role',
+            headerName: 'Papel',
+            flex: 1,
+            sortable: true,
+            filter: true,
+            valueFormatter: (params) => this.rotulosPapel[params.value as UserRole] ?? params.value,
+        },
+        {
+            headerName: '',
+            flex: 1,
+            sortable: false,
+            filter: false,
+            cellRenderer: (params: { data?: UsuarioAdmin }) => {
+                const podeRemover = params.data?.id !== this.auth.currentUser()?.id;
+                return `
+                    <div class="acoes-celula">
+                        <button type="button" class="acoes-celula__btn" data-acao="editar" aria-label="Editar"><i class="fas fa-pen"></i></button>
+                        ${podeRemover ? `<button type="button" class="acoes-celula__btn" data-acao="remover" aria-label="Remover"><i class="fas fa-trash"></i></button>` : ''}
+                    </div>
+                `;
+            },
+            onCellClicked: (event) => {
+                const alvo = event.event?.target as HTMLElement;
+                const acao = alvo?.closest('[data-acao]')?.getAttribute('data-acao');
+                if (!event.data) return;
+                if (acao === 'editar') this.abrirFormularioUsuario(event.data);
+                if (acao === 'remover') this.removerUsuario(event.data);
+            },
+        },
+    ];
+
+    formUsuario = this.fb.nonNullable.group({
+        name: ['', [Validators.required, Validators.minLength(2)]],
+        email: ['', [Validators.required, Validators.email]],
+        password: [''],
+        role: ['atendente' as UserRole, Validators.required],
+    });
 
     form = this.fb.nonNullable.group({
         seo_titulo_site: [''],
@@ -86,6 +151,99 @@ export class Configuracoes implements OnInit {
 
     trocarAba(aba: Aba): void {
         this.abaAtiva.set(aba);
+        if (aba === 'usuarios' && this.usuarios().length === 0) {
+            this.carregarUsuarios();
+        }
+    }
+
+    private carregarUsuarios(): void {
+        this.carregandoUsuarios.set(true);
+        this.usuariosService.listar().subscribe({
+            next: (usuarios) => {
+                this.usuarios.set(usuarios);
+                this.carregandoUsuarios.set(false);
+            },
+            error: () => {
+                this.carregandoUsuarios.set(false);
+                this.toast.erro('Não foi possível carregar os usuários.');
+            },
+        });
+    }
+
+    abrirFormularioNovoUsuario(): void {
+        this.usuarioEmEdicao.set(null);
+        this.formUsuario.reset({ name: '', email: '', password: '', role: 'atendente' });
+        this.formUsuario.controls.password.addValidators(Validators.required);
+        this.formUsuario.controls.password.updateValueAndValidity();
+        this.formularioUsuarioAberto.set(true);
+    }
+
+    abrirFormularioUsuario(usuario: UsuarioAdmin): void {
+        this.usuarioEmEdicao.set(usuario);
+        this.formUsuario.reset({ name: usuario.name, email: usuario.email, password: '', role: usuario.role });
+        this.formUsuario.controls.password.clearValidators();
+        this.formUsuario.controls.password.updateValueAndValidity();
+        this.formularioUsuarioAberto.set(true);
+    }
+
+    fecharFormularioUsuario(): void {
+        this.formularioUsuarioAberto.set(false);
+    }
+
+    salvarUsuario(): void {
+        if (this.formUsuario.invalid) {
+            this.formUsuario.markAllAsTouched();
+            return;
+        }
+
+        this.salvandoUsuario.set(true);
+        const valores = this.formUsuario.getRawValue();
+        const dados = {
+            name: valores.name,
+            email: valores.email,
+            password: valores.password || undefined,
+            role: valores.role,
+        };
+        const emEdicao = this.usuarioEmEdicao();
+
+        const requisicao = emEdicao
+            ? this.usuariosService.atualizar(emEdicao.id, dados)
+            : this.usuariosService.criar(dados);
+
+        requisicao.subscribe({
+            next: () => {
+                this.salvandoUsuario.set(false);
+                this.toast.sucesso(emEdicao ? 'Usuário atualizado.' : 'Usuário criado.');
+                this.fecharFormularioUsuario();
+                this.carregarUsuarios();
+            },
+            error: () => {
+                this.salvandoUsuario.set(false);
+                this.toast.erro('Não foi possível salvar o usuário.');
+            },
+        });
+    }
+
+    async removerUsuario(usuario: UsuarioAdmin): Promise<void> {
+        const confirmado = await this.confirmDialog.confirmar({
+            titulo: 'Remover usuário',
+            mensagem: `Tem certeza que deseja remover "${usuario.name}"? Essa ação não pode ser desfeita.`,
+        });
+        if (!confirmado) return;
+
+        this.usuariosService.remover(usuario.id).subscribe({
+            next: () => {
+                this.toast.sucesso('Usuário removido.');
+                this.carregarUsuarios();
+            },
+            error: (erro) => {
+                if (erro.status === 422) {
+                    this.toast.erro(erro.error?.mensagem ?? 'Não foi possível remover o usuário.');
+                } else {
+                    this.toast.erro('Não foi possível remover o usuário.');
+                }
+            },
+        });
     }
 
     aoDefinirOgImage(url: string): void {

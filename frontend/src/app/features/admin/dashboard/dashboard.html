@@ -1,4 +1,153 @@
 <div class="dashboard-boas-vindas">
     <h1>Olá, {{ auth.currentUser()?.name }}</h1>
-    <p>Use o menu ao lado para gerenciar o conteúdo, as seções, o catálogo e os pedidos do site.</p>
+    @if (isAdmin()) {
+        <p>Aqui está uma visão geral do que está acontecendo na loja.</p>
+    } @else {
+        <p>Acompanhe os pedidos da loja e mantenha o atendimento em dia.</p>
+    }
 </div>
+
+@if (!isAdmin()) {
+    <div class="acoes-rapidas">
+        <a routerLink="/admin/pedidos" class="acao-rapida">
+            <i class="fas fa-box"></i> Ver pedidos
+        </a>
+    </div>
+
+    @if (carregando()) {
+        <p>Carregando...</p>
+    } @else {
+        <div class="kpis">
+            <div class="kpi-card kpi-card--alerta">
+                <span class="kpi-card__rotulo">Pedidos aguardando pagamento</span>
+                <strong class="kpi-card__valor">{{ totalAguardando() }}</strong>
+            </div>
+        </div>
+    }
+} @else {
+
+<div class="acoes-rapidas">
+    <a routerLink="/admin/produtos/novo" class="acao-rapida">
+        <i class="fas fa-plus"></i> Novo produto
+    </a>
+    <a routerLink="/admin/pedidos" class="acao-rapida">
+        <i class="fas fa-box"></i> Ver pedidos aguardando
+    </a>
+    <a routerLink="/admin/categorias" class="acao-rapida">
+        <i class="fas fa-tags"></i> Nova categoria
+    </a>
+</div>
+
+@if (carregando()) {
+    <p>Carregando...</p>
+} @else if (resumo(); as r) {
+    <div class="kpis">
+        <div class="kpi-card">
+            <span class="kpi-card__rotulo">Faturamento total</span>
+            <strong class="kpi-card__valor">R$ {{ r.kpis.faturamentoTotal }}</strong>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-card__rotulo">Pedidos no mês</span>
+            <strong class="kpi-card__valor">{{ r.kpis.pedidosNoMes }}</strong>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-card__rotulo">Ticket médio</span>
+            <strong class="kpi-card__valor">R$ {{ r.kpis.ticketMedio }}</strong>
+        </div>
+        <div class="kpi-card kpi-card--alerta">
+            <span class="kpi-card__rotulo">Aguardando pagamento</span>
+            <strong class="kpi-card__valor">{{ r.kpis.pedidosAguardando }}</strong>
+        </div>
+    </div>
+
+    <div class="graficos">
+        <div class="grafico-card grafico-card--linha">
+            <h2>Vendas nos últimos 30 dias</h2>
+            <div class="grafico-card__area">
+                <canvas baseChart [data]="vendasChartData()" [options]="vendasChartOptions" type="line"></canvas>
+            </div>
+        </div>
+        <div class="grafico-card">
+            <h2>Pedidos por status</h2>
+            <div class="grafico-card__area">
+                <canvas baseChart [data]="statusChartData()" [options]="statusChartOptions" type="doughnut"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="rankings">
+        <div class="ranking-card">
+            <h2>Produtos mais vendidos</h2>
+            @if (r.produtosMaisVendidos.length === 0) {
+                <p class="ranking-card__vazio">Nenhuma venda registrada ainda.</p>
+            } @else {
+                <ul class="ranking-lista">
+                    @for (item of r.produtosMaisVendidos; track item.nome) {
+                        <li>
+                            <div class="ranking-lista__topo">
+                                <span>{{ item.nome }}</span>
+                                <strong>{{ item.total }}</strong>
+                            </div>
+                            <div class="ranking-lista__barra">
+                                <div
+                                    class="ranking-lista__preenchimento"
+                                    [style.width.%]="(item.total / maiorValor(r.produtosMaisVendidos)) * 100"
+                                ></div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+
+        <div class="ranking-card">
+            <h2>Produtos mais visitados</h2>
+            @if (r.produtosMaisVisitados.length === 0) {
+                <p class="ranking-card__vazio">Nenhuma visita registrada ainda.</p>
+            } @else {
+                <ul class="ranking-lista">
+                    @for (item of r.produtosMaisVisitados; track item.nome) {
+                        <li>
+                            <div class="ranking-lista__topo">
+                                <span>{{ item.nome }}</span>
+                                <strong>{{ item.total }}</strong>
+                            </div>
+                            <div class="ranking-lista__barra">
+                                <div
+                                    class="ranking-lista__preenchimento"
+                                    [style.width.%]="(item.total / maiorValor(r.produtosMaisVisitados)) * 100"
+                                ></div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+
+        <div class="ranking-card">
+            <h2>Categorias mais visitadas</h2>
+            @if (r.categoriasMaisVisitadas.length === 0) {
+                <p class="ranking-card__vazio">Nenhuma visita registrada ainda.</p>
+            } @else {
+                <ul class="ranking-lista">
+                    @for (item of r.categoriasMaisVisitadas; track item.nome) {
+                        <li>
+                            <div class="ranking-lista__topo">
+                                <span>{{ item.nome }}</span>
+                                <strong>{{ item.total }}</strong>
+                            </div>
+                            <div class="ranking-lista__barra">
+                                <div
+                                    class="ranking-lista__preenchimento"
+                                    [style.width.%]="(item.total / maiorValor(r.categoriasMaisVisitadas)) * 100"
+                                ></div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+}
+
+}

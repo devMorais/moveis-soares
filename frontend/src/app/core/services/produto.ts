@@ -22,4 +22,8 @@ export class ProdutoService {
     porSlug(slug: string): Observable<Produto> {
         return this.http.get<Produto>(`${this.apiUrl}/${slug}`);
     }
+
+    registrarVisualizacao(id: number): void {
+        this.http.post(`${this.apiUrl}/${id}/visualizacao`, {}).subscribe({ error: () => {} });
+    }
 }

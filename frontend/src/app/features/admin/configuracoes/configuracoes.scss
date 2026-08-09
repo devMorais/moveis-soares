@@ -1,3 +1,5 @@
+@use '../../../shared/styles/admin-modal';
+
 .configuracoes-pagina h1 {
     font-size: 20px;
     margin-bottom: 6px;
@@ -82,7 +84,8 @@
 }
 
 .campo input,
-.campo textarea {
+.campo textarea,
+.campo select {
     padding: 9px 12px;
     background-color: var(--admin-surface);
     border: 1px solid var(--admin-border);
@@ -94,7 +97,8 @@
 }
 
 .campo input:focus,
-.campo textarea:focus {
+.campo textarea:focus,
+.campo select:focus {
     outline: none;
     border-color: var(--admin-primary);
 }
@@ -147,4 +151,24 @@
 .btn-salvar:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+}
+
+.secao--usuarios {
+    max-width: none;
+    width: 100%;
+}
+
+.secao__cabecalho {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.secao__cabecalho .btn-salvar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: auto;
+    white-space: nowrap;
 }

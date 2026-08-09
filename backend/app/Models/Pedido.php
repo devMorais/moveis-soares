@@ -9,15 +9,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Pedido extends Model
 {
     protected $fillable = [
+        'token_acompanhamento',
         'nome_cliente',
         'telefone_cliente',
         'endereco',
+        'observacoes',
         'cidade_entrega_id',
         'cidade_texto_livre',
         'frete_a_combinar',
         'valor_frete',
         'valor_total',
         'status',
+        'atendente_id',
         'metodo_pagamento',
         'infinitepay_link',
         'infinitepay_order_nsu',
@@ -33,12 +36,17 @@ class Pedido extends Model
 
     public function itens(): HasMany
     {
-        return $this->hasMany(PedidoItem::class);
+        return $this->hasMany(PedidoItem::class)->with('produto:id,slug,imagem_url');
     }
 
     public function cidadeEntrega(): BelongsTo
     {
         return $this->belongsTo(CidadeEntrega::class, 'cidade_entrega_id');
+    }
+
+    public function atendente(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'atendente_id');
     }
 
     /**
@@ -62,19 +70,27 @@ class Pedido extends Model
     {
         return [
             'id' => $this->id,
+            'tokenAcompanhamento' => $this->token_acompanhamento,
             'nomeCliente' => $this->nome_cliente,
             'telefoneCliente' => $this->telefone_cliente,
             'endereco' => $this->endereco,
+            'observacoes' => $this->observacoes,
             'cidade' => $this->cidadeEntrega?->nome_cidade ?? $this->cidade_texto_livre,
             'freteACombinar' => $this->frete_a_combinar,
             'valorFrete' => $this->valor_frete !== null ? (float) $this->valor_frete : null,
             'valorTotal' => (float) $this->valor_total,
             'status' => $this->status,
+            'atendente' => $this->atendente ? [
+                'id' => $this->atendente->id,
+                'name' => $this->atendente->name,
+            ] : null,
             'metodoPagamento' => $this->metodo_pagamento,
             'itens' => $this->itens->map(fn (PedidoItem $item) => [
                 'nomeProduto' => $item->nome_produto,
                 'precoUnitario' => (float) $item->preco_unitario,
                 'quantidade' => $item->quantidade,
+                'imagemUrl' => $item->produto?->imagem_url,
+                'produtoSlug' => $item->produto?->slug,
             ]),
             'criadoEm' => $this->created_at,
         ];

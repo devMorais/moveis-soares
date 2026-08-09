@@ -6,7 +6,10 @@ import { Categoria } from './features/categoria/categoria';
 import { Produto } from './features/produto/produto';
 import { Checkout } from './features/checkout/checkout';
 import { PedidoRetorno } from './features/pedido-retorno/pedido-retorno';
+import { PedidoAcompanhar } from './features/pedido-acompanhar/pedido-acompanhar';
+import { Ajuda } from './features/ajuda/ajuda';
 import { authGuard } from './core/guards/auth.guard';
+import { adminOnlyGuard } from './core/guards/admin-only.guard';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -16,6 +19,8 @@ export const routes: Routes = [
     { path: 'produto/:slug', component: Produto },
     { path: 'checkout', component: Checkout },
     { path: 'checkout/retorno', component: PedidoRetorno },
+    { path: 'pedido/acompanhar/:token', component: PedidoAcompanhar },
+    { path: 'ajuda', component: Ajuda },
     {
         path: 'admin/login',
         loadComponent: () => import('./features/admin/login/login').then((m) => m.Login),
@@ -30,11 +35,24 @@ export const routes: Routes = [
                 loadComponent: () => import('./features/admin/dashboard/dashboard').then((m) => m.Dashboard),
             },
             {
-                path: 'conteudo',
-                loadComponent: () => import('./features/admin/conteudo/conteudo').then((m) => m.Conteudo),
+                path: 'conteudo/inicio',
+                canActivate: [adminOnlyGuard],
+                loadComponent: () => import('./features/admin/conteudo/inicio/conteudo-inicio').then((m) => m.ConteudoInicio),
             },
             {
+                path: 'conteudo/sobre',
+                canActivate: [adminOnlyGuard],
+                loadComponent: () => import('./features/admin/conteudo/sobre/conteudo-sobre').then((m) => m.ConteudoSobre),
+            },
+            {
+                path: 'conteudo/contato',
+                canActivate: [adminOnlyGuard],
+                loadComponent: () => import('./features/admin/conteudo/contato/conteudo-contato').then((m) => m.ConteudoContato),
+            },
+            { path: 'conteudo', redirectTo: 'conteudo/inicio' },
+            {
                 path: 'instagram',
+                canActivate: [adminOnlyGuard],
                 loadComponent: () => import('./features/admin/instagram/instagram').then((m) => m.Instagram),
             },
             {
@@ -55,6 +73,7 @@ export const routes: Routes = [
             },
             {
                 path: 'entrega',
+                canActivate: [adminOnlyGuard],
                 loadComponent: () => import('./features/admin/entrega/entrega').then((m) => m.Entrega),
             },
             {
@@ -63,6 +82,7 @@ export const routes: Routes = [
             },
             {
                 path: 'configuracoes',
+                canActivate: [adminOnlyGuard],
                 loadComponent: () => import('./features/admin/configuracoes/configuracoes').then((m) => m.Configuracoes),
             },
         ],

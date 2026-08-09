@@ -63,6 +63,7 @@ export class Produto implements OnInit {
                     description: produto.descricao ?? `${produto.nome} - ${produto.categoria} | Móveis Soares`,
                     image: produto.imagemUrl,
                 });
+                this.produtoService.registrarVisualizacao(produto.id);
             },
             error: () => {
                 this.naoEncontrado.set(true);

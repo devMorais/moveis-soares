@@ -1,0 +1,86 @@
+<section class="acompanhar-pagina">
+    <div class="container">
+        @switch (estado()) {
+            @case ('carregando') {
+                <div class="acompanhar-card acompanhar-card--centro">
+                    <div class="acompanhar-icone acompanhar-icone--carregando">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                    </div>
+                    <h1>Buscando seu pedido...</h1>
+                </div>
+            }
+            @case ('ok') {
+                @if (pedido(); as p) {
+                    <div class="acompanhar-card">
+                        <h1>Pedido #{{ p.id }}</h1>
+                        <p class="acompanhar-subtitulo">Olá, {{ p.nomeCliente }}! Acompanhe aqui o status da sua entrega.</p>
+
+                        <ol class="timeline">
+                            @for (etapa of etapas; track etapa.status; let i = $index) {
+                                <li
+                                    class="timeline__etapa"
+                                    [class.timeline__etapa--concluida]="i <= indiceEtapaAtual(p.status)"
+                                    [class.timeline__etapa--atual]="i === indiceEtapaAtual(p.status)"
+                                >
+                                    <span class="timeline__marcador"><i class="fas fa-check"></i></span>
+                                    <span class="timeline__rotulo">{{ etapa.rotulo }}</span>
+                                </li>
+                            }
+                        </ol>
+
+                        <div class="acompanhar-resumo">
+                            <p><strong>Endereço:</strong> {{ p.endereco }}, {{ p.cidade }}</p>
+                            <p>
+                                <strong>Frete:</strong>
+                                @if (p.freteACombinar) {
+                                    A combinar
+                                } @else {
+                                    Incluso
+                                }
+                            </p>
+                            @if (p.atendente) {
+                                <p><strong>Atendido por:</strong> {{ p.atendente }}</p>
+                            }
+                            @if (p.observacoes) {
+                                <p><strong>Observações:</strong> {{ p.observacoes }}</p>
+                            }
+                            <ul class="acompanhar-resumo__itens">
+                                @for (item of p.itens; track item.nomeProduto) {
+                                    <li>
+                                        @if (item.imagemUrl) {
+                                            <img [src]="item.imagemUrl" [alt]="item.nomeProduto" class="acompanhar-resumo__item-foto" />
+                                        }
+                                        <span>{{ item.quantidade }}x {{ item.nomeProduto }}</span>
+                                    </li>
+                                }
+                            </ul>
+                            <div class="acompanhar-resumo__total">
+                                <span>Total</span>
+                                <strong>R$ {{ p.valorTotal }}</strong>
+                            </div>
+                        </div>
+
+                        <div class="acompanhar-acoes">
+                            <a routerLink="/" class="btn btn-voltar">Voltar para a loja</a>
+                            <a [href]="linkWhatsapp" target="_blank" rel="noopener" class="btn-whatsapp">
+                                <i class="fab fa-whatsapp"></i> Falar pelo WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+            @case ('erro') {
+                <div class="acompanhar-card acompanhar-card--centro">
+                    <div class="acompanhar-icone acompanhar-icone--erro">
+                        <i class="fas fa-triangle-exclamation"></i>
+                    </div>
+                    <h1>Não encontramos esse pedido</h1>
+                    <p>Verifique se o link está correto ou fale com a gente pelo WhatsApp.</p>
+                    <a [href]="linkWhatsapp" target="_blank" rel="noopener" class="btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i> Falar pelo WhatsApp
+                    </a>
+                </div>
+            }
+        }
+    </div>
+</section>

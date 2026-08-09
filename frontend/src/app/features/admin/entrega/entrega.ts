@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ColDef } from 'ag-grid-community';
 import { CidadeEntregaAdminService } from '../../../core/services/cidade-entrega-admin.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 import { CidadeEntrega } from '../../../core/types/cidade-entrega/cidade-entrega.type';
 import { Datatable } from '../../../shared/components/datatable/datatable';
 
@@ -16,6 +17,7 @@ export class Entrega implements OnInit {
     private fb = inject(FormBuilder);
     private cidadesService = inject(CidadeEntregaAdminService);
     private toast = inject(ToastService);
+    private confirmDialog = inject(ConfirmDialogService);
 
     cidades = signal<CidadeEntrega[]>([]);
     carregando = signal(true);
@@ -135,7 +137,13 @@ export class Entrega implements OnInit {
         });
     }
 
-    remover(cidade: CidadeEntrega): void {
+    async remover(cidade: CidadeEntrega): Promise<void> {
+        const confirmado = await this.confirmDialog.confirmar({
+            titulo: 'Remover cidade',
+            mensagem: `Tem certeza que deseja remover "${cidade.nomeCidade}"? Essa ação não pode ser desfeita.`,
+        });
+        if (!confirmado) return;
+
         this.cidadesService.remover(cidade.id).subscribe({
             next: () => {
                 this.toast.sucesso('Cidade removida.');

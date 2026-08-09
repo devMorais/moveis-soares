@@ -37,6 +37,25 @@
                 </button>
             </div>
 
+            <div class="modal-detalhe__acoes">
+                <a [href]="linkWhatsappCliente(pedido)" target="_blank" rel="noopener" class="btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i> Falar com cliente
+                </a>
+                <button type="button" class="btn-copiar-link" (click)="copiarLinkAcompanhamento(pedido)">
+                    <i class="fas fa-copy"></i> Copiar link de acompanhamento
+                </button>
+            </div>
+
+            <div class="modal-detalhe__atendente">
+                @if (pedido.atendente) {
+                    <span><i class="fas fa-user"></i> Atendido por <strong>{{ pedido.atendente.name }}</strong></span>
+                } @else {
+                    <button type="button" class="btn-assumir" (click)="assumirAtendimento(pedido)">
+                        <i class="fas fa-user-plus"></i> Assumir atendimento
+                    </button>
+                }
+            </div>
+
             <p><strong>Telefone:</strong> {{ pedido.telefoneCliente }}</p>
             <p><strong>Endereço:</strong> {{ pedido.endereco }}</p>
             <p><strong>Cidade:</strong> {{ pedido.cidade }}</p>
@@ -51,11 +70,19 @@
             @if (pedido.metodoPagamento) {
                 <p><strong>Pagamento:</strong> {{ pedido.metodoPagamento }}</p>
             }
+            @if (pedido.observacoes) {
+                <p><strong>Observações:</strong> {{ pedido.observacoes }}</p>
+            }
 
             <p class="modal-detalhe__subtitulo">Itens</p>
-            <ul class="modal-detalhe__itens">
+            <ul class="modal-detalhe__itens modal-detalhe__itens--com-foto">
                 @for (item of pedido.itens; track item.nomeProduto) {
-                    <li>{{ item.quantidade }}x {{ item.nomeProduto }} — R$ {{ item.precoUnitario }}</li>
+                    <li>
+                        @if (item.imagemUrl) {
+                            <img [src]="item.imagemUrl" [alt]="item.nomeProduto" class="modal-detalhe__item-foto" />
+                        }
+                        <span>{{ item.quantidade }}x {{ item.nomeProduto }} — R$ {{ item.precoUnitario }}</span>
+                    </li>
                 }
             </ul>
             <p class="modal-detalhe__total"><strong>Total:</strong> R$ {{ pedido.valorTotal }}</p>

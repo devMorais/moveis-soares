@@ -7,6 +7,7 @@ use App\Services\Exceptions\ImagemInvalidaException;
 use App\Services\ImagemService;
 use App\Models\Categoria;
 use App\Models\Produto;
+use App\Models\ProdutoVisualizacao;
 use App\Suporte\Helpers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -82,5 +83,23 @@ class ProdutoController extends Controller
         return response()->json([
             'url' => Storage::disk('public')->url($caminhoRelativo),
         ]);
+    }
+
+    /**
+     * Registra um evento de visualizacao da pagina publica do produto.
+     * Chamado pelo frontend a cada acesso, sem exigir autenticacao.
+     */
+    public function registrarVisualizacao(int $id, Request $request): JsonResponse
+    {
+        Produto::findOrFail($id);
+
+        ProdutoVisualizacao::create([
+            'produto_id' => $id,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'criado_em' => now(),
+        ]);
+
+        return response()->json(Helpers::mensagemSucesso('Visualização registrada.'));
     }
 }

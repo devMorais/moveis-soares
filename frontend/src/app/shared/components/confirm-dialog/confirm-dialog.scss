@@ -1,0 +1,36 @@
+@use '../../styles/admin-modal';
+
+.confirm-dialog__acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-cancelar {
+    padding: 9px 18px;
+    background-color: var(--admin-bg);
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    color: var(--admin-text);
+    font-family: var(--admin-font);
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.btn-excluir {
+    padding: 9px 18px;
+    background-color: var(--admin-primary);
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-family: var(--admin-font);
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.btn-excluir:hover {
+    background-color: var(--admin-primary-hover);
+}

@@ -1,0 +1,66 @@
+<div class="conteudo-pagina">
+    <h1>Conteúdo — Início do site</h1>
+
+    <div class="subabas">
+        @for (aba of subAbasDisponiveis; track aba) {
+            <button type="button" [class.ativa]="subAbaAtiva() === aba" (click)="trocarSubAba(aba)">
+                {{ nomesSubAba[aba] }}
+            </button>
+        }
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="salvar()" class="form-secao">
+        @if (subAbaAtiva() === 'quem-somos') {
+            <div class="secao-bloco">
+                <h2>Bloco "Quem somos"</h2>
+                <div class="campo">
+                    <label for="resumo-titulo">Título</label>
+                    <input type="text" id="resumo-titulo" formControlName="resumo_titulo">
+                </div>
+                <div class="campo">
+                    <label for="resumo-texto">Texto resumido</label>
+                    <textarea id="resumo-texto" formControlName="resumo_texto" rows="4"></textarea>
+                </div>
+            </div>
+        }
+
+        @if (subAbaAtiva() === 'destaques') {
+            <div class="secao-bloco">
+                <h2>3 destaques da home</h2>
+                <div class="lista-itens" formArrayName="itens">
+                    @for (item of itens.controls; track $index) {
+                        <div class="lista-itens__item" [formGroupName]="$index">
+                            <span class="lista-itens__rotulo">{{ rotulosDestaques[$index] }}</span>
+                            <div class="campo">
+                                <label>Título</label>
+                                <input type="text" formControlName="titulo">
+                            </div>
+                            <div class="campo">
+                                <label>Texto</label>
+                                <input type="text" formControlName="texto">
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        @if (subAbaAtiva() === 'banner') {
+            <div class="secao-bloco">
+                <h2>Banner final (call-to-action)</h2>
+                <div class="campo">
+                    <label for="cta-titulo">Título</label>
+                    <input type="text" id="cta-titulo" formControlName="cta_titulo">
+                </div>
+                <div class="campo">
+                    <label for="cta-texto">Texto</label>
+                    <input type="text" id="cta-texto" formControlName="cta_texto">
+                </div>
+            </div>
+        }
+
+        <button type="submit" class="btn-salvar" [disabled]="salvando()">
+            {{ salvando() ? 'Salvando...' : 'Salvar' }}
+        </button>
+    </form>
+</div>

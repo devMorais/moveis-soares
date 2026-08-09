@@ -31,6 +31,16 @@
                     </div>
                 </div>
 
+                <div class="campo">
+                    <label for="observacoes">Observações (opcional)</label>
+                    <textarea
+                        id="observacoes"
+                        formControlName="observacoes"
+                        rows="3"
+                        placeholder="Ex: entregar no período da tarde, montar no quarto de cima..."
+                    ></textarea>
+                </div>
+
                 @if (form.controls.cidadeTexto.value && !cidadeEncontrada()) {
                     <div class="aviso-frete-combinar">
                         <i class="fas fa-triangle-exclamation"></i>

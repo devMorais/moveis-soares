@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CategoriaAdminService } from '../../../../core/services/categoria-admin.service';
 import { ProdutoAdminService } from '../../../../core/services/produto-admin.service';
 import { ToastService } from '../../../../core/services/toast.service';
@@ -11,7 +11,7 @@ import { LightboxService } from '../../../../shared/components/lightbox/lightbox
 
 @Component({
     selector: 'app-produto-form',
-    imports: [ReactiveFormsModule, UploadImagem],
+    imports: [ReactiveFormsModule, UploadImagem, RouterLink],
     templateUrl: './produto-form.html',
     styleUrl: './produto-form.scss',
 })
@@ -50,6 +50,10 @@ export class ProdutoForm implements OnInit {
 
     get editando(): boolean {
         return this.produtoId() !== null;
+    }
+
+    voltar(): void {
+        this.router.navigate(['/admin/produtos']);
     }
 
     ngOnInit(): void {

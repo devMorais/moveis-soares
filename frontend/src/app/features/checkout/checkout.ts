@@ -32,6 +32,7 @@ export class Checkout implements OnInit {
         telefone: ['', Validators.required],
         endereco: ['', Validators.required],
         cidadeTexto: ['', Validators.required],
+        observacoes: [''],
     });
 
     /** Cidade cadastrada que bate com o texto digitado, se houver. */
@@ -80,6 +81,7 @@ export class Checkout implements OnInit {
             nome_cliente: dados.nome,
             telefone_cliente: dados.telefone,
             endereco: dados.endereco,
+            observacoes: dados.observacoes || null,
             cidade_entrega_id: cidade?.id ?? null,
             cidade_texto_livre: cidade ? null : dados.cidadeTexto,
             frete_a_combinar: !cidade,

@@ -1,5 +1,16 @@
 <section class="produto-form">
-    <h1>{{ editando ? 'Editar produto' : 'Novo produto' }}</h1>
+    <nav class="breadcrumb">
+        <a routerLink="/admin/produtos">Produtos</a>
+        <span class="breadcrumb__separador">/</span>
+        <span class="breadcrumb__atual">{{ editando ? 'Editar produto' : 'Novo produto' }}</span>
+    </nav>
+
+    <div class="produto-form__cabecalho">
+        <button type="button" class="btn-voltar" (click)="voltar()" aria-label="Voltar para produtos">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <h1>{{ editando ? 'Editar produto' : 'Novo produto' }}</h1>
+    </div>
 
     @if (carregando()) {
         <p>Carregando...</p>

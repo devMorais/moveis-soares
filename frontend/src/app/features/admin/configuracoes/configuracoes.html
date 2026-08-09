@@ -103,6 +103,30 @@
             </form>
         }
 
+        @if (abaAtiva() === 'usuarios') {
+            <div class="secao secao--usuarios">
+                <div class="secao__cabecalho">
+                    <div>
+                        <h2>Usuários do painel</h2>
+                        <p class="secao__ajuda">Contas que podem entrar no painel administrativo e atender pedidos.</p>
+                    </div>
+                    <button type="button" class="btn-salvar" (click)="abrirFormularioNovoUsuario()">
+                        <i class="fas fa-plus"></i> Novo usuário
+                    </button>
+                </div>
+
+                @if (carregandoUsuarios()) {
+                    <p>Carregando...</p>
+                } @else {
+                    <app-datatable
+                        [linhas]="usuarios()"
+                        [colunas]="colunasUsuarios"
+                        [mensagemVazio]="'<span>Nenhum usuário cadastrado.</span>'"
+                    />
+                }
+            </div>
+        }
+
         @if (abaAtiva() === 'rastreamento') {
             <form [formGroup]="form" (ngSubmit)="salvar()" class="form-seo">
                 <div class="secao">
@@ -134,3 +158,50 @@
         }
     }
 </div>
+
+@if (formularioUsuarioAberto()) {
+    <div class="modal-fundo" (click)="fecharFormularioUsuario()">
+        <div class="modal-detalhe" (click)="$event.stopPropagation()">
+            <div class="modal-detalhe__topo">
+                <h2>{{ usuarioEmEdicao() ? 'Editar usuário' : 'Novo usuário' }}</h2>
+                <button type="button" class="modal-detalhe__fechar" (click)="fecharFormularioUsuario()" aria-label="Fechar">
+                    <i class="fas fa-xmark"></i>
+                </button>
+            </div>
+
+            <form [formGroup]="formUsuario" (ngSubmit)="salvarUsuario()" class="form-seo">
+                <div class="campo">
+                    <label for="usuario-nome">Nome</label>
+                    <input type="text" id="usuario-nome" formControlName="name">
+                </div>
+                <div class="campo">
+                    <label for="usuario-email">E-mail</label>
+                    <input type="email" id="usuario-email" formControlName="email">
+                </div>
+                <div class="campo">
+                    <label for="usuario-role">Papel</label>
+                    <select id="usuario-role" formControlName="role">
+                        <option value="admin">Administrador</option>
+                        <option value="atendente">Atendente</option>
+                    </select>
+                    <span class="campo__ajuda">
+                        Administrador tem acesso total. Atendente vê apenas Pedidos e consulta o catálogo.
+                    </span>
+                </div>
+                <div class="campo">
+                    <label for="usuario-senha">
+                        Senha
+                        @if (usuarioEmEdicao()) {
+                            <span class="campo__ajuda">(deixe em branco para manter a atual)</span>
+                        }
+                    </label>
+                    <input type="password" id="usuario-senha" formControlName="password">
+                </div>
+
+                <button type="submit" class="btn-salvar" [disabled]="salvandoUsuario()">
+                    {{ salvandoUsuario() ? 'Salvando...' : 'Salvar' }}
+                </button>
+            </form>
+        </div>
+    </div>
+}

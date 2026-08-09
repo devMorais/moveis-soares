@@ -15,6 +15,7 @@ class ProdutoController extends Controller
     public function index(): JsonResponse
     {
         $produtos = Produto::with('categoria')
+            ->withCount('visualizacoes')
             ->orderByDesc('created_at')
             ->get()
             ->map(fn (Produto $produto) => $produto->paraApi());
@@ -24,7 +25,7 @@ class ProdutoController extends Controller
 
     public function mostrar(int $id): JsonResponse
     {
-        $produto = Produto::with('categoria')->findOrFail($id);
+        $produto = Produto::with('categoria')->withCount('visualizacoes')->findOrFail($id);
 
         return response()->json($produto->paraApi());
     }
@@ -36,7 +37,7 @@ class ProdutoController extends Controller
 
         $produto = Produto::create($dados);
 
-        return response()->json($produto->fresh('categoria')->paraApi(), 201);
+        return response()->json($produto->fresh('categoria')->loadCount('visualizacoes')->paraApi(), 201);
     }
 
     public function update(int $id, Request $request): JsonResponse
@@ -50,7 +51,7 @@ class ProdutoController extends Controller
 
         $produto->update($dados);
 
-        return response()->json($produto->fresh('categoria')->paraApi());
+        return response()->json($produto->fresh('categoria')->loadCount('visualizacoes')->paraApi());
     }
 
     public function atualizarStatus(int $id, Request $request): JsonResponse
@@ -62,7 +63,7 @@ class ProdutoController extends Controller
         $produto = Produto::findOrFail($id);
         $produto->update($dados);
 
-        return response()->json($produto->fresh('categoria')->paraApi());
+        return response()->json($produto->fresh('categoria')->loadCount('visualizacoes')->paraApi());
     }
 
     /**

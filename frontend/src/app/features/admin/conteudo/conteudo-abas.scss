@@ -3,14 +3,14 @@
     margin-bottom: 20px;
 }
 
-.abas {
+.subabas {
     display: flex;
     gap: 4px;
     margin-bottom: 20px;
     border-bottom: 1px solid var(--admin-border);
 }
 
-.abas button {
+.subabas button {
     padding: 10px 16px;
     background: none;
     border: none;
@@ -22,7 +22,7 @@
     cursor: pointer;
 }
 
-.abas button.ativa {
+.subabas button.ativa {
     color: var(--admin-primary);
     border-bottom-color: var(--admin-primary);
 }
@@ -108,18 +108,15 @@
     border-radius: 8px;
 }
 
-.form-secao__subtitulo {
-    font-size: 15px;
-    font-weight: 700;
-    margin-top: 8px;
-    padding-top: 12px;
-    border-top: 1px solid var(--admin-border);
+.secao-bloco {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-.form-secao__subtitulo:first-child {
-    margin-top: 0;
-    padding-top: 0;
-    border-top: none;
+.secao-bloco h2 {
+    font-size: 15px;
+    font-weight: 700;
 }
 
 .lista-itens {

@@ -1,0 +1,108 @@
+.modal-fundo {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-detalhe {
+    width: 100%;
+    max-width: 520px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 24px;
+    background-color: var(--admin-surface);
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--admin-text);
+}
+
+.modal-detalhe__topo {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.modal-detalhe__topo h2 {
+    font-size: 16px;
+}
+
+.modal-detalhe__fechar {
+    background: none;
+    border: none;
+    color: var(--admin-text-muted);
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.modal-detalhe p {
+    margin-top: 8px;
+}
+
+.modal-detalhe__subtitulo {
+    margin-top: 16px;
+    font-weight: 700;
+}
+
+.modal-detalhe__itens {
+    margin: 6px 0 0;
+    padding-left: 18px;
+    color: var(--admin-text-muted);
+}
+
+.modal-detalhe__itens--com-foto {
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.modal-detalhe__itens--com-foto li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-detalhe__item-foto {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--admin-border);
+    flex-shrink: 0;
+}
+
+.modal-detalhe__total {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--admin-border);
+}
+
+.campo-status {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 20px;
+}
+
+.campo-status label {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.campo-status select {
+    padding: 8px 10px;
+    background-color: var(--admin-bg);
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    color: var(--admin-text);
+    font-family: var(--admin-font);
+    font-size: 13px;
+}

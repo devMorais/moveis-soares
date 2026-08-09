@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { ColDef } from 'ag-grid-community';
 import { PedidoAdminService } from '../../../core/services/pedido-admin.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { ClipboardService } from '../../../core/services/clipboard.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Pedido, StatusPedido } from '../../../core/types/pedido/pedido.type';
 import { Datatable } from '../../../shared/components/datatable/datatable';
 
@@ -23,6 +25,8 @@ const ROTULOS_STATUS: Record<StatusPedido, string> = {
 export class Pedidos implements OnInit {
     private pedidosService = inject(PedidoAdminService);
     private toast = inject(ToastService);
+    private clipboard = inject(ClipboardService);
+    private auth = inject(AuthService);
 
     readonly statusOpcoes: StatusPedido[] = ['AGUARDANDO', 'PAGO', 'EM_PREPARACAO', 'ENVIADO', 'ENTREGUE'];
 
@@ -39,6 +43,7 @@ export class Pedidos implements OnInit {
         {
             headerName: 'Frete',
             flex: 1,
+            minWidth: 150,
             sortable: false,
             filter: false,
             cellRenderer: (params: { data?: Pedido }) =>
@@ -50,6 +55,7 @@ export class Pedidos implements OnInit {
             field: 'status',
             headerName: 'Status',
             flex: 1,
+            minWidth: 180,
             sortable: true,
             filter: true,
             cellRenderer: (params: { value: StatusPedido }) =>
@@ -59,8 +65,17 @@ export class Pedidos implements OnInit {
             field: 'valorTotal',
             headerName: 'Valor',
             flex: 1,
+            minWidth: 110,
             sortable: true,
             valueFormatter: (params) => `R$ ${params.value}`,
+        },
+        {
+            headerName: 'Atendente',
+            flex: 1,
+            minWidth: 140,
+            sortable: false,
+            filter: false,
+            valueGetter: (params) => params.data?.atendente?.name ?? '—',
         },
         {
             headerName: '',
@@ -125,5 +140,33 @@ export class Pedidos implements OnInit {
 
     rotuloStatus(status: StatusPedido): string {
         return ROTULOS_STATUS[status];
+    }
+
+    assumirAtendimento(pedido: Pedido): void {
+        this.pedidosService.assumirAtendimento(pedido.id).subscribe({
+            next: (atualizado) => {
+                this.pedidos.update((atuais) => atuais.map((p) => (p.id === atualizado.id ? atualizado : p)));
+                this.pedidoSelecionado.set(atualizado);
+                this.toast.sucesso('Você assumiu o atendimento deste pedido.');
+            },
+            error: () => this.toast.erro('Não foi possível assumir o atendimento.'),
+        });
+    }
+
+    linkAcompanhamento(pedido: Pedido): string {
+        return `${window.location.origin}/pedido/acompanhar/${pedido.tokenAcompanhamento}`;
+    }
+
+    copiarLinkAcompanhamento(pedido: Pedido): void {
+        this.clipboard.copiar(this.linkAcompanhamento(pedido), 'Link de acompanhamento copiado.');
+    }
+
+    linkWhatsappCliente(pedido: Pedido): string {
+        const atendente = this.auth.currentUser()?.name ?? 'Móveis Soares';
+        const texto = encodeURIComponent(
+            `Olá ${pedido.nomeCliente}! Aqui é ${atendente}, da Móveis Soares, sobre seu pedido #${pedido.id}. ` +
+                `Você pode acompanhar em tempo real por aqui: ${this.linkAcompanhamento(pedido)}`,
+        );
+        return `https://wa.me/${pedido.telefoneCliente}?text=${texto}`;
     }
 }

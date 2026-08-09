@@ -5,7 +5,62 @@
 
 .produto-form h1 {
     font-size: 20px;
+    margin: 0;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: var(--admin-text-muted);
+}
+
+.breadcrumb a {
+    color: var(--admin-text-muted);
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    color: var(--admin-primary);
+    text-decoration: underline;
+}
+
+.breadcrumb__separador {
+    color: var(--admin-border);
+}
+
+.breadcrumb__atual {
+    color: var(--admin-text);
+    font-weight: 600;
+}
+
+.produto-form__cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     margin-bottom: 20px;
+}
+
+.btn-voltar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    background-color: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    color: var(--admin-text);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.btn-voltar:hover {
+    background-color: var(--admin-bg);
+    border-color: var(--admin-primary);
+    color: var(--admin-primary);
 }
 
 .produto-form form {

@@ -19,4 +19,5 @@ export interface Produto {
     larguraCm?: number;
     profundidadeCm?: number;
     ativo?: boolean;
+    totalVisualizacoes?: number | null;
 }

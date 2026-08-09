@@ -14,8 +14,52 @@
     } @else {
         <app-datatable
             [linhas]="produtos()"
-            [colunas]="colunas"
+            [colunas]="colunas()"
             [mensagemVazio]="'<span>Nenhum produto cadastrado ainda.</span>'"
         />
     }
 </div>
+
+@if (produtoSelecionado(); as produto) {
+    <div class="modal-fundo" (click)="fecharDetalhe()">
+        <div class="modal-detalhe" (click)="$event.stopPropagation()">
+            <div class="modal-detalhe__topo">
+                <h2>{{ produto.nome }}</h2>
+                <button type="button" class="modal-detalhe__fechar" (click)="fecharDetalhe()" aria-label="Fechar">
+                    <i class="fas fa-xmark"></i>
+                </button>
+            </div>
+
+            <p><strong>Categoria:</strong> {{ produto.categoria }}</p>
+            <p><strong>Preço:</strong> R$ {{ produto.preco }}</p>
+            <p><strong>Estoque:</strong> {{ produto.estoque ?? '—' }}</p>
+
+            <p class="modal-detalhe__subtitulo">Imagens</p>
+            <div class="detalhe-produto__galeria">
+                @for (imagem of galeriaDetalhe(produto); track imagem) {
+                    <img
+                        [src]="imagem"
+                        [alt]="produto.nome"
+                        class="detalhe-produto__miniatura"
+                        (click)="lightbox.abrir(imagem)"
+                    />
+                }
+            </div>
+
+            <p class="modal-detalhe__subtitulo">URL pública</p>
+            <div class="detalhe-produto__link">
+                <span>{{ urlPublica(produto) }}</span>
+                <button type="button" (click)="copiarUrlPublica(produto)" aria-label="Copiar link">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+
+            <div class="detalhe-produto__stats">
+                <div class="detalhe-produto__stat">
+                    <strong>{{ produto.totalVisualizacoes ?? 0 }}</strong>
+                    <span>Visualizações</span>
+                </div>
+            </div>
+        </div>
+    </div>
+}

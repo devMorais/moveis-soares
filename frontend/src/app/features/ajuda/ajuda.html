@@ -1,0 +1,257 @@
+<section class="ajuda-pagina">
+    <div class="container">
+        <header class="ajuda-topo">
+            <span class="ajuda-topo__selo">Manual do painel</span>
+            <h1>Como usar o painel Móveis Soares</h1>
+            <p>
+                Guia rápido para o dia a dia da loja: cadastrar produtos, atender pedidos e manter o
+                site sempre atualizado. Leva menos de 10 minutos pra ler tudo.
+            </p>
+        </header>
+
+        <nav class="ajuda-indice" aria-label="Índice">
+            <a href="#comecando">1. Começando</a>
+            <a href="#produtos">2. Produtos</a>
+            <a href="#categorias">3. Categorias</a>
+            <a href="#pedidos">4. Pedidos</a>
+            <a href="#entrega">5. Entrega</a>
+            <a href="#conteudo">6. Conteúdo do site</a>
+            <a href="#configuracoes">7. Configurações</a>
+            <a href="#equipe">8. Equipe (Admin x Atendente)</a>
+            <a href="#dashboard">9. Painel inicial</a>
+            <a href="#cliente-final">10. O que o seu cliente vê</a>
+            <a href="#duvidas">11. Dúvidas comuns</a>
+        </nav>
+
+        <article class="ajuda-secao" id="comecando">
+            <h2><span class="numero">1</span> Começando</h2>
+            <p>
+                O painel administrativo fica em <strong>/admin</strong>. Entre com o e-mail e senha
+                cadastrados. Se esqueceu a senha, peça pra quem tem o papel de
+                <strong>Administrador</strong> criar uma nova ou redefinir a sua em
+                <a href="#equipe">Configurações → Usuários</a>.
+            </p>
+            <div class="ajuda-aviso">
+                <i class="fas fa-circle-info"></i>
+                <p>
+                    Existem dois tipos de acesso: <strong>Administrador</strong> (vê e edita tudo) e
+                    <strong>Atendente</strong> (foca em Pedidos e consulta o catálogo). Veja a diferença
+                    completa na seção <a href="#equipe">Equipe</a>.
+                </p>
+            </div>
+        </article>
+
+        <article class="ajuda-secao" id="produtos">
+            <h2><span class="numero">2</span> Produtos</h2>
+            <p>Em <strong>Produtos</strong> você gerencia tudo o que aparece à venda no site.</p>
+
+            <h3>Cadastrar ou editar um produto</h3>
+            <ul>
+                <li><strong>Nome, categoria e preço</strong> são obrigatórios.</li>
+                <li>
+                    <strong>Preço "de"</strong> é opcional — preencha só se quiser mostrar um preço
+                    riscado (promoção).
+                </li>
+                <li><strong>Estoque</strong> é opcional; deixe em branco se não quiser controlar.</li>
+                <li>Especificação curta, descrição completa, medidas e um selo (ex: "Oferta") são opcionais.</li>
+                <li>
+                    <strong>É obrigatório enviar pelo menos uma foto.</strong> A primeira foto enviada
+                    vira a foto principal automaticamente, mas dá pra trocar clicando em
+                    "Tornar principal" em qualquer outra.
+                </li>
+            </ul>
+
+            <h3>Ver detalhes de um produto</h3>
+            <p>
+                Clique no ícone de <i class="fas fa-eye"></i> (olho) na listagem para ver todas as
+                fotos em galeria, copiar o link público do produto e conferir quantas vezes ele já
+                foi visualizado no site.
+            </p>
+
+            <h3>Ativar, desativar e excluir</h3>
+            <p>
+                Clique no status (Ativo/Inativo) pra esconder ou mostrar o produto no site sem apagar
+                nada. Só o <strong>Administrador</strong> vê o botão de excluir, e o sistema sempre
+                pede confirmação antes.
+            </p>
+            <div class="ajuda-aviso">
+                <i class="fas fa-triangle-exclamation"></i>
+                <p>
+                    Produto que já foi vendido <strong>não pode ser excluído</strong> — o sistema
+                    bloqueia e sugere usar "Desativar" no lugar. Isso é proposital: mantém o histórico
+                    de vendas íntegro.
+                </p>
+            </div>
+        </article>
+
+        <article class="ajuda-secao" id="categorias">
+            <h2><span class="numero">3</span> Categorias</h2>
+            <p>
+                Organize o catálogo por ambiente (ex: Quarto, Sala, Cozinha, Escritório). Cada
+                categoria tem nome e uma imagem opcional. Categorias com produtos cadastrados dentro
+                delas não podem ser removidas — remova ou mude os produtos primeiro.
+            </p>
+        </article>
+
+        <article class="ajuda-secao" id="pedidos">
+            <h2><span class="numero">4</span> Pedidos</h2>
+            <p>
+                A tela mais usada no dia a dia. Filtre por status (Aguardando, Pago, Em preparação,
+                Enviado, Entregue) usando os botões no topo.
+            </p>
+
+            <h3>Abrindo um pedido</h3>
+            <p>Clique no ícone de <i class="fas fa-eye"></i> pra ver o detalhe completo: dados do cliente, endereço, itens comprados com foto, valor total e observações que o cliente deixou no momento da compra.</p>
+
+            <h3>Falar com o cliente</h3>
+            <p>
+                O botão <strong>"Falar com cliente"</strong> abre o WhatsApp já com o número do
+                comprador e uma mensagem pronta, incluindo o link de acompanhamento do pedido dele.
+                Se preferir só copiar o link pra mandar por outro canal, use
+                <strong>"Copiar link de acompanhamento"</strong>.
+            </p>
+
+            <h3>Assumir o atendimento</h3>
+            <p>
+                Clique em <strong>"Assumir atendimento"</strong> pra marcar que você é quem está
+                cuidando daquele pedido. Isso aparece pros outros atendentes ("Atendido por [seu
+                nome]"), evitando que duas pessoas falem com o mesmo cliente ao mesmo tempo.
+            </p>
+
+            <h3>Mudando o status</h3>
+            <p>
+                Use a lista suspensa "Alterar status" dentro do detalhe do pedido. A mudança é salva
+                automaticamente, sem precisar de outro botão.
+            </p>
+        </article>
+
+        <article class="ajuda-secao" id="entrega">
+            <h2><span class="numero">5</span> Entrega</h2>
+            <p>
+                Cadastre aqui as cidades que você atende, com o valor do frete e o prazo de entrega
+                de cada uma. Também dá pra marcar uma cidade como "Retirada no local".
+            </p>
+            <div class="ajuda-aviso">
+                <i class="fas fa-circle-info"></i>
+                <p>
+                    Essa lista alimenta o formulário de compra do site: se o cliente digitar uma
+                    cidade que não está cadastrada aqui, o frete aparece como "a combinar" e ele é
+                    direcionado a falar no WhatsApp com a loja.
+                </p>
+            </div>
+        </article>
+
+        <article class="ajuda-secao" id="conteudo">
+            <h2><span class="numero">6</span> Conteúdo do site</h2>
+            <p>Menu <strong>Conteúdo</strong> (só visível pro Administrador) — edita os textos das páginas públicas.</p>
+            <ul>
+                <li><strong>Início:</strong> texto "quem somos" da home, os 3 destaques e o banner final.</li>
+                <li><strong>Sobre:</strong> história da loja (com imagem), os 4 diferenciais e o banner da página. Dá pra ocultar a página inteira sem apagar o conteúdo, usando o interruptor no topo.</li>
+                <li>
+                    <strong>Contato:</strong> telefone exibido, e-mail, endereço, horário — e o campo
+                    mais importante: o <strong>WhatsApp oficial da loja</strong>. Esse número é usado
+                    automaticamente em todos os botões de WhatsApp do site público (ícone flutuante,
+                    página de acompanhamento de pedido, aviso de frete a combinar).
+                </li>
+            </ul>
+        </article>
+
+        <article class="ajuda-secao" id="configuracoes">
+            <h2><span class="numero">7</span> Configurações</h2>
+            <p>Também restrita ao Administrador. Cinco abas:</p>
+            <ul>
+                <li><strong>Notificações:</strong> e-mail e WhatsApp que recebem as mensagens do formulário "Fale Conosco" do site (diferente do WhatsApp oficial da loja).</li>
+                <li><strong>Identidade e SEO:</strong> nome do site e textos padrão que aparecem no Google.</li>
+                <li><strong>Compartilhamento:</strong> imagem que aparece quando alguém compartilha o site no WhatsApp/Instagram, e o ícone da aba do navegador.</li>
+                <li><strong>Rastreamento:</strong> Google Analytics, Google Search Console, e o interruptor que permite (ou não) que o Google indexe o site nas buscas.</li>
+                <li><strong>Usuários:</strong> veja a seção <a href="#equipe">Equipe</a> abaixo.</li>
+            </ul>
+        </article>
+
+        <article class="ajuda-secao" id="equipe">
+            <h2><span class="numero">8</span> Equipe: Administrador x Atendente</h2>
+            <p>Em Configurações → Usuários, cadastre quem vai usar o painel. Cada pessoa tem um papel:</p>
+
+            <div class="ajuda-comparativo">
+                <div class="ajuda-comparativo__coluna">
+                    <h3><i class="fas fa-user-shield"></i> Administrador</h3>
+                    <p>Acesso total: Produtos, Categorias, Pedidos, Entrega, Conteúdo do site, Configurações e Usuários. É quem configura a loja.</p>
+                </div>
+                <div class="ajuda-comparativo__coluna">
+                    <h3><i class="fas fa-headset"></i> Atendente</h3>
+                    <p>Foco no atendimento: vê e opera Pedidos por completo, e consulta/cadastra Produtos e Categorias — mas não exclui nada nem mexe em Conteúdo/Configurações.</p>
+                </div>
+            </div>
+
+            <p>
+                Pra criar uma conta nova, clique em "Novo usuário", preencha nome, e-mail, escolha o
+                papel e defina uma senha. Ninguém consegue excluir a própria conta, e o sistema nunca
+                deixa remover o último Administrador — assim a loja nunca fica sem ninguém com acesso
+                total.
+            </p>
+        </article>
+
+        <article class="ajuda-secao" id="dashboard">
+            <h2><span class="numero">9</span> Painel inicial (Dashboard)</h2>
+            <p>
+                A primeira tela ao entrar no admin. Para o <strong>Administrador</strong>, mostra
+                faturamento, pedidos do mês, ticket médio, pedidos aguardando pagamento, gráfico de
+                vendas dos últimos 30 dias, pedidos por status e os rankings de produtos mais
+                vendidos/visitados e categorias mais visitadas.
+            </p>
+            <p>
+                Para o <strong>Atendente</strong>, a tela é mais enxuta: só a contagem de pedidos
+                aguardando pagamento e um atalho pra ir direto pra Pedidos.
+            </p>
+        </article>
+
+        <article class="ajuda-secao" id="cliente-final">
+            <h2><span class="numero">10</span> O que o seu cliente vê</h2>
+            <p>Vale saber como fica a experiência do lado de quem compra:</p>
+            <ul>
+                <li>
+                    <strong>Compra (checkout):</strong> o cliente preenche nome, WhatsApp, endereço,
+                    cidade (com sugestões das cidades cadastradas em Entrega) e pode deixar uma
+                    observação. Depois é levado pra tela de pagamento.
+                </li>
+                <li>
+                    <strong>Acompanhar pedido:</strong> a página que você envia pelo botão "Falar com
+                    cliente" ou "Copiar link". Mostra uma linha do tempo do pedido, os itens
+                    comprados, endereço e um botão de WhatsApp pra falar com a loja. Ela se atualiza
+                    sozinha a cada poucos segundos.
+                </li>
+            </ul>
+        </article>
+
+        <article class="ajuda-secao" id="duvidas">
+            <h2><span class="numero">11</span> Dúvidas comuns</h2>
+
+            <div class="ajuda-faq">
+                <h3>Não consigo excluir um produto ou categoria, por quê?</h3>
+                <p>
+                    Produto já vendido não pode ser excluído (só desativado). Categoria com produtos
+                    dentro também não pode ser excluída — mova ou remova os produtos primeiro.
+                </p>
+            </div>
+            <div class="ajuda-faq">
+                <h3>Cliquei em excluir sem querer, o que fazer?</h3>
+                <p>
+                    Fique tranquilo: o sistema sempre mostra uma janela de confirmação antes de
+                    excluir qualquer coisa. Basta clicar em "Cancelar" que nada é apagado.
+                </p>
+            </div>
+            <div class="ajuda-faq">
+                <h3>Como troco o número de WhatsApp da loja?</h3>
+                <p>Em Conteúdo → Contato, campo "WhatsApp". Vale pra todos os botões do site automaticamente.</p>
+            </div>
+            <div class="ajuda-faq">
+                <h3>Um atendente pode ver o faturamento da loja?</h3>
+                <p>Não. Só o papel Administrador vê números financeiros, gráficos e configurações.</p>
+            </div>
+        </article>
+
+        <footer class="ajuda-rodape">
+            <p>Ainda com dúvida? Fale com quem cuida do site pra você.</p>
+        </footer>
+    </div>
+</section>

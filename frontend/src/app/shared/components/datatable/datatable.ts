@@ -24,6 +24,56 @@ const TEMA_ADMIN = themeQuartz.withParams({
     wrapperBorderRadius: 8,
 });
 
+/** Traducao pt-BR da UI do AG Grid (paginacao, filtros, menus). */
+const TEXTO_LOCALE_PT_BR: Record<string, string> = {
+    page: 'Página',
+    more: 'Mais',
+    to: 'até',
+    of: 'de',
+    next: 'Próxima',
+    last: 'Última',
+    first: 'Primeira',
+    previous: 'Anterior',
+    loadingOoo: 'Carregando...',
+    noRowsToShow: 'Nenhum registro encontrado.',
+    pageSize: 'Itens por página',
+    footerTotal: 'Total',
+
+    search: 'Buscar',
+    filterOoo: 'Filtrar...',
+    equals: 'Igual a',
+    notEqual: 'Diferente de',
+    contains: 'Contém',
+    notContains: 'Não contém',
+    startsWith: 'Começa com',
+    endsWith: 'Termina com',
+    blank: 'Vazio',
+    notBlank: 'Não vazio',
+    applyFilter: 'Aplicar',
+    resetFilter: 'Limpar',
+    clearFilter: 'Limpar',
+    andCondition: 'E',
+    orCondition: 'OU',
+
+    pinColumn: 'Fixar coluna',
+    autosizeThiscolumn: 'Ajustar esta coluna',
+    autosizeAllColumns: 'Ajustar todas as colunas',
+    resetColumns: 'Redefinir colunas',
+    sortAscending: 'Ordem crescente',
+    sortDescending: 'Ordem decrescente',
+    sortUnSort: 'Remover ordenação',
+    pinLeft: 'Fixar à esquerda',
+    pinRight: 'Fixar à direita',
+    noPin: 'Sem fixação',
+
+    copy: 'Copiar',
+    copyWithHeaders: 'Copiar com cabeçalho',
+    paste: 'Colar',
+    export: 'Exportar',
+    csvExport: 'Exportar CSV',
+    excelExport: 'Exportar Excel',
+};
+
 @Component({
     selector: 'app-datatable',
     imports: [AgGridAngular],
@@ -47,6 +97,7 @@ const TEMA_ADMIN = themeQuartz.withParams({
                 [theme]="tema"
                 [rowData]="linhas()"
                 [columnDefs]="colunas()"
+                [localeText]="localeText"
                 [quickFilterText]="textoBusca()"
                 [pagination]="true"
                 [paginationPageSize]="paginacao()"
@@ -72,6 +123,7 @@ export class Datatable<T = unknown> {
     linhaClicada = output<T>();
 
     tema = TEMA_ADMIN;
+    localeText = TEXTO_LOCALE_PT_BR;
     textoBusca = signal('');
 
     aoClicarLinha(event: RowClickedEvent<T>): void {

@@ -25,6 +25,7 @@ class PedidoController extends Controller
             'nome_cliente' => ['required', 'string', 'max:255'],
             'telefone_cliente' => ['required', 'string', 'max:30'],
             'endereco' => ['required', 'string', 'max:500'],
+            'observacoes' => ['nullable', 'string', 'max:1000'],
             'cidade_entrega_id' => ['nullable', 'integer', 'exists:cidades_entrega,id'],
             'cidade_texto_livre' => ['nullable', 'string', 'max:255'],
             'frete_a_combinar' => ['required', 'boolean'],
@@ -35,7 +36,7 @@ class PedidoController extends Controller
 
         try {
             $pedido = DB::transaction(function () use ($dados) {
-                $cidade = $dados['cidade_entrega_id'] ? CidadeEntrega::find($dados['cidade_entrega_id']) : null;
+                $cidade = ($dados['cidade_entrega_id'] ?? null) ? CidadeEntrega::find($dados['cidade_entrega_id']) : null;
                 $valorFrete = $cidade?->valor_frete;
 
                 $produtos = Produto::whereIn('id', collect($dados['itens'])->pluck('produto_id'))
@@ -74,9 +75,11 @@ class PedidoController extends Controller
                 $valorTotal += (float) ($valorFrete ?? 0);
 
                 $pedido = Pedido::create([
+                    'token_acompanhamento' => (string) Str::uuid(),
                     'nome_cliente' => $dados['nome_cliente'],
                     'telefone_cliente' => $dados['telefone_cliente'],
                     'endereco' => $dados['endereco'],
+                    'observacoes' => $dados['observacoes'] ?? null,
                     'cidade_entrega_id' => $cidade?->id,
                     'cidade_texto_livre' => $cidade ? null : ($dados['cidade_texto_livre'] ?? null),
                     'frete_a_combinar' => $dados['frete_a_combinar'],
@@ -123,6 +126,36 @@ class PedidoController extends Controller
         }
 
         return response()->json(['link' => $resultado['link']]);
+    }
+
+    /**
+     * Pagina publica de acompanhamento do pedido - buscado por token
+     * (nao por id) para nao permitir adivinhar outros pedidos pela URL.
+     * Nao expoe dados sensiveis de pagamento (NSU/slug do InfinitePay).
+     */
+    public function acompanharPorToken(string $token): JsonResponse
+    {
+        $pedido = Pedido::with(['itens', 'atendente'])
+            ->where('token_acompanhamento', $token)
+            ->firstOrFail();
+
+        return response()->json([
+            'id' => $pedido->id,
+            'status' => $pedido->status,
+            'nomeCliente' => $pedido->nome_cliente,
+            'endereco' => $pedido->endereco,
+            'observacoes' => $pedido->observacoes,
+            'cidade' => $pedido->cidadeEntrega?->nome_cidade ?? $pedido->cidade_texto_livre,
+            'freteACombinar' => $pedido->frete_a_combinar,
+            'valorTotal' => (float) $pedido->valor_total,
+            'atendente' => $pedido->atendente?->name,
+            'itens' => $pedido->itens->map(fn (PedidoItem $item) => [
+                'nomeProduto' => $item->nome_produto,
+                'quantidade' => $item->quantidade,
+                'imagemUrl' => $item->produto?->imagem_url,
+            ]),
+            'criadoEm' => $pedido->created_at,
+        ]);
     }
 
     /**

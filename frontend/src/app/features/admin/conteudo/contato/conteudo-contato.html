@@ -1,0 +1,57 @@
+<div class="conteudo-pagina">
+    <h1>Conteúdo — Contato</h1>
+
+    @if (secao(); as s) {
+        <div class="visibilidade-bar">
+            <div>
+                <strong>Visível no site</strong>
+                @if (s.bloqueada) {
+                    <span class="visibilidade-bar__badge">sempre visível</span>
+                } @else {
+                    <span class="visibilidade-bar__ajuda">
+                        Desligue para ocultar esta página sem apagar o conteúdo.
+                    </span>
+                }
+            </div>
+            <button
+                type="button"
+                class="toggle"
+                [class.ativo]="s.visivel"
+                [class.desabilitado]="s.bloqueada"
+                [disabled]="s.bloqueada || salvandoVisibilidade()"
+                (click)="alternarVisibilidade()"
+            >
+                <span class="toggle__bola"></span>
+            </button>
+        </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="salvar()" class="form-secao">
+        <div class="secao-bloco">
+            <div class="campo">
+                <label for="contato-telefone">Telefone (exibido)</label>
+                <input type="text" id="contato-telefone" formControlName="telefone_display">
+            </div>
+            <div class="campo">
+                <label for="contato-whatsapp">WhatsApp (só números, com DDI)</label>
+                <input type="text" id="contato-whatsapp" formControlName="telefone_whatsapp">
+            </div>
+            <div class="campo">
+                <label for="contato-email">E-mail</label>
+                <input type="email" id="contato-email" formControlName="email">
+            </div>
+            <div class="campo">
+                <label for="contato-endereco">Endereço</label>
+                <input type="text" id="contato-endereco" formControlName="endereco">
+            </div>
+            <div class="campo">
+                <label for="contato-horario">Horário de atendimento</label>
+                <input type="text" id="contato-horario" formControlName="horario">
+            </div>
+        </div>
+
+        <button type="submit" class="btn-salvar" [disabled]="salvando()">
+            {{ salvando() ? 'Salvando...' : 'Salvar' }}
+        </button>
+    </form>
+</div>
