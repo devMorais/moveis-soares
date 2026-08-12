@@ -5,7 +5,10 @@ import { CategoriaAdmin } from '../types/categoria/categoria-admin.type';
 
 export interface DadosCategoria {
     nome: string;
+    slug?: string | null;
     imagem_url?: string | null;
+    ativo?: boolean;
+    ordem_exibicao?: number;
 }
 
 @Injectable({ providedIn: 'root' })
