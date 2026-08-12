@@ -28,7 +28,6 @@ Route::get('/user', function (Request $request) {
 Route::get('/categorias', [CategoriaController::class, 'index']);
 Route::get('/categorias/{slug}/produtos', [CategoriaController::class, 'produtos']);
 Route::get('/categorias/{slug}', [CategoriaController::class, 'porSlug']);
-Route::post('/produtos/upload-imagem', [ProdutoController::class, 'uploadImagem']);
 Route::post('/produtos/{id}/visualizacao', [ProdutoController::class, 'registrarVisualizacao']);
 Route::get('/produtos/categoria/{slug}', [ProdutoController::class, 'porCategoria']);
 Route::get('/produtos/{slug}', [ProdutoController::class, 'porSlug']);
@@ -49,6 +48,8 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     // Liberado para qualquer papel autenticado (admin ou atendente) - o
     // dia a dia do atendente: atender pedidos e consultar catalogo.
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::post('/upload-imagem', [ProdutoController::class, 'uploadImagem'])->middleware('throttle:30,1');
 
     Route::get('/pedidos', [AdminPedidoController::class, 'index']);
     Route::get('/pedidos/{id}', [AdminPedidoController::class, 'mostrar']);

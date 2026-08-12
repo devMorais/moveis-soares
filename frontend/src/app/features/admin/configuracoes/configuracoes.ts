@@ -42,7 +42,7 @@ export class Configuracoes implements OnInit {
 
     rotulosPapel = ROTULOS_PAPEL;
 
-    uploadEndpoint = `${environment.apiUrl}/produtos/upload-imagem`;
+    uploadEndpoint = `${environment.apiUrl}/admin/upload-imagem`;
     nomesAba = NOMES_ABA;
     abasDisponiveis: Aba[] = ['notificacoes', 'identidade', 'compartilhamento', 'rastreamento', 'usuarios'];
     abaAtiva = signal<Aba>('notificacoes');

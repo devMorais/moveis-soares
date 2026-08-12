@@ -23,7 +23,7 @@ export class Categorias implements OnInit {
     private confirmDialog = inject(ConfirmDialogService);
     private auth = inject(AuthService);
 
-    readonly uploadEndpoint = `${environment.apiUrl}/produtos/upload-imagem`;
+    readonly uploadEndpoint = `${environment.apiUrl}/admin/upload-imagem`;
 
     isAdmin = computed(() => this.auth.currentUser()?.role === 'admin');
 
