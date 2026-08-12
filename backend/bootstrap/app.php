@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -64,13 +65,23 @@ return Application::configure(basePath: dirname(__DIR__))
                 ], 404);
             }
 
-            if ($e instanceof \RuntimeException) {
+            if ($e instanceof ThrottleRequestsException) {
                 return new JsonResponse([
-                    'mensagem' => $e->getMessage(),
+                    'mensagem' => 'Muitas tentativas. Aguarde um momento e tente novamente.',
                     'tipo' => 'erro',
-                ], 422);
+                ], 429);
             }
 
+            /**
+             * Sem branch generico pra \RuntimeException aqui de proposito:
+             * QueryException e ThrottleRequestsException (ja tratada acima)
+             * tambem estendem RuntimeException, e um branch generico
+             * devolvia $e->getMessage() cru pra qualquer uma delas - vazando
+             * SQL/host/porta/banco de producao numa query mal sucedida.
+             * RuntimeException usada de proposito pra erro de negocio (ver
+             * PedidoController::store) ja e capturada localmente com sua
+             * propria mensagem amigavel antes de chegar aqui.
+             */
             $debug = config('app.debug');
 
             return new JsonResponse([
