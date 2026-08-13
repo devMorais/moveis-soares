@@ -206,6 +206,11 @@ img {
     color: var(--admin-primary);
 }
 
+.badge-status[data-status="FALHOU"] {
+    background-color: rgba(239, 68, 68, 0.14);
+    color: #dc2626;
+}
+
 .badge-frete-combinar {
     display: inline-flex;
     align-items: center;

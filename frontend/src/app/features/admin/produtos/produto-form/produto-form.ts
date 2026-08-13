@@ -24,7 +24,7 @@ export class ProdutoForm implements OnInit {
     private router = inject(Router);
     lightbox = inject(LightboxService);
 
-    readonly uploadEndpoint = `${environment.apiUrl}/produtos/upload-imagem`;
+    readonly uploadEndpoint = `${environment.apiUrl}/admin/upload-imagem`;
 
     categorias = signal<CategoriaAdmin[]>([]);
     salvando = signal(false);
