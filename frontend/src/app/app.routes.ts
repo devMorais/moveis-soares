@@ -52,6 +52,11 @@ export const routes: Routes = [
             },
             { path: 'conteudo', redirectTo: 'conteudo/inicio' },
             {
+                path: 'secoes',
+                canActivate: [adminOnlyGuard],
+                loadComponent: () => import('./features/admin/secoes/secoes').then((m) => m.Secoes),
+            },
+            {
                 path: 'instagram',
                 canActivate: [adminOnlyGuard],
                 loadComponent: () => import('./features/admin/instagram/instagram').then((m) => m.Instagram),

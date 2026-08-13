@@ -1,30 +1,9 @@
 <div class="conteudo-pagina">
     <h1>Conteúdo — Contato</h1>
 
-    @if (secao(); as s) {
-        <div class="visibilidade-bar">
-            <div>
-                <strong>Visível no site</strong>
-                @if (s.bloqueada) {
-                    <span class="visibilidade-bar__badge">sempre visível</span>
-                } @else {
-                    <span class="visibilidade-bar__ajuda">
-                        Desligue para ocultar esta página sem apagar o conteúdo.
-                    </span>
-                }
-            </div>
-            <button
-                type="button"
-                class="toggle"
-                [class.ativo]="s.visivel"
-                [class.desabilitado]="s.bloqueada"
-                [disabled]="s.bloqueada || salvandoVisibilidade()"
-                (click)="alternarVisibilidade()"
-            >
-                <span class="toggle__bola"></span>
-            </button>
-        </div>
-    }
+    <p class="secoes-ajuda">
+        Pra ligar ou desligar esta seção no site, use <a routerLink="/admin/secoes">Seções</a>.
+    </p>
 
     <form [formGroup]="form" (ngSubmit)="salvar()" class="form-secao">
         <div class="secao-bloco">

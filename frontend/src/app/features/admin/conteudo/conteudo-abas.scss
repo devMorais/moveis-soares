@@ -96,6 +96,18 @@
     transform: translateX(18px);
 }
 
+.secoes-ajuda {
+    margin-bottom: 20px;
+    color: var(--admin-text-muted);
+    font-size: 13px;
+}
+
+.lista-secoes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
 .form-secao {
     display: flex;
     flex-direction: column;
