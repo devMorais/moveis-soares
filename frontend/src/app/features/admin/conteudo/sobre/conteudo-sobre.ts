@@ -1,8 +1,8 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { ConteudoAdminService } from '../../../../core/services/conteudo-admin.service';
-import { SecaoVisibilidade, SecoesAdminService } from '../../../../core/services/secoes-admin.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { UploadImagem } from '../../../../shared/components/upload-imagem/upload-imagem';
 import { environment } from '../../../../../environments/environment';
@@ -20,14 +20,13 @@ const ROTULOS_DIFERENCIAIS = ['Diferencial 1 (ícone: estrela)', 'Diferencial 2 
 
 @Component({
     selector: 'app-admin-conteudo-sobre',
-    imports: [ReactiveFormsModule, UploadImagem],
+    imports: [ReactiveFormsModule, UploadImagem, RouterLink],
     templateUrl: './conteudo-sobre.html',
     styleUrl: '../conteudo-abas.scss',
 })
 export class ConteudoSobre implements OnInit {
     private fb = inject(FormBuilder);
     private conteudoService = inject(ConteudoAdminService);
-    private secoesService = inject(SecoesAdminService);
     private toast = inject(ToastService);
 
     uploadEndpoint = `${environment.apiUrl}/produtos/upload-imagem`;
@@ -37,8 +36,6 @@ export class ConteudoSobre implements OnInit {
     rotulosDiferenciais = ROTULOS_DIFERENCIAIS;
 
     salvando = signal(false);
-    secao = signal<SecaoVisibilidade | null>(null);
-    salvandoVisibilidade = signal(false);
 
     private novoItemLista = () => this.fb.nonNullable.group({
         titulo: ['', Validators.required],
@@ -82,11 +79,6 @@ export class ConteudoSobre implements OnInit {
             next: (dados) => this.form.patchValue({ cta_titulo: dados?.titulo ?? '', cta_texto: dados?.texto ?? '' }),
             error: erroAoCarregar,
         });
-
-        this.secoesService.listar().subscribe({
-            next: (secoes) => this.secao.set(secoes.find((s) => s.chave === 'sobre') ?? null),
-            error: erroAoCarregar,
-        });
     }
 
     private preencherItens(itens: { titulo: string; texto: string }[]): void {
@@ -101,26 +93,6 @@ export class ConteudoSobre implements OnInit {
 
     aoImagemProcessada(url: string): void {
         this.form.patchValue({ imagem_url: url });
-    }
-
-    alternarVisibilidade(): void {
-        const secao = this.secao();
-        if (!secao || secao.bloqueada) return;
-
-        const novoValor = !secao.visivel;
-        this.salvandoVisibilidade.set(true);
-
-        this.secoesService.atualizar(secao.chave, novoValor).subscribe({
-            next: () => {
-                this.salvandoVisibilidade.set(false);
-                this.secao.set({ ...secao, visivel: novoValor });
-                this.toast.sucesso(novoValor ? 'Seção agora está visível no site.' : 'Seção ocultada do site.');
-            },
-            error: () => {
-                this.salvandoVisibilidade.set(false);
-                this.toast.erro('Não foi possível atualizar a visibilidade.');
-            },
-        });
     }
 
     salvar(): void {
