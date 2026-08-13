@@ -142,6 +142,14 @@ img {
     color: var(--admin-primary);
 }
 
+.acoes-celula__btn--whatsapp {
+    color: #25d366;
+}
+
+.acoes-celula__btn--whatsapp:hover {
+    color: #1da851;
+}
+
 .tabela-produtos__thumb {
     width: 36px;
     height: 36px;
@@ -216,4 +224,18 @@ img {
     font-weight: 600;
     background-color: rgba(230, 51, 41, 0.1);
     color: var(--admin-primary);
+}
+
+.badge-atencao {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: none;
+    background-color: rgba(245, 158, 11, 0.14);
+    color: #b45309;
 }
