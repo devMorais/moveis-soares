@@ -12,9 +12,10 @@ const ROTULOS_STATUS: Record<string, string> = {
     EM_PREPARACAO: 'Em preparação',
     ENVIADO: 'Enviado',
     ENTREGUE: 'Entregue',
+    FALHOU: 'Falha no pagamento',
 };
 
-const CORES_STATUS = ['#f59e0b', '#22c55e', '#3b82f6', '#8b5cf6', '#10b981'];
+const CORES_STATUS = ['#f59e0b', '#22c55e', '#3b82f6', '#8b5cf6', '#10b981', '#ef4444'];
 
 @Component({
     selector: 'app-admin-dashboard',

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class PedidoController extends Controller
 {
-    private const STATUS_VALIDOS = ['AGUARDANDO', 'PAGO', 'EM_PREPARACAO', 'ENVIADO', 'ENTREGUE'];
+    private const STATUS_VALIDOS = ['AGUARDANDO', 'PAGO', 'EM_PREPARACAO', 'ENVIADO', 'ENTREGUE', 'FALHOU'];
 
     public function index(Request $request): JsonResponse
     {
