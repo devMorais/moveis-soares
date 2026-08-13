@@ -41,7 +41,9 @@
             <h2 class="titulo">{{ cta()?.titulo }}</h2>
             <p>{{ cta()?.texto }}</p>
             <div class="botoes">
-                <a routerLink="/contato" class="btn">Fale Conosco</a>
+                @if (contatoVisivel()) {
+                    <a routerLink="/contato" class="btn">Fale Conosco</a>
+                }
             </div>
         </div>
     </div>

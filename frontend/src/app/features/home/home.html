@@ -111,7 +111,9 @@
             <div class="texto">
                 <h2 class="titulo">{{ institucional()?.resumoTitulo }}</h2>
                 <p>{{ institucional()?.resumoTexto }}</p>
-                <a routerLink="/sobre" class="btn">Conheça nossa história</a>
+                @if (sobreVisivel()) {
+                    <a routerLink="/sobre" class="btn">Conheça nossa história</a>
+                }
             </div>
         </div>
     </div>
@@ -123,7 +125,9 @@
             <h2 class="titulo">{{ cta()?.titulo }}</h2>
             <p>{{ cta()?.texto }}</p>
             <div class="botoes">
-                <a routerLink="/contato" class="btn">Fale Conosco</a>
+                @if (contatoVisivel()) {
+                    <a routerLink="/contato" class="btn">Fale Conosco</a>
+                }
                 <a [href]="'https://wa.me/' + contato()?.telefoneWhatsapp" target="_blank" rel="noopener" class="btn btn-whatsapp">
                     <i class="fab fa-whatsapp"></i> Chamar no WhatsApp
                 </a>

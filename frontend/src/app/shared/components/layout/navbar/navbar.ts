@@ -25,6 +25,7 @@ export class Navbar implements OnInit {
     categorias = signal<Categoria[]>([]);
 
     sobreVisivel = computed(() => this.site.conteudo().secoesVisiveis['sobre'] ?? true);
+    contatoVisivel = computed(() => this.site.conteudo().secoesVisiveis['contato'] ?? true);
 
     menuAberto = signal(false);
     rolado = signal(false);
