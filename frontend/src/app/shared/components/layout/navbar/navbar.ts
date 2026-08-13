@@ -23,6 +23,7 @@ export class Navbar {
     categorias = CATEGORIAS;
 
     sobreVisivel = computed(() => this.site.conteudo().secoesVisiveis['sobre'] ?? true);
+    contatoVisivel = computed(() => this.site.conteudo().secoesVisiveis['contato'] ?? true);
 
     menuAberto = signal(false);
     rolado = signal(false);

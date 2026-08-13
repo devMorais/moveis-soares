@@ -1,5 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError, map, shareReplay, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { SITE_INFO } from '../constants/site-info';
 import { ItemLista, SiteConteudo } from '../types/site/site-conteudo.type';
@@ -78,13 +80,28 @@ export class SiteService {
     /** Populado com o fallback imediatamente; atualiza quando a resposta real chega. */
     conteudo = signal<SiteConteudo>(FALLBACK);
 
+    private carregamento$: Observable<SiteConteudo> | null = null;
+
     carregar(): void {
-        this.http.get<SiteConteudoBruto>(`${environment.apiUrl}/site`).subscribe({
-            next: (bruto) => this.conteudo.set(this.normalizar(bruto)),
-            error: () => {
-                // mantem o fallback ja aplicado
-            },
-        });
+        this.aguardarCarregamento().subscribe();
+    }
+
+    /**
+     * Usado por guards de rota que precisam saber o conteudo real (ex: secoesVisiveis)
+     * antes de decidir se a navegacao pode continuar - o signal `conteudo` comeca com o
+     * fallback (tudo visivel), entao ler ele direto na hora da navegacao poderia liberar
+     * uma secao desligada por uma fracao de segundo, antes da resposta da API chegar.
+     */
+    aguardarCarregamento(): Observable<SiteConteudo> {
+        if (!this.carregamento$) {
+            this.carregamento$ = this.http.get<SiteConteudoBruto>(`${environment.apiUrl}/site`).pipe(
+                map((bruto) => this.normalizar(bruto)),
+                tap((conteudo) => this.conteudo.set(conteudo)),
+                catchError(() => of(this.conteudo())),
+                shareReplay(1),
+            );
+        }
+        return this.carregamento$;
     }
 
     private normalizar(bruto: SiteConteudoBruto): SiteConteudo {

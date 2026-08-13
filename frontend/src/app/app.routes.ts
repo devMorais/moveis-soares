@@ -10,11 +10,12 @@ import { PedidoAcompanhar } from './features/pedido-acompanhar/pedido-acompanhar
 import { Ajuda } from './features/ajuda/ajuda';
 import { authGuard } from './core/guards/auth.guard';
 import { adminOnlyGuard } from './core/guards/admin-only.guard';
+import { secaoVisivelGuard } from './core/guards/secao-visivel.guard';
 
 export const routes: Routes = [
     { path: '', component: Home },
-    { path: 'sobre', component: Sobre },
-    { path: 'contato', component: Contato },
+    { path: 'sobre', component: Sobre, canActivate: [secaoVisivelGuard('sobre')] },
+    { path: 'contato', component: Contato, canActivate: [secaoVisivelGuard('contato')] },
     { path: 'categoria/:slug', component: Categoria },
     { path: 'produto/:slug', component: Produto },
     { path: 'checkout', component: Checkout },
