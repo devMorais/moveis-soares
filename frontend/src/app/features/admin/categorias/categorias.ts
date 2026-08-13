@@ -35,12 +35,24 @@ export class Categorias implements OnInit {
 
     form = this.fb.nonNullable.group({
         nome: ['', Validators.required],
+        slug: [''],
+        ativo: [true],
+        ordem_exibicao: [0, [Validators.min(0)]],
     });
 
     colunas = computed<ColDef<CategoriaAdmin>[]>(() => {
         const base: ColDef<CategoriaAdmin>[] = [
+            { field: 'ordemExibicao', headerName: 'Ordem', flex: 1, sortable: true },
             { field: 'nome', headerName: 'Nome', flex: 2, sortable: true, filter: true },
             { field: 'totalProdutos', headerName: 'Produtos', flex: 1, sortable: true },
+            {
+                field: 'ativo',
+                headerName: 'Status',
+                flex: 1,
+                sortable: true,
+                cellRenderer: (params: { value: boolean }) =>
+                    `<span class="badge-status ${params.value ? 'badge-status--ativo' : ''}">${params.value ? 'Ativa' : 'Inativa'}</span>`,
+            },
         ];
 
         const btnRemover = this.isAdmin()
@@ -93,13 +105,18 @@ export class Categorias implements OnInit {
     editar(categoria: CategoriaAdmin): void {
         this.editandoId.set(categoria.id);
         this.imagemUrl.set(categoria.imagemUrl);
-        this.form.patchValue({ nome: categoria.nome });
+        this.form.patchValue({
+            nome: categoria.nome,
+            slug: categoria.slug,
+            ativo: categoria.ativo,
+            ordem_exibicao: categoria.ordemExibicao,
+        });
     }
 
     cancelarEdicao(): void {
         this.editandoId.set(null);
         this.imagemUrl.set(null);
-        this.form.reset({ nome: '' });
+        this.form.reset({ nome: '', slug: '', ativo: true, ordem_exibicao: 0 });
     }
 
     salvar(): void {
@@ -109,7 +126,14 @@ export class Categorias implements OnInit {
         }
 
         this.salvando.set(true);
-        const dados = { nome: this.form.getRawValue().nome, imagem_url: this.imagemUrl() };
+        const valores = this.form.getRawValue();
+        const dados = {
+            nome: valores.nome,
+            slug: valores.slug || null,
+            imagem_url: this.imagemUrl(),
+            ativo: valores.ativo,
+            ordem_exibicao: valores.ordem_exibicao,
+        };
         const id = this.editandoId();
 
         const requisicao = id ? this.categoriasService.atualizar(id, dados) : this.categoriasService.criar(dados);
@@ -121,10 +145,7 @@ export class Categorias implements OnInit {
                 this.cancelarEdicao();
                 this.carregar();
             },
-            error: () => {
-                this.salvando.set(false);
-                this.toast.erro('Não foi possível salvar a categoria.');
-            },
+            error: () => this.salvando.set(false), // authInterceptor ja mostra o toast de erro
         });
     }
 

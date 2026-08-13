@@ -3,5 +3,7 @@ export interface CategoriaAdmin {
     nome: string;
     slug: string;
     imagemUrl: string | null;
+    ativo: boolean;
+    ordemExibicao: number;
     totalProdutos: number;
 }

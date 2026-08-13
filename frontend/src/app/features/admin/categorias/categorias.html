@@ -10,6 +10,18 @@
             <input type="text" id="nome" formControlName="nome">
         </div>
         <div class="campo">
+            <label for="slug">Slug (opcional)</label>
+            <input type="text" id="slug" formControlName="slug" placeholder="Gerado a partir do nome, se deixado em branco">
+        </div>
+        <label class="campo-checkbox">
+            <input type="checkbox" formControlName="ativo">
+            Ativa (aparece no site)
+        </label>
+        <div class="campo campo--pequeno">
+            <label for="ordem_exibicao">Ordem de exibição</label>
+            <input type="number" id="ordem_exibicao" formControlName="ordem_exibicao" min="0">
+        </div>
+        <div class="campo">
             <label>Imagem (opcional)</label>
             <app-upload-imagem [endpoint]="uploadEndpoint" (uploadConcluido)="aoConcluirUpload($event)" />
         </div>
