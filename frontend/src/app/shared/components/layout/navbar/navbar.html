@@ -5,7 +5,7 @@
         </a>
         <nav class="menu">
             <a routerLink="/" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharMenu()">Home</a>
-            @for (categoria of categorias; track categoria.slug) {
+            @for (categoria of categorias(); track categoria.slug) {
                 <a [routerLink]="['/categoria', categoria.slug]" routerLinkActive="ativo" (click)="fecharMenu()">{{ categoria.nome }}</a>
             }
             @if (sobreVisivel()) {
@@ -27,7 +27,7 @@
     </div>
     <nav class="menu-mobile" [class.aberto]="menuAberto()">
         <a routerLink="/" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharMenu()">Home</a>
-        @for (categoria of categorias; track categoria.slug) {
+        @for (categoria of categorias(); track categoria.slug) {
             <a [routerLink]="['/categoria', categoria.slug]" routerLinkActive="ativo" (click)="fecharMenu()">{{ categoria.nome }}</a>
         }
         <a routerLink="/sobre" routerLinkActive="ativo" (click)="fecharMenu()">Sobre</a>

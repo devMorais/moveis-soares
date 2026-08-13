@@ -30,7 +30,7 @@ export class ConteudoSobre implements OnInit {
     private secoesService = inject(SecoesAdminService);
     private toast = inject(ToastService);
 
-    uploadEndpoint = `${environment.apiUrl}/produtos/upload-imagem`;
+    uploadEndpoint = `${environment.apiUrl}/admin/upload-imagem`;
     subAbasDisponiveis: SubAba[] = ['historia', 'diferenciais', 'banner'];
     nomesSubAba = NOMES_SUBABA;
     subAbaAtiva = signal<SubAba>('historia');

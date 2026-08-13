@@ -110,6 +110,8 @@ class PedidoController extends Controller
         );
 
         if ($resultado['erro']) {
+            $this->reverterPedidoSemPagamento($pedido);
+
             return response()->json(Helpers::mensagemErro($resultado['mensagem']), 502);
         }
 
@@ -126,6 +128,34 @@ class PedidoController extends Controller
         }
 
         return response()->json(['link' => $resultado['link']]);
+    }
+
+    /**
+     * Falha ao gerar o link de pagamento apos o pedido/estoque ja terem
+     * sido confirmados no banco (rede fora, credencial invalida, etc) -
+     * devolve o estoque decrementado e marca o pedido como FALHOU, pra
+     * nao deixar nem estoque vazado nem pedido preso em AGUARDANDO sem
+     * forma de pagar (MS-PED-11).
+     */
+    private function reverterPedidoSemPagamento(Pedido $pedido): void
+    {
+        DB::transaction(function () use ($pedido) {
+            $itens = $pedido->itens()->get();
+            $produtos = Produto::whereIn('id', $itens->pluck('produto_id'))
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+
+            foreach ($itens as $item) {
+                $produto = $produtos->get($item->produto_id);
+
+                if ($produto && $produto->estoque !== null) {
+                    $produto->increment('estoque', $item->quantidade);
+                }
+            }
+
+            $pedido->update(['status' => 'FALHOU']);
+        });
     }
 
     /**

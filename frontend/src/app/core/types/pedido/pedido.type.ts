@@ -1,4 +1,4 @@
-export type StatusPedido = 'AGUARDANDO' | 'PAGO' | 'EM_PREPARACAO' | 'ENVIADO' | 'ENTREGUE';
+export type StatusPedido = 'AGUARDANDO' | 'PAGO' | 'EM_PREPARACAO' | 'ENVIADO' | 'ENTREGUE' | 'FALHOU';
 
 export interface PedidoItem {
     nomeProduto: string;
