@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ColDef } from 'ag-grid-community';
+import { CellClickedEvent, ColDef } from 'ag-grid-community';
 import { PedidoAdminService } from '../../../core/services/pedido-admin.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { ClipboardService } from '../../../core/services/clipboard.service';
@@ -16,6 +16,15 @@ const ROTULOS_STATUS: Record<StatusPedido, string> = {
     ENTREGUE: 'Entregue',
     FALHOU: 'Falha no pagamento',
 };
+
+/** A partir de quantas horas parado em "aguardando" o pedido ganha o selo de atencao na lista. */
+const HORAS_LIMITE_AGUARDANDO = 2;
+
+function precisaDeAtencao(pedido: Pedido): boolean {
+    if (pedido.status !== 'AGUARDANDO') return false;
+    const horasDesdeCriacao = (Date.now() - new Date(pedido.criadoEm).getTime()) / (1000 * 60 * 60);
+    return horasDesdeCriacao >= HORAS_LIMITE_AGUARDANDO;
+}
 
 @Component({
     selector: 'app-admin-pedidos',
@@ -59,8 +68,11 @@ export class Pedidos implements OnInit {
             minWidth: 180,
             sortable: true,
             filter: true,
-            cellRenderer: (params: { value: StatusPedido }) =>
-                `<span class="badge-status" data-status="${params.value}">${ROTULOS_STATUS[params.value]}</span>`,
+            cellRenderer: (params: { value: StatusPedido; data?: Pedido }) =>
+                `<span class="badge-status" data-status="${params.value}">${ROTULOS_STATUS[params.value]}</span>` +
+                (params.data && precisaDeAtencao(params.data)
+                    ? `<span class="badge-atencao" title="Aguardando pagamento há mais de ${HORAS_LIMITE_AGUARDANDO}h"><i class="fas fa-triangle-exclamation"></i> atenção</span>`
+                    : ''),
         },
         {
             field: 'valorTotal',
@@ -83,13 +95,21 @@ export class Pedidos implements OnInit {
             flex: 1,
             sortable: false,
             filter: false,
-            cellRenderer: () => `
+            cellRenderer: (params: { data?: Pedido }) => `
                 <div class="acoes-celula">
+                    ${
+                        params.data?.status === 'AGUARDANDO'
+                            ? `<a href="${this.linkWhatsappCliente(params.data)}" target="_blank" rel="noopener" class="acoes-celula__btn acoes-celula__btn--whatsapp" aria-label="Falar no WhatsApp"><i class="fab fa-whatsapp"></i></a>`
+                            : ''
+                    }
                     <button type="button" class="acoes-celula__btn" data-acao="detalhe" aria-label="Ver detalhes"><i class="fas fa-eye"></i></button>
                 </div>
             `,
-            onCellClicked: (event) => {
-                if (event.data) this.abrirDetalhe(event.data);
+            onCellClicked: (event: CellClickedEvent<Pedido>) => {
+                const alvo = event.event?.target as HTMLElement | null;
+                if (event.data && alvo?.closest('[data-acao="detalhe"]')) {
+                    this.abrirDetalhe(event.data);
+                }
             },
         },
     ];
