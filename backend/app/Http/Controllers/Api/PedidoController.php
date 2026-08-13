@@ -121,10 +121,16 @@ class PedidoController extends Controller
             'infinitepay_slug' => $resultado['slug'],
         ]);
 
-        try {
-            Mail::to(config('mail.from.address'))->send(new NovoPedidoRecebido($pedido));
-        } catch (\Throwable $e) {
-            Log::warning('Falha ao enviar e-mail de novo pedido: ' . $e->getMessage());
+        $destinatarioNotificacao = config('mail.notificacao_pedidos');
+
+        if ($destinatarioNotificacao) {
+            try {
+                Mail::to($destinatarioNotificacao)->send(new NovoPedidoRecebido($pedido));
+            } catch (\Throwable $e) {
+                Log::warning('Falha ao enviar e-mail de novo pedido: ' . $e->getMessage());
+            }
+        } else {
+            Log::warning('E-mail de novo pedido nao enviado: MAIL_NOTIFICACAO_PEDIDOS nao configurado.');
         }
 
         return response()->json(['link' => $resultado['link']]);

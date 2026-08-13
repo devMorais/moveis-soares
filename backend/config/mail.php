@@ -115,4 +115,17 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Destinatario das notificacoes de novo pedido
+    |--------------------------------------------------------------------------
+    |
+    | Endereco que recebe o aviso de novo pedido (App\Mail\NovoPedidoRecebido).
+    | Separado do "from" de proposito -- "from" e quem envia, nao quem deve
+    | ler o aviso.
+    |
+    */
+
+    'notificacao_pedidos' => env('MAIL_NOTIFICACAO_PEDIDOS'),
+
 ];
