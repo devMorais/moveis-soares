@@ -18,6 +18,7 @@ export class Sobre {
 
     sobre = computed(() => this.site.conteudo().sobre);
     cta = computed(() => this.site.conteudo().cta['sobre']);
+    contatoVisivel = computed(() => this.site.conteudo().secoesVisiveis['contato'] ?? true);
 
     diferenciais = computed(() =>
         (this.sobre()?.diferenciais ?? []).map((item, indice) => ({

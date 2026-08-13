@@ -30,6 +30,8 @@ export class Home implements OnInit, OnDestroy {
     institucional = computed(() => this.site.conteudo().institucional);
     cta = computed(() => this.site.conteudo().cta['home']);
     contato = computed(() => this.site.conteudo().contato);
+    sobreVisivel = computed(() => this.site.conteudo().secoesVisiveis['sobre'] ?? true);
+    contatoVisivel = computed(() => this.site.conteudo().secoesVisiveis['contato'] ?? true);
 
     itensInstitucional = computed(() =>
         (this.institucional()?.itens ?? []).map((item, indice) => ({

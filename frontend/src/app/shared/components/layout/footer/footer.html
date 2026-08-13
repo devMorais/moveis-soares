@@ -27,7 +27,9 @@
                     @if (sobreVisivel()) {
                         <a routerLink="/sobre">Sobre</a>
                     }
-                    <a routerLink="/contato">Fale Conosco</a>
+                    @if (contatoVisivel()) {
+                        <a routerLink="/contato">Fale Conosco</a>
+                    }
                 </nav>
             </div>
             <div class="coluna contato">

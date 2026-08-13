@@ -17,4 +17,5 @@ export class Footer {
 
     contato = computed(() => this.site.conteudo().contato);
     sobreVisivel = computed(() => this.site.conteudo().secoesVisiveis['sobre'] ?? true);
+    contatoVisivel = computed(() => this.site.conteudo().secoesVisiveis['contato'] ?? true);
 }
