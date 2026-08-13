@@ -14,6 +14,7 @@ const ROTULOS_STATUS: Record<StatusPedido, string> = {
     EM_PREPARACAO: 'Em preparação',
     ENVIADO: 'Enviado',
     ENTREGUE: 'Entregue',
+    FALHOU: 'Falha no pagamento',
 };
 
 @Component({
@@ -28,7 +29,7 @@ export class Pedidos implements OnInit {
     private clipboard = inject(ClipboardService);
     private auth = inject(AuthService);
 
-    readonly statusOpcoes: StatusPedido[] = ['AGUARDANDO', 'PAGO', 'EM_PREPARACAO', 'ENVIADO', 'ENTREGUE'];
+    readonly statusOpcoes: StatusPedido[] = ['AGUARDANDO', 'PAGO', 'EM_PREPARACAO', 'ENVIADO', 'ENTREGUE', 'FALHOU'];
 
     pedidos = signal<Pedido[]>([]);
     carregando = signal(true);
