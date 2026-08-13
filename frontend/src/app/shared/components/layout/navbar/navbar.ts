@@ -1,10 +1,11 @@
-import { Component, HostListener, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { Component, HostListener, OnInit, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SITE_INFO } from '../../../../core/constants/site-info';
-import { CATEGORIAS } from '../../../../core/constants/categorias';
 import { CarrinhoService } from '../../../../core/services/carrinho.service';
 import { SiteService } from '../../../../core/services/site.service';
+import { CategoriaService } from '../../../../core/services/categoria';
+import { Categoria } from '../../../../core/types/categoria/categoria.type';
 
 const LIMIAR_SCROLL_PX = 60;
 
@@ -14,13 +15,14 @@ const LIMIAR_SCROLL_PX = 60;
     templateUrl: './navbar.html',
     styleUrl: './navbar.scss',
 })
-export class Navbar {
+export class Navbar implements OnInit {
     private platformId = inject(PLATFORM_ID);
     private site = inject(SiteService);
+    private categoriaService = inject(CategoriaService);
     carrinho = inject(CarrinhoService);
 
     info = SITE_INFO;
-    categorias = CATEGORIAS;
+    categorias = signal<Categoria[]>([]);
 
     sobreVisivel = computed(() => this.site.conteudo().secoesVisiveis['sobre'] ?? true);
 
@@ -31,6 +33,10 @@ export class Navbar {
         if (isPlatformBrowser(this.platformId)) {
             this.rolado.set(window.scrollY > LIMIAR_SCROLL_PX);
         }
+    }
+
+    ngOnInit(): void {
+        this.categoriaService.listar().subscribe((categorias) => this.categorias.set(categorias));
     }
 
     @HostListener('window:scroll')
