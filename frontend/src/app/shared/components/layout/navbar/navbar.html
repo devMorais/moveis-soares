@@ -11,7 +11,9 @@
             @if (sobreVisivel()) {
                 <a routerLink="/sobre" routerLinkActive="ativo" (click)="fecharMenu()">Sobre</a>
             }
-            <a routerLink="/contato" routerLinkActive="ativo" (click)="fecharMenu()">Fale Conosco</a>
+            @if (contatoVisivel()) {
+                <a routerLink="/contato" routerLinkActive="ativo" (click)="fecharMenu()">Fale Conosco</a>
+            }
         </nav>
         <button type="button" class="btn-carrinho" (click)="carrinho.abrir()" aria-label="Abrir carrinho">
             <i class="fas fa-bag-shopping"></i>
@@ -30,7 +32,11 @@
         @for (categoria of categorias(); track categoria.slug) {
             <a [routerLink]="['/categoria', categoria.slug]" routerLinkActive="ativo" (click)="fecharMenu()">{{ categoria.nome }}</a>
         }
-        <a routerLink="/sobre" routerLinkActive="ativo" (click)="fecharMenu()">Sobre</a>
-        <a routerLink="/contato" routerLinkActive="ativo" (click)="fecharMenu()">Fale Conosco</a>
+        @if (sobreVisivel()) {
+            <a routerLink="/sobre" routerLinkActive="ativo" (click)="fecharMenu()">Sobre</a>
+        }
+        @if (contatoVisivel()) {
+            <a routerLink="/contato" routerLinkActive="ativo" (click)="fecharMenu()">Fale Conosco</a>
+        }
     </nav>
 </header>

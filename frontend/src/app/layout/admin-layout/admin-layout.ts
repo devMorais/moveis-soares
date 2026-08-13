@@ -47,6 +47,7 @@ export class AdminLayout {
     ];
 
     itemEntrega: ItemMenu = { rota: '/admin/entrega', label: 'Entrega', icone: 'fa-truck' };
+    itemSecoes: ItemMenu = { rota: '/admin/secoes', label: 'Seções', icone: 'fa-eye' };
 
     itemInstagram: ItemMenu = { rota: '/admin/instagram', label: 'Instagram', icone: 'fa-camera' };
     itemConfiguracoes: ItemMenu = { rota: '/admin/configuracoes', label: 'Configurações', icone: 'fa-gear' };

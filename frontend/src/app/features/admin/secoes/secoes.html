@@ -1,0 +1,38 @@
+<div class="conteudo-pagina">
+    <h1>Seções do site</h1>
+    <p class="secoes-ajuda">
+        Controle quais seções aparecem no site público. Desligar uma seção tira o link do menu e a página inteira
+        deixa de ser acessível.
+    </p>
+
+    @if (carregando()) {
+        <p>Carregando...</p>
+    } @else {
+        <div class="lista-secoes">
+            @for (secao of secoes(); track secao.chave) {
+                <div class="visibilidade-bar">
+                    <div>
+                        <strong>{{ nomesSecao[secao.chave] ?? secao.chave }}</strong>
+                        @if (secao.bloqueada) {
+                            <span class="visibilidade-bar__badge">sempre visível</span>
+                        } @else {
+                            <span class="visibilidade-bar__ajuda">
+                                Desligue para tirar esta seção do site.
+                            </span>
+                        }
+                    </div>
+                    <button
+                        type="button"
+                        class="toggle"
+                        [class.ativo]="secao.visivel"
+                        [class.desabilitado]="secao.bloqueada"
+                        [disabled]="secao.bloqueada || salvandoChave() === secao.chave"
+                        (click)="alternar(secao)"
+                    >
+                        <span class="toggle__bola"></span>
+                    </button>
+                </div>
+            }
+        </div>
+    }
+</div>
