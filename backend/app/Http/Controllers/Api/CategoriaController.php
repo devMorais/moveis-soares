@@ -12,18 +12,22 @@ class CategoriaController extends Controller
 {
     public function index(): JsonResponse
     {
-        $categorias = Categoria::orderBy('nome')->get()->map(fn (Categoria $categoria) => [
-            'slug' => $categoria->slug,
-            'nome' => $categoria->nome,
-            'imagemUrl' => $categoria->imagem_url,
-        ]);
+        $categorias = Categoria::ativas()
+            ->orderBy('ordem_exibicao')
+            ->orderBy('nome')
+            ->get()
+            ->map(fn (Categoria $categoria) => [
+                'slug' => $categoria->slug,
+                'nome' => $categoria->nome,
+                'imagemUrl' => $categoria->imagem_url,
+            ]);
 
         return response()->json($categorias);
     }
 
     public function porSlug(string $slug): JsonResponse
     {
-        $categoria = Categoria::where('slug', $slug)->firstOrFail();
+        $categoria = Categoria::ativas()->where('slug', $slug)->firstOrFail();
 
         return response()->json([
             'slug' => $categoria->slug,
@@ -34,11 +38,11 @@ class CategoriaController extends Controller
 
     /**
      * Lista, paginados, os produtos ativos de uma categoria.
-     * 404 automatico (via firstOrFail) se a categoria nao existir.
+     * 404 automatico (via firstOrFail) se a categoria nao existir ou estiver inativa.
      */
     public function produtos(string $slug, Request $request): JsonResponse
     {
-        $categoria = Categoria::where('slug', $slug)->firstOrFail();
+        $categoria = Categoria::ativas()->where('slug', $slug)->firstOrFail();
 
         $porPagina = (int) $request->query('por_pagina', 9);
 
