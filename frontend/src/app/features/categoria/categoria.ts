@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { CategoriaService } from '../../core/services/categoria';
 import { Categoria as CategoriaType } from '../../core/types/categoria/categoria.type';
 import { Produto } from '../../core/types/produto/produto.type';
+import { Seo } from '../../core/services/seo';
 
 @Component({
     selector: 'app-categoria',
@@ -14,6 +15,7 @@ import { Produto } from '../../core/types/produto/produto.type';
 export class Categoria implements OnInit, OnDestroy {
     private route = inject(ActivatedRoute);
     private categoriaService = inject(CategoriaService);
+    private seo = inject(Seo);
 
     categoria = signal<CategoriaType | null>(null);
     produtos = signal<Produto[]>([]);
@@ -42,7 +44,14 @@ export class Categoria implements OnInit, OnDestroy {
             this.paginaAtual.set(1);
             this.ultimaPagina.set(1);
 
-            this.categoriaService.porSlug(slug).subscribe((categoria) => this.categoria.set(categoria));
+            this.categoriaService.porSlug(slug).subscribe((categoria) => {
+                this.categoria.set(categoria);
+                this.seo.set({
+                    title: categoria.nome,
+                    description: `Confira os móveis de ${categoria.nome.toLowerCase()} com qualidade e preço justo na Móveis Soares.`,
+                    image: categoria.imagemUrl,
+                });
+            });
             this.carregarProdutos(slug, 1);
         });
     }
