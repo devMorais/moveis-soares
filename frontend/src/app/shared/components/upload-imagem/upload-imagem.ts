@@ -1,5 +1,5 @@
 import { Component, inject, input, output, signal } from '@angular/core';
-import { HttpEventType } from '@angular/common/http';
+import { HttpErrorResponse, HttpEventType } from '@angular/common/http';
 import { Upload } from '../../../core/services/upload';
 
 @Component({
@@ -59,9 +59,9 @@ export class UploadImagem {
           this.enviarFila(arquivos, indice + 1);
         }
       },
-      error: () => {
+      error: (err: HttpErrorResponse) => {
         this.enviando.set(false);
-        this.erro.set('Falha ao enviar a imagem.');
+        this.erro.set(err.error?.mensagem || 'Falha ao enviar a imagem.');
       },
     });
   }
