@@ -1,7 +1,8 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ContatoService } from '../../core/services/contato';
 import { SiteService } from '../../core/services/site.service';
+import { Seo } from '../../core/services/seo';
 
 @Component({
     selector: 'app-contato',
@@ -9,10 +10,11 @@ import { SiteService } from '../../core/services/site.service';
     templateUrl: './contato.html',
     styleUrl: './contato.scss',
 })
-export class Contato {
+export class Contato implements OnInit {
     private fb = inject(FormBuilder);
     private contatoService = inject(ContatoService);
     private site = inject(SiteService);
+    private seo = inject(Seo);
 
     info = computed(() => this.site.conteudo().contato);
     enviando = signal(false);
@@ -26,6 +28,13 @@ export class Contato {
         // Honeypot: campo invisivel para o usuario, deve permanecer vazio.
         empresa: [''],
     });
+
+    ngOnInit(): void {
+        this.seo.set({
+            title: 'Fale conosco',
+            description: 'Entre em contato com a Móveis Soares pelo telefone, WhatsApp ou e-mail. Tire suas dúvidas sobre produtos, entrega e formas de pagamento.',
+        });
+    }
 
     enviar(): void {
         if (this.form.invalid) {
