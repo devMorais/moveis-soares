@@ -48,11 +48,12 @@ export class Produtos implements OnInit {
                 },
             },
             { field: 'nome', headerName: 'Nome', flex: 2, sortable: true, filter: true },
-            { field: 'categoria', headerName: 'Categoria', flex: 1, sortable: true, filter: true },
+            { field: 'categoria', headerName: 'Categoria', flex: 1, minWidth: 120, sortable: true, filter: true },
             {
                 field: 'preco',
                 headerName: 'Preço',
                 flex: 1,
+                minWidth: 100,
                 sortable: true,
                 valueFormatter: (params) => `R$ ${params.value}`,
             },
@@ -60,6 +61,7 @@ export class Produtos implements OnInit {
                 field: 'estoque',
                 headerName: 'Estoque',
                 flex: 1,
+                minWidth: 90,
                 sortable: true,
                 valueFormatter: (params) => (params.value ?? '—').toString(),
             },
@@ -67,6 +69,7 @@ export class Produtos implements OnInit {
                 ? {
                       headerName: 'Status',
                       flex: 1,
+                      minWidth: 100,
                       sortable: false,
                       filter: false,
                       cellRenderer: (params: { data?: Produto }) => {
@@ -80,6 +83,7 @@ export class Produtos implements OnInit {
                 : {
                       headerName: 'Status',
                       flex: 1,
+                      minWidth: 100,
                       sortable: false,
                       filter: false,
                       cellRenderer: (params: { data?: Produto }) => {
