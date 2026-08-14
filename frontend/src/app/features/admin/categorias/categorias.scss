@@ -65,6 +65,11 @@
     border-color: var(--admin-primary);
 }
 
+.preview-imagem {
+    max-width: 200px;
+    border-radius: 6px;
+}
+
 .form-categoria__acoes {
     display: flex;
     gap: 8px;
