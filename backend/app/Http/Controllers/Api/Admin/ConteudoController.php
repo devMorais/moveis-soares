@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SecaoContato;
-use App\Models\SecaoHero;
 use App\Models\SecaoInstitucional;
 use App\Models\SecaoSobre;
 use Illuminate\Http\JsonResponse;
@@ -20,10 +19,6 @@ class ConteudoController extends Controller
      * tratado em ConteudoCtaController).
      */
     private const SECOES = [
-        'hero' => [
-            'model' => SecaoHero::class,
-            'campos' => ['titulo', 'subtitulo'],
-        ],
         'sobre' => [
             'model' => SecaoSobre::class,
             'campos' => ['titulo_historia', 'texto_historia', 'imagem_url', 'diferenciais'],

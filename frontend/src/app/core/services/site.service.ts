@@ -11,7 +11,6 @@ import { ItemLista, SiteConteudo } from '../types/site/site-conteudo.type';
  * SiteController::conteudo().
  */
 interface SiteConteudoBruto {
-    hero: { titulo: string | null; subtitulo: string | null } | null;
     sobre: {
         titulo_historia: string | null;
         texto_historia: string | null;
@@ -36,7 +35,6 @@ interface SiteConteudoBruto {
 
 /** Conteudo de fallback: o mesmo texto que estava hardcoded antes da migracao pra conteudo dinamico. */
 const FALLBACK: SiteConteudo = {
-    hero: null,
     sobre: {
         tituloHistoria: 'Nossa história',
         textoHistoria:
@@ -106,9 +104,6 @@ export class SiteService {
 
     private normalizar(bruto: SiteConteudoBruto): SiteConteudo {
         return {
-            hero: bruto.hero
-                ? { titulo: bruto.hero.titulo, subtitulo: bruto.hero.subtitulo }
-                : FALLBACK.hero,
             sobre: bruto.sobre
                 ? {
                       tituloHistoria: bruto.sobre.titulo_historia ?? FALLBACK.sobre?.tituloHistoria ?? null,

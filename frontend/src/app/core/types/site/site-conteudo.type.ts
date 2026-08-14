@@ -3,11 +3,6 @@ export interface ItemLista {
     texto: string;
 }
 
-export interface SecaoHero {
-    titulo: string | null;
-    subtitulo: string | null;
-}
-
 export interface SecaoSobre {
     tituloHistoria: string | null;
     textoHistoria: string | null;
@@ -35,7 +30,6 @@ export interface SecaoCtaItem {
 }
 
 export interface SiteConteudo {
-    hero: SecaoHero | null;
     /** Nunca null na prática - o service sempre garante o fallback estático. */
     sobre: SecaoSobre;
     contato: SecaoContato;
