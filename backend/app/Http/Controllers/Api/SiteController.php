@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\SecaoContato;
 use App\Models\SecaoCta;
-use App\Models\SecaoHero;
 use App\Models\SecaoInstitucional;
 use App\Models\SecaoSobre;
 use App\Models\SecaoVisibilidade;
@@ -22,7 +21,6 @@ class SiteController extends Controller
     public function conteudo(): JsonResponse
     {
         return response()->json([
-            'hero' => SecaoHero::first(),
             'sobre' => SecaoSobre::first(),
             'contato' => SecaoContato::first(),
             'institucional' => SecaoInstitucional::first(),
