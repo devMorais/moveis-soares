@@ -28,6 +28,9 @@
                 <div class="campo">
                     <label>Imagem</label>
                     <app-upload-imagem [endpoint]="uploadEndpoint" (uploadConcluido)="aoImagemProcessada($event)" />
+                    @if (form.controls.imagem_url.value) {
+                        <img [src]="form.controls.imagem_url.value" alt="Prévia da imagem" class="preview-imagem">
+                    }
                 </div>
             </div>
         }

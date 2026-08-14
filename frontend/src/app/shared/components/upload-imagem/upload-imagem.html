@@ -10,6 +10,8 @@
     <span>{{ enviando() ? 'Enviando...' : (multiplo() ? 'Selecionar imagens' : 'Selecionar imagem') }}</span>
   </label>
 
+  <p class="upload-imagem__ajuda">A imagem será ajustada automaticamente para 800x800px no formato WebP para manter o site rápido.</p>
+
   @if (preview()) {
     <img class="upload-imagem__preview" [src]="preview()" alt="Pré-visualização da imagem" />
   }

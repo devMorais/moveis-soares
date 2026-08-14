@@ -24,6 +24,9 @@
         <div class="campo">
             <label>Imagem (opcional)</label>
             <app-upload-imagem [endpoint]="uploadEndpoint" (uploadConcluido)="aoConcluirUpload($event)" />
+            @if (imagemUrl()) {
+                <img [src]="imagemUrl()" alt="Prévia da imagem da categoria" class="preview-imagem">
+            }
         </div>
         <div class="form-categoria__acoes">
             <button type="submit" class="btn-salvar" [disabled]="salvando()">
