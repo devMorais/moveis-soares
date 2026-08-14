@@ -16,7 +16,7 @@
         <div class="carrinho-itens">
             @for (item of carrinho.itens(); track item.produtoId) {
                 <div class="carrinho-item">
-                    <img [src]="item.imagemUrl" [alt]="item.nome">
+                    <img [src]="item.imagemUrl" [alt]="item.nome" loading="lazy">
                     <div class="carrinho-item__info">
                         <p class="carrinho-item__nome">{{ item.nome }}</p>
                         <p class="carrinho-item__preco">R$ {{ item.preco }}</p>

@@ -1,7 +1,7 @@
 <section class="hero-carrossel">
     @for (produto of destaques(); track produto.id; let i = $index) {
         <div class="slide" [class.ativo]="i === slideAtual()">
-            <img [src]="produto.imagemUrl" [alt]="produto.nome">
+            <img [src]="produto.imagemUrl" [alt]="produto.nome" [attr.loading]="i === 0 ? 'eager' : 'lazy'" [attr.fetchpriority]="i === 0 ? 'high' : null">
             <div class="veu"></div>
             <div class="conteudo">
                 <div class="container">
@@ -36,7 +36,7 @@
         <div class="grid-categorias">
             @for (categoria of categorias(); track categoria.slug) {
                 <a [routerLink]="['/categoria', categoria.slug]" class="card-categoria">
-                    <img [src]="categoria.imagemUrl" [alt]="categoria.nome">
+                    <img [src]="categoria.imagemUrl" [alt]="categoria.nome" loading="lazy">
                     <div class="overlay">
                         <span class="rotulo">Categoria</span>
                         <h3>{{ categoria.nome }}</h3>

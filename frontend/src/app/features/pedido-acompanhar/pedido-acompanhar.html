@@ -48,7 +48,7 @@
                                 @for (item of p.itens; track item.nomeProduto) {
                                     <li>
                                         @if (item.imagemUrl) {
-                                            <img [src]="item.imagemUrl" [alt]="item.nomeProduto" class="acompanhar-resumo__item-foto" />
+                                            <img [src]="item.imagemUrl" [alt]="item.nomeProduto" class="acompanhar-resumo__item-foto" loading="lazy" />
                                         }
                                         <span>{{ item.quantidade }}x {{ item.nomeProduto }}</span>
                                     </li>
