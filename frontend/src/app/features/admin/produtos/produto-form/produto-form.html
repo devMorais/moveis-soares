@@ -68,17 +68,18 @@
             <div class="campo-grid">
                 <div class="campo">
                     <label for="altura_cm">Altura (cm)</label>
-                    <input id="altura_cm" type="number" min="0" formControlName="altura_cm" />
+                    <input id="altura_cm" type="number" min="0" step="1" formControlName="altura_cm" />
                 </div>
                 <div class="campo">
                     <label for="largura_cm">Largura (cm)</label>
-                    <input id="largura_cm" type="number" min="0" formControlName="largura_cm" />
+                    <input id="largura_cm" type="number" min="0" step="1" formControlName="largura_cm" />
                 </div>
                 <div class="campo">
                     <label for="profundidade_cm">Profundidade (cm)</label>
-                    <input id="profundidade_cm" type="number" min="0" formControlName="profundidade_cm" />
+                    <input id="profundidade_cm" type="number" min="0" step="1" formControlName="profundidade_cm" />
                 </div>
             </div>
+            <p class="campo__ajuda">Use apenas números inteiros nas medidas, sem vírgula (ex: 55, não 0,55).</p>
 
             <div class="campo">
                 <label for="selo">Selo (opcional)</label>
