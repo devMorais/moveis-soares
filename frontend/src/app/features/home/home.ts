@@ -7,6 +7,7 @@ import { Produto } from '../../core/types/produto/produto.type';
 import { Categoria } from '../../core/types/categoria/categoria.type';
 import { SITE_INFO } from '../../core/constants/site-info';
 import { SiteService } from '../../core/services/site.service';
+import { Seo } from '../../core/services/seo';
 
 const INTERVALO_AUTOPLAY_MS = 5000;
 const ICONES_INSTITUCIONAL = ['fa-truck', 'fa-star', 'fa-comments'];
@@ -22,6 +23,7 @@ export class Home implements OnInit, OnDestroy {
     private produtoService = inject(ProdutoService);
     private categoriaService = inject(CategoriaService);
     private site = inject(SiteService);
+    private seo = inject(Seo);
 
     info = SITE_INFO;
     categorias = signal<Categoria[]>([]);
@@ -54,6 +56,11 @@ export class Home implements OnInit, OnDestroy {
     });
 
     ngOnInit(): void {
+        this.seo.set({
+            title: 'Móveis com qualidade e preço justo',
+            description:
+                'Móveis de qualidade para escritório, quarto, sala e cozinha, com preço justo e atendimento que cuida de cada detalhe da sua casa.',
+        });
         this.produtoService.listar().subscribe((produtos) => this.produtos.set(produtos));
         this.categoriaService.listar().subscribe((categorias) => this.categorias.set(categorias));
         this.iniciarAutoplay();
