@@ -35,7 +35,7 @@
         <h2 class="titulo">Compre por ambiente</h2>
         <div class="grid-categorias">
             @for (categoria of categorias(); track categoria.slug) {
-                <a routerLink="/" [queryParams]="{ categoria: categoria.slug }" class="card-categoria" (click)="filtrarPorCategoria(categoria.nome)">
+                <a [routerLink]="['/categoria', categoria.slug]" class="card-categoria">
                     <img [src]="categoria.imagemUrl" [alt]="categoria.nome">
                     <div class="overlay">
                         <span class="rotulo">Categoria</span>
