@@ -1,48 +1,55 @@
-<section class="banner-categoria" [style.backgroundImage]="categoria()?.imagemUrl ? 'url(' + categoria()!.imagemUrl + ')' : null">
-    <div class="veu"></div>
-    <div class="container">
-        <a routerLink="/">Inicio</a> / <span>{{ categoria()?.nome }}</span>
-        <h1>{{ categoria()?.nome }}</h1>
+@if (naoEncontrada()) {
+    <div class="categoria-estado">
+        <p>Categoria não encontrada.</p>
+        <a routerLink="/" class="btn">Voltar para a home</a>
     </div>
-</section>
+} @else {
+    <section class="banner-categoria" [style.backgroundImage]="categoria()?.imagemUrl ? 'url(' + categoria()!.imagemUrl + ')' : null">
+        <div class="veu"></div>
+        <div class="container">
+            <a routerLink="/">Inicio</a> / <span>{{ categoria()?.nome }}</span>
+            <h1>{{ categoria()?.nome }}</h1>
+        </div>
+    </section>
 
-<section class="catalogo-categoria">
-    <div class="container">
-        <div class="grid-produtos">
-            @for (produto of produtos(); track produto.id) {
-                <a [routerLink]="['/produto', produto.slug]" class="card-produto">
-                    <div class="imagem">
-                        <img [src]="produto.imagemUrl" [alt]="produto.nome" loading="lazy">
-                        @if (produto.precoDe) {
-                            <span class="selo">Oferta</span>
-                        }
-                    </div>
-                    <div class="info">
-                        <span class="categoria">{{ produto.categoria }}</span>
-                        <h3>{{ produto.nome }}</h3>
-                        <div class="preco">
+    <section class="catalogo-categoria">
+        <div class="container">
+            <div class="grid-produtos">
+                @for (produto of produtos(); track produto.id) {
+                    <a [routerLink]="['/produto', produto.slug]" class="card-produto">
+                        <div class="imagem">
+                            <img [src]="produto.imagemUrl" [alt]="produto.nome" loading="lazy">
                             @if (produto.precoDe) {
-                                <span class="de">R$ {{ produto.precoDe }}</span>
+                                <span class="selo">Oferta</span>
                             }
-                            <span class="por">R$ {{ produto.preco }}</span>
                         </div>
-                    </div>
-                </a>
-            } @empty {
-                <p class="vazio">Nenhum produto encontrado nessa categoria.</p>
+                        <div class="info">
+                            <span class="categoria">{{ produto.categoria }}</span>
+                            <h3>{{ produto.nome }}</h3>
+                            <div class="preco">
+                                @if (produto.precoDe) {
+                                    <span class="de">R$ {{ produto.precoDe }}</span>
+                                }
+                                <span class="por">R$ {{ produto.preco }}</span>
+                            </div>
+                        </div>
+                    </a>
+                } @empty {
+                    <p class="vazio">Nenhum produto encontrado nessa categoria.</p>
+                }
+            </div>
+
+            @if (temMaisPaginas) {
+                <div class="acoes">
+                    <button type="button" (click)="carregarMais()" [disabled]="carregando()">
+                        @if (carregando()) {
+                            Carregando...
+                        } @else {
+                            Carregar mais
+                        }
+                    </button>
+                </div>
             }
         </div>
-
-        @if (temMaisPaginas) {
-            <div class="acoes">
-                <button type="button" (click)="carregarMais()" [disabled]="carregando()">
-                    @if (carregando()) {
-                        Carregando...
-                    } @else {
-                        Carregar mais
-                    }
-                </button>
-            </div>
-        }
-    </div>
-</section>
+    </section>
+}
