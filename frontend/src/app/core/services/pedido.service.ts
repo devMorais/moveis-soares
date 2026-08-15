@@ -35,8 +35,17 @@ export interface AcompanhamentoPedido {
     freteACombinar: boolean;
     valorTotal: number;
     atendente: string | null;
+    /** Só vem preenchido enquanto o pedido ainda está aguardando pagamento. */
+    infinitepayLink: string | null;
+    expiraEm: string | null;
     itens: { nomeProduto: string; quantidade: number; imagemUrl: string | null }[];
     criadoEm: string;
+}
+
+export interface PedidoCriado {
+    link: string;
+    token: string;
+    expiraEm: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -45,7 +54,7 @@ export class PedidoService {
     private baseUrl = environment.apiUrl;
 
     criar(payload: CriarPedidoPayload) {
-        return this.http.post<{ link: string }>(`${this.baseUrl}/pedidos`, payload);
+        return this.http.post<PedidoCriado>(`${this.baseUrl}/pedidos`, payload);
     }
 
     verificarStatus(id: number) {

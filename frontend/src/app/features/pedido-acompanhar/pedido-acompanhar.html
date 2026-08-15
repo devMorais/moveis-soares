@@ -15,18 +15,39 @@
                         <h1>Pedido #{{ p.id }}</h1>
                         <p class="acompanhar-subtitulo">Olá, {{ p.nomeCliente }}! Acompanhe aqui o status da sua entrega.</p>
 
-                        <ol class="timeline">
-                            @for (etapa of etapas; track etapa.status; let i = $index) {
-                                <li
-                                    class="timeline__etapa"
-                                    [class.timeline__etapa--concluida]="i <= indiceEtapaAtual(p.status)"
-                                    [class.timeline__etapa--atual]="i === indiceEtapaAtual(p.status)"
-                                >
-                                    <span class="timeline__marcador"><i class="fas fa-check"></i></span>
-                                    <span class="timeline__rotulo">{{ etapa.rotulo }}</span>
-                                </li>
-                            }
-                        </ol>
+                        @if (p.status === 'AGUARDANDO' && p.infinitepayLink) {
+                            <div class="acompanhar-aviso acompanhar-aviso--reserva">
+                                <p>
+                                    <i class="fas fa-clock"></i>
+                                    Seu produto está reservado até <strong>{{ p.expiraEm | date: 'HH:mm' }}</strong>.
+                                    Depois desse horário, se o pagamento não for concluído, a reserva é cancelada.
+                                </p>
+                                <a [href]="p.infinitepayLink" class="btn btn-pagar">Pagar agora</a>
+                            </div>
+                        }
+
+                        @if (p.status === 'EXPIRADO') {
+                            <div class="acompanhar-aviso acompanhar-aviso--expirado">
+                                <p>
+                                    <i class="fas fa-triangle-exclamation"></i>
+                                    O prazo de reserva desse pedido acabou e o pagamento não foi identificado a tempo.
+                                    O produto pode não estar mais disponível. Fale com a gente pelo WhatsApp pra verificar.
+                                </p>
+                            </div>
+                        } @else {
+                            <ol class="timeline">
+                                @for (etapa of etapas; track etapa.status; let i = $index) {
+                                    <li
+                                        class="timeline__etapa"
+                                        [class.timeline__etapa--concluida]="i <= indiceEtapaAtual(p.status)"
+                                        [class.timeline__etapa--atual]="i === indiceEtapaAtual(p.status)"
+                                    >
+                                        <span class="timeline__marcador"><i class="fas fa-check"></i></span>
+                                        <span class="timeline__rotulo">{{ etapa.rotulo }}</span>
+                                    </li>
+                                }
+                            </ol>
+                        }
 
                         <div class="acompanhar-resumo">
                             <p><strong>Endereço:</strong> {{ p.endereco }}, {{ p.cidade }}</p>

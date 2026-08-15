@@ -1,4 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AcompanhamentoPedido, PedidoService } from '../../core/services/pedido.service';
 import { SiteService } from '../../core/services/site.service';
@@ -17,7 +18,7 @@ const INTERVALO_ATUALIZACAO_MS = 15000;
 
 @Component({
     selector: 'app-pedido-acompanhar',
-    imports: [RouterLink],
+    imports: [RouterLink, DatePipe],
     templateUrl: './pedido-acompanhar.html',
     styleUrl: './pedido-acompanhar.scss',
 })
