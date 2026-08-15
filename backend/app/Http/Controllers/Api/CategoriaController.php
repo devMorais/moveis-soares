@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Categoria;
+use App\Models\ConfiguracaoSite;
 use App\Models\Produto;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -39,12 +40,15 @@ class CategoriaController extends Controller
     /**
      * Lista, paginados, os produtos ativos de uma categoria.
      * 404 automatico (via firstOrFail) se a categoria nao existir ou estiver inativa.
+     * Tamanho de pagina definido pelo admin (Configuracoes > Catalogo),
+     * mesmo valor usado em ProdutoController::index() - um so lugar pra
+     * controlar quantos produtos aparecem por pagina em todo o site.
      */
     public function produtos(string $slug, Request $request): JsonResponse
     {
         $categoria = Categoria::ativas()->where('slug', $slug)->firstOrFail();
 
-        $porPagina = (int) $request->query('por_pagina', 9);
+        $porPagina = ConfiguracaoSite::instancia()->produtos_por_pagina;
 
         $produtos = $categoria->produtos()
             ->ativos()

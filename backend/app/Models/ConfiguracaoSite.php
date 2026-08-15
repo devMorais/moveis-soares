@@ -10,6 +10,7 @@ class ConfiguracaoSite extends Model
 
     protected $fillable = [
         'modulos_habilitados',
+        'produtos_por_pagina',
         'logo_url',
         'seo_titulo_site',
         'seo_titulo_padrao',
@@ -38,6 +39,7 @@ class ConfiguracaoSite extends Model
         return static::firstOrCreate([], [
             'modulos_habilitados' => ['instagram' => false],
             'seo_indexar_site' => true,
+            'produtos_por_pagina' => 12,
         ]);
     }
 
