@@ -10,6 +10,7 @@ use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -70,6 +71,13 @@ return Application::configure(basePath: dirname(__DIR__))
                     'mensagem' => 'Muitas tentativas. Aguarde um momento e tente novamente.',
                     'tipo' => 'erro',
                 ], 429);
+            }
+
+            if ($e instanceof MethodNotAllowedHttpException) {
+                return new JsonResponse([
+                    'mensagem' => 'Método não permitido para este recurso.',
+                    'tipo' => 'erro',
+                ], 405);
             }
 
             /**
