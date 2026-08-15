@@ -51,6 +51,9 @@
 
                         <div class="acompanhar-resumo">
                             <p><strong>Endereço:</strong> {{ p.endereco }}, {{ p.cidade }}</p>
+                            @if (p.pontoReferencia) {
+                                <p><strong>Ponto de referência:</strong> {{ p.pontoReferencia }}</p>
+                            }
                             <p>
                                 <strong>Frete:</strong>
                                 @if (p.freteACombinar) {

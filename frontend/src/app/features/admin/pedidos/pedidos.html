@@ -58,6 +58,9 @@
 
             <p><strong>Telefone:</strong> {{ pedido.telefoneCliente }}</p>
             <p><strong>Endereço:</strong> {{ pedido.endereco }}</p>
+            @if (pedido.pontoReferencia) {
+                <p><strong>Ponto de referência:</strong> {{ pedido.pontoReferencia }}</p>
+            }
             <p><strong>Cidade:</strong> {{ pedido.cidade }}</p>
             <p>
                 <strong>Frete:</strong>
