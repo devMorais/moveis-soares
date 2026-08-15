@@ -121,6 +121,8 @@ class PedidoController extends Controller
             'infinitepay_slug' => $resultado['slug'],
         ]);
 
+        $expiraEm = $pedido->created_at->clone()->addMinutes(Pedido::LIMITE_RESERVA_MINUTOS);
+
         $destinatarioNotificacao = config('mail.notificacao_pedidos');
 
         if ($destinatarioNotificacao) {
@@ -133,7 +135,11 @@ class PedidoController extends Controller
             Log::warning('E-mail de novo pedido nao enviado: MAIL_NOTIFICACAO_PEDIDOS nao configurado.');
         }
 
-        return response()->json(['link' => $resultado['link']]);
+        return response()->json([
+            'link' => $resultado['link'],
+            'token' => $pedido->token_acompanhamento,
+            'expiraEm' => $expiraEm->toIso8601String(),
+        ]);
     }
 
     /**
@@ -145,23 +151,7 @@ class PedidoController extends Controller
      */
     private function reverterPedidoSemPagamento(Pedido $pedido): void
     {
-        DB::transaction(function () use ($pedido) {
-            $itens = $pedido->itens()->get();
-            $produtos = Produto::whereIn('id', $itens->pluck('produto_id'))
-                ->lockForUpdate()
-                ->get()
-                ->keyBy('id');
-
-            foreach ($itens as $item) {
-                $produto = $produtos->get($item->produto_id);
-
-                if ($produto && $produto->estoque !== null) {
-                    $produto->increment('estoque', $item->quantidade);
-                }
-            }
-
-            $pedido->update(['status' => 'FALHOU']);
-        });
+        $pedido->liberarEstoqueEMudarStatus('FALHOU');
     }
 
     /**
@@ -175,6 +165,8 @@ class PedidoController extends Controller
             ->where('token_acompanhamento', $token)
             ->firstOrFail();
 
+        $aguardandoPagamento = $pedido->status === 'AGUARDANDO';
+
         return response()->json([
             'id' => $pedido->id,
             'status' => $pedido->status,
@@ -185,6 +177,12 @@ class PedidoController extends Controller
             'freteACombinar' => $pedido->frete_a_combinar,
             'valorTotal' => (float) $pedido->valor_total,
             'atendente' => $pedido->atendente?->name,
+            // Link/prazo so fazem sentido enquanto o pedido ainda pode ser pago -
+            // depois disso o link fica invalido e o prazo perde o sentido.
+            'infinitepayLink' => $aguardandoPagamento ? $pedido->infinitepay_link : null,
+            'expiraEm' => $aguardandoPagamento
+                ? $pedido->created_at->clone()->addMinutes(Pedido::LIMITE_RESERVA_MINUTOS)->toIso8601String()
+                : null,
             'itens' => $pedido->itens->map(fn (PedidoItem $item) => [
                 'nomeProduto' => $item->nome_produto,
                 'quantidade' => $item->quantidade,
