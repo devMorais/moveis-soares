@@ -2,9 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
+export type OrdenacaoProdutos = 'recentes' | 'antigos' | 'alfabetica' | 'aleatoria';
+
 export interface ConfiguracaoSeo {
     logoUrl: string | null;
     produtosPorPagina: number;
+    produtosOrdenacao: OrdenacaoProdutos;
     tituloSite: string | null;
     tituloPadrao: string | null;
     descricaoPadrao: string | null;
@@ -19,6 +22,7 @@ export interface ConfiguracaoSeo {
 export interface DadosConfiguracaoSeo {
     logo_url?: string | null;
     produtos_por_pagina?: number;
+    produtos_ordenacao?: OrdenacaoProdutos;
     seo_titulo_site?: string | null;
     seo_titulo_padrao?: string | null;
     seo_descricao_padrao?: string | null;

@@ -19,6 +19,7 @@ class ConfiguracaoSeoController extends Controller
         $dados = $request->validate([
             'logo_url' => ['nullable', 'string'],
             'produtos_por_pagina' => ['sometimes', 'integer', 'min:4', 'max:100'],
+            'produtos_ordenacao' => ['sometimes', 'string', 'in:recentes,antigos,alfabetica,aleatoria'],
             'seo_titulo_site' => ['nullable', 'string', 'max:255'],
             'seo_titulo_padrao' => ['nullable', 'string', 'max:255'],
             'seo_descricao_padrao' => ['nullable', 'string', 'max:500'],
@@ -41,6 +42,7 @@ class ConfiguracaoSeoController extends Controller
         return [
             'logoUrl' => $config->logo_url,
             'produtosPorPagina' => $config->produtos_por_pagina,
+            'produtosOrdenacao' => $config->produtos_ordenacao,
             'tituloSite' => $config->seo_titulo_site,
             'tituloPadrao' => $config->seo_titulo_padrao,
             'descricaoPadrao' => $config->seo_descricao_padrao,

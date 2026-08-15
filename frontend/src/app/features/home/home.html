@@ -12,7 +12,7 @@
                     @if (produto.especificacao) {
                         <p class="especificacao">{{ produto.especificacao }}</p>
                     }
-                    <a routerLink="/contato" class="btn">Consultar disponibilidade</a>
+                    <a [routerLink]="['/produto', produto.slug]" class="btn">Ver produto</a>
                 </div>
             </div>
         </div>

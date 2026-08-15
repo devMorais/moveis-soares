@@ -11,6 +11,7 @@ class ConfiguracaoSite extends Model
     protected $fillable = [
         'modulos_habilitados',
         'produtos_por_pagina',
+        'produtos_ordenacao',
         'logo_url',
         'seo_titulo_site',
         'seo_titulo_padrao',
@@ -40,6 +41,7 @@ class ConfiguracaoSite extends Model
             'modulos_habilitados' => ['instagram' => false],
             'seo_indexar_site' => true,
             'produtos_por_pagina' => 12,
+            'produtos_ordenacao' => 'recentes',
         ]);
     }
 

@@ -66,7 +66,7 @@ class ProdutoPaginacaoTest extends TestCase
         $resposta->assertJsonPath('total', 1);
     }
 
-    public function test_endpoint_de_destaques_so_traz_produtos_com_selo_e_nao_e_paginado(): void
+    public function test_endpoint_de_destaques_traz_os_10_ultimos_cadastrados_com_ou_sem_selo(): void
     {
         $categoria = Categoria::factory()->create();
         Produto::factory()->count(3)->create(['categoria_id' => $categoria->id, 'selo' => null]);
@@ -75,7 +75,79 @@ class ProdutoPaginacaoTest extends TestCase
         $resposta = $this->getJson('/api/produtos/destaques');
 
         $resposta->assertOk();
-        $resposta->assertJsonCount(2);
+        $resposta->assertJsonCount(5);
+    }
+
+    public function test_endpoint_de_destaques_limita_a_10_mesmo_com_mais_produtos(): void
+    {
+        $categoria = Categoria::factory()->create();
+        Produto::factory()->count(15)->create(['categoria_id' => $categoria->id]);
+
+        $resposta = $this->getJson('/api/produtos/destaques');
+
+        $resposta->assertOk();
+        $resposta->assertJsonCount(10);
+    }
+
+    public function test_ordenacao_alfabetica_configurada_pelo_admin(): void
+    {
+        ConfiguracaoSite::instancia()->update(['produtos_ordenacao' => 'alfabetica']);
+        $categoria = Categoria::factory()->create();
+        Produto::factory()->create(['categoria_id' => $categoria->id, 'nome' => 'Zebra']);
+        Produto::factory()->create(['categoria_id' => $categoria->id, 'nome' => 'Abacaxi']);
+
+        $resposta = $this->getJson('/api/produtos');
+
+        $resposta->assertOk();
+        $nomes = array_column($resposta->json('data'), 'nome');
+        $this->assertSame(['Abacaxi', 'Zebra'], $nomes);
+    }
+
+    public function test_ordenacao_antigos_primeiro_configurada_pelo_admin(): void
+    {
+        ConfiguracaoSite::instancia()->update(['produtos_ordenacao' => 'antigos']);
+        $categoria = Categoria::factory()->create();
+        $primeiro = Produto::factory()->create(['categoria_id' => $categoria->id]);
+        $segundo = Produto::factory()->create(['categoria_id' => $categoria->id]);
+
+        $resposta = $this->getJson('/api/produtos');
+
+        $resposta->assertOk();
+        $ids = array_column($resposta->json('data'), 'id');
+        $this->assertSame([$primeiro->id, $segundo->id], $ids);
+    }
+
+    public function test_categoria_produtos_tambem_respeita_a_ordenacao_configurada(): void
+    {
+        ConfiguracaoSite::instancia()->update(['produtos_ordenacao' => 'alfabetica']);
+        $categoria = Categoria::factory()->create(['slug' => 'quarto']);
+        Produto::factory()->create(['categoria_id' => $categoria->id, 'nome' => 'Zebra']);
+        Produto::factory()->create(['categoria_id' => $categoria->id, 'nome' => 'Abacaxi']);
+
+        $resposta = $this->getJson('/api/categorias/quarto/produtos');
+
+        $resposta->assertOk();
+        $nomes = array_column($resposta->json('data'), 'nome');
+        $this->assertSame(['Abacaxi', 'Zebra'], $nomes);
+    }
+
+    public function test_admin_configura_ordenacao_do_catalogo(): void
+    {
+        Sanctum::actingAs(User::factory()->create(['role' => 'admin']));
+
+        $resposta = $this->putJson('/api/admin/configuracoes/seo', ['produtos_ordenacao' => 'alfabetica']);
+
+        $resposta->assertOk();
+        $resposta->assertJsonPath('produtosOrdenacao', 'alfabetica');
+        $this->assertSame('alfabetica', ConfiguracaoSite::instancia()->fresh()->produtos_ordenacao);
+    }
+
+    public function test_admin_nao_consegue_configurar_ordenacao_invalida(): void
+    {
+        Sanctum::actingAs(User::factory()->create(['role' => 'admin']));
+
+        $this->putJson('/api/admin/configuracoes/seo', ['produtos_ordenacao' => 'qualquer-coisa'])
+            ->assertStatus(422);
     }
 
     public function test_admin_configura_produtos_por_pagina(): void

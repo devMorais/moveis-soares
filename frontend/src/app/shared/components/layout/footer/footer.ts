@@ -23,7 +23,7 @@ export class Footer implements OnInit {
     contatoVisivel = computed(() => this.site.conteudo().secoesVisiveis['contato'] ?? true);
 
     /** Tempo de carregamento da primeira navegação, mostrado discretamente no rodapé. */
-    tempoCarregamentoMs = signal<number | null>(null);
+    tempoCarregamentoSegundos = signal<string | null>(null);
 
     ngOnInit(): void {
         if (!isPlatformBrowser(this.platformId)) return;
@@ -43,7 +43,8 @@ export class Footer implements OnInit {
     private medirTempoCarregamento(): void {
         const [entrada] = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
         if (entrada && entrada.loadEventEnd > 0) {
-            this.tempoCarregamentoMs.set(Math.round(entrada.loadEventEnd - entrada.startTime));
+            const segundos = (entrada.loadEventEnd - entrada.startTime) / 1000;
+            this.tempoCarregamentoSegundos.set(segundos.toFixed(segundos < 10 ? 1 : 0));
         }
     }
 }

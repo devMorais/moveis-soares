@@ -98,6 +98,17 @@
                             </span>
                         }
                     </div>
+                    <div class="campo">
+                        <label for="produtos_ordenacao">Ordem dos produtos</label>
+                        <select id="produtos_ordenacao" formControlName="produtos_ordenacao">
+                            @for (opcao of opcoesOrdenacao; track opcao) {
+                                <option [value]="opcao">{{ rotulosOrdenacao[opcao] }}</option>
+                            }
+                        </select>
+                        <span class="campo__ajuda">
+                            Como os produtos aparecem nas listagens (home e categorias). Vale pro site inteiro.
+                        </span>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn-salvar" [disabled]="salvando()">

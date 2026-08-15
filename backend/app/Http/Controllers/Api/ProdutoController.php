@@ -22,11 +22,11 @@ class ProdutoController extends Controller
     }
 
     /**
-     * Lista os produtos ativos, paginados - o tamanho da pagina e definido
-     * pelo admin em Configuracoes > Catalogo (ConfiguracaoSite::produtos_por_pagina),
-     * nao pelo visitante, pra manter controle total no painel. Aceita
-     * ?categoria=slug opcional pra filtrar sem trocar de rota (usado pelos
-     * filtros da home).
+     * Lista os produtos ativos, paginados - tamanho de pagina e ordenacao
+     * sao definidos pelo admin em Configuracoes > Catalogo
+     * (ConfiguracaoSite::produtos_por_pagina / produtos_ordenacao), nao pelo
+     * visitante, pra manter controle total no painel. Aceita ?categoria=slug
+     * opcional pra filtrar sem trocar de rota (usado pelos filtros da home).
      */
     public function index(Request $request): JsonResponse
     {
@@ -40,27 +40,23 @@ class ProdutoController extends Controller
             $query->where('categoria_id', $categoriaId ?? 0);
         }
 
-        $porPagina = ConfiguracaoSite::instancia()->produtos_por_pagina;
+        $config = ConfiguracaoSite::instancia();
 
-        // Ordena por id (chave primaria, ja indexada) em vez de created_at:
-        // mesmo resultado pratico (mais novo primeiro) mas aproveitando os
-        // indices compostos abaixo sem precisar de mais uma coluna neles.
-        $produtos = $query->orderByDesc('id')->paginate($porPagina);
+        $produtos = $query->ordenarConforme($config->produtos_ordenacao)->paginate($config->produtos_por_pagina);
         $produtos->through(fn (Produto $produto) => $produto->paraApi());
 
         return response()->json($produtos);
     }
 
     /**
-     * Produtos em destaque (com selo) pro carrossel da home - separado da
-     * listagem paginada de proposito: um produto em destaque pode estar em
-     * qualquer pagina do catalogo completo, entao o carrossel precisa da
-     * sua propria busca pequena e independente da paginacao.
+     * Ultimos 10 produtos cadastrados, pro carrossel da home - separado da
+     * listagem paginada de proposito: sempre os mais recentes, independente
+     * da ordenacao escolhida pelo admin pra listagem paginada (essa e fixa,
+     * "mais novo primeiro", nao segue ConfiguracaoSite::produtos_ordenacao).
      */
     public function destaques(): JsonResponse
     {
         $produtos = Produto::ativos()
-            ->whereNotNull('selo')
             ->with('categoria')
             ->orderByDesc('id')
             ->limit(10)
