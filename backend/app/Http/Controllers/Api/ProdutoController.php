@@ -33,12 +33,19 @@ class ProdutoController extends Controller
         $query = Produto::ativos()->with('categoria');
 
         if ($slug = $request->query('categoria')) {
-            $query->whereHas('categoria', fn ($q) => $q->where('slug', $slug));
+            // Filtro direto por categoria_id (indexado) em vez de whereHas
+            // (subconsulta correlacionada) - mesma coisa pro visitante,
+            // muito mais barato pro banco com o catalogo grande.
+            $categoriaId = Categoria::where('slug', $slug)->value('id');
+            $query->where('categoria_id', $categoriaId ?? 0);
         }
 
         $porPagina = ConfiguracaoSite::instancia()->produtos_por_pagina;
 
-        $produtos = $query->orderByDesc('created_at')->paginate($porPagina);
+        // Ordena por id (chave primaria, ja indexada) em vez de created_at:
+        // mesmo resultado pratico (mais novo primeiro) mas aproveitando os
+        // indices compostos abaixo sem precisar de mais uma coluna neles.
+        $produtos = $query->orderByDesc('id')->paginate($porPagina);
         $produtos->through(fn (Produto $produto) => $produto->paraApi());
 
         return response()->json($produtos);
@@ -55,7 +62,7 @@ class ProdutoController extends Controller
         $produtos = Produto::ativos()
             ->whereNotNull('selo')
             ->with('categoria')
-            ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->limit(10)
             ->get()
             ->map(fn (Produto $produto) => $produto->paraApi());
@@ -73,7 +80,10 @@ class ProdutoController extends Controller
         $produtos = $categoria->produtos()
             ->ativos()
             ->with('categoria')
-            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            // Rota publica sem paginacao - trava num teto de seguranca pra
+            // nao devolver o catalogo inteiro de uma vez com o site grande.
+            ->limit(200)
             ->get()
             ->map(fn (Produto $produto) => $produto->paraApi());
 
