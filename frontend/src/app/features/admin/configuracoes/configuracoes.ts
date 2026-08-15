@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ColDef } from 'ag-grid-community';
-import { ConfiguracaoSeoAdminService } from '../../../core/services/configuracao-seo-admin.service';
+import { ConfiguracaoSeoAdminService, OrdenacaoProdutos } from '../../../core/services/configuracao-seo-admin.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -14,6 +14,13 @@ import { environment } from '../../../../environments/environment';
 const ROTULOS_PAPEL: Record<UserRole, string> = {
     admin: 'Administrador',
     atendente: 'Atendente',
+};
+
+const ROTULOS_ORDENACAO: Record<OrdenacaoProdutos, string> = {
+    recentes: 'Mais recentes primeiro',
+    antigos: 'Mais antigos primeiro',
+    alfabetica: 'Alfabética (A-Z)',
+    aleatoria: 'Aleatória',
 };
 
 type Aba = 'notificacoes' | 'identidade' | 'catalogo' | 'compartilhamento' | 'rastreamento' | 'usuarios';
@@ -42,6 +49,8 @@ export class Configuracoes implements OnInit {
     auth = inject(AuthService);
 
     rotulosPapel = ROTULOS_PAPEL;
+    rotulosOrdenacao = ROTULOS_ORDENACAO;
+    opcoesOrdenacao: OrdenacaoProdutos[] = ['recentes', 'antigos', 'alfabetica', 'aleatoria'];
 
     uploadEndpoint = `${environment.apiUrl}/admin/upload-imagem`;
     nomesAba = NOMES_ABA;
@@ -103,6 +112,7 @@ export class Configuracoes implements OnInit {
     form = this.fb.nonNullable.group({
         logo_url: [''],
         produtos_por_pagina: [12, [Validators.required, Validators.min(4), Validators.max(100)]],
+        produtos_ordenacao: ['recentes' as OrdenacaoProdutos, Validators.required],
         seo_titulo_site: [''],
         seo_titulo_padrao: [''],
         seo_descricao_padrao: [''],
@@ -125,6 +135,7 @@ export class Configuracoes implements OnInit {
                 this.form.patchValue({
                     logo_url: dados.logoUrl ?? '',
                     produtos_por_pagina: dados.produtosPorPagina ?? 12,
+                    produtos_ordenacao: dados.produtosOrdenacao ?? 'recentes',
                     seo_titulo_site: dados.tituloSite ?? '',
                     seo_titulo_padrao: dados.tituloPadrao ?? '',
                     seo_descricao_padrao: dados.descricaoPadrao ?? '',

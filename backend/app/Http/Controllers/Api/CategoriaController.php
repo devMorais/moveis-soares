@@ -40,21 +40,21 @@ class CategoriaController extends Controller
     /**
      * Lista, paginados, os produtos ativos de uma categoria.
      * 404 automatico (via firstOrFail) se a categoria nao existir ou estiver inativa.
-     * Tamanho de pagina definido pelo admin (Configuracoes > Catalogo),
-     * mesmo valor usado em ProdutoController::index() - um so lugar pra
-     * controlar quantos produtos aparecem por pagina em todo o site.
+     * Tamanho de pagina e ordenacao definidos pelo admin (Configuracoes >
+     * Catalogo), mesmo criterio usado em ProdutoController::index() - um so
+     * lugar pra controlar como o catalogo aparece em todo o site.
      */
     public function produtos(string $slug, Request $request): JsonResponse
     {
         $categoria = Categoria::ativas()->where('slug', $slug)->firstOrFail();
 
-        $porPagina = ConfiguracaoSite::instancia()->produtos_por_pagina;
+        $config = ConfiguracaoSite::instancia();
 
         $produtos = $categoria->produtos()
             ->ativos()
             ->with('categoria')
-            ->orderByDesc('created_at')
-            ->paginate($porPagina);
+            ->ordenarConforme($config->produtos_ordenacao)
+            ->paginate($config->produtos_por_pagina);
 
         $produtos->through(fn (Produto $produto) => $produto->paraApi());
 

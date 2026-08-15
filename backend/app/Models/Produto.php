@@ -53,6 +53,24 @@ class Produto extends Model
     }
 
     /**
+     * Aplica a ordenacao escolhida pelo admin (Configuracoes > Catalogo) em
+     * qualquer listagem paginada do site - home e categoria usam o mesmo
+     * criterio. "aleatoria" usa a data de hoje como seed pro RAND() do
+     * MySQL: assim o embaralhamento fica estavel ao longo do dia (sem isso,
+     * cada pagina de "carregar mais" sortearia uma ordem diferente e
+     * duplicaria/pularia produtos entre as paginas).
+     */
+    public function scopeOrdenarConforme(Builder $query, string $ordenacao): Builder
+    {
+        return match ($ordenacao) {
+            'antigos' => $query->orderBy('id'),
+            'alfabetica' => $query->orderBy('nome'),
+            'aleatoria' => $query->inRandomOrder((string) now()->startOfDay()->timestamp),
+            default => $query->orderByDesc('id'),
+        };
+    }
+
+    /**
      * Formata o produto no shape esperado pelo frontend (Produto interface):
      * categoria como string (nome), preco/precoDe como number, etc.
      */
