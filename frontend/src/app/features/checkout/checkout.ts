@@ -33,6 +33,8 @@ export class Checkout implements OnInit {
     cidadeSelecionada = signal<CidadeEntrega | null>(null);
     /** Cliente indicou que a cidade dele nao esta na lista - mostra o caminho pelo WhatsApp. */
     cidadeForaDaLista = signal(false);
+    /** Cliente tentou finalizar sem escolher cidade - mostra aviso especifico pra isso. */
+    tentouSemCidade = signal(false);
 
     form = this.fb.nonNullable.group({
         nome: ['', Validators.required],
@@ -60,6 +62,7 @@ export class Checkout implements OnInit {
     selecionarCidade(cidade: CidadeEntrega): void {
         this.cidadeSelecionada.set(cidade);
         this.cidadeForaDaLista.set(false);
+        this.tentouSemCidade.set(false);
     }
 
     minhaCidadeNaoEsta(): void {
@@ -91,6 +94,12 @@ export class Checkout implements OnInit {
 
         if (this.form.invalid || !cidade) {
             this.form.markAllAsTouched();
+            this.tentouSemCidade.set(!cidade);
+            this.toast.erro(
+                !cidade
+                    ? 'Escolha a cidade de entrega antes de continuar.'
+                    : 'Preencha os campos obrigatórios antes de continuar.',
+            );
             return;
         }
 
