@@ -55,6 +55,9 @@
         <div class="rodape-final">
             <p>&copy; {{ ano }} {{ marca.businessName }}. Todos os direitos reservados.</p>
             <p class="creditos">Site desenvolvido por Dolen</p>
+            @if (tempoCarregamentoMs() !== null) {
+                <p class="tempo-carregamento">Carregado em {{ tempoCarregamentoMs() }}ms</p>
+            }
         </div>
     </div>
 </footer>
