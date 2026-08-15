@@ -88,6 +88,11 @@ footer .redes-sociais a:hover {
     background-color: var(--color-primary);
 }
 
+footer .tempo-carregamento {
+    font-size: 11px;
+    opacity: 0.5;
+}
+
 footer .rodape-final {
     display: flex;
     flex-wrap: wrap;
