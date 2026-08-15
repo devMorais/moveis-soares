@@ -31,7 +31,12 @@ export class Footer implements OnInit {
         if (document.readyState === 'complete') {
             this.medirTempoCarregamento();
         } else {
-            window.addEventListener('load', () => this.medirTempoCarregamento(), { once: true });
+            // loadEventEnd só é finalizado pelo browser logo depois do evento
+            // 'load' terminar de disparar - ler dentro do proprio handler
+            // sincrono da 'load' quase sempre pega o valor ainda zerado.
+            // setTimeout empurra a leitura pro proximo ciclo, depois que o
+            // browser ja fechou o timing.
+            window.addEventListener('load', () => setTimeout(() => this.medirTempoCarregamento()), { once: true });
         }
     }
 
