@@ -1,7 +1,7 @@
 <section class="hero-carrossel">
     @for (produto of destaques(); track produto.id; let i = $index) {
         <div class="slide" [class.ativo]="i === slideAtual()">
-            <img [src]="produto.imagemUrl" [alt]="produto.nome">
+            <img [src]="produto.imagemUrl" [alt]="produto.nome" width="800" height="800" [attr.loading]="i === 0 ? 'eager' : 'lazy'" [attr.fetchpriority]="i === 0 ? 'high' : null">
             <div class="veu"></div>
             <div class="conteudo">
                 <div class="container">
@@ -36,7 +36,7 @@
         <div class="grid-categorias">
             @for (categoria of categorias(); track categoria.slug) {
                 <a [routerLink]="['/categoria', categoria.slug]" class="card-categoria">
-                    <img [src]="categoria.imagemUrl" [alt]="categoria.nome">
+                    <img [src]="categoria.imagemUrl" [alt]="categoria.nome" width="800" height="800" loading="lazy">
                     <div class="overlay">
                         <span class="rotulo">Categoria</span>
                         <h3>{{ categoria.nome }}</h3>
@@ -82,7 +82,7 @@
             @for (produto of produtosFiltrados(); track produto.id) {
                 <a [routerLink]="['/produto', produto.slug]" class="card-produto">
                     <div class="imagem">
-                        <img [src]="produto.imagemUrl" [alt]="produto.nome" loading="lazy">
+                        <img [src]="produto.imagemUrl" [alt]="produto.nome" width="800" height="800" loading="lazy">
                         @if (produto.precoDe) {
                             <span class="selo">Oferta</span>
                         }
