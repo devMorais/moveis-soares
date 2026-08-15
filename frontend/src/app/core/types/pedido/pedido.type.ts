@@ -1,4 +1,4 @@
-export type StatusPedido = 'AGUARDANDO' | 'PAGO' | 'EM_PREPARACAO' | 'ENVIADO' | 'ENTREGUE' | 'FALHOU';
+export type StatusPedido = 'AGUARDANDO' | 'PAGO' | 'EM_PREPARACAO' | 'ENVIADO' | 'ENTREGUE' | 'FALHOU' | 'EXPIRADO';
 
 export interface PedidoItem {
     nomeProduto: string;
@@ -19,6 +19,7 @@ export interface Pedido {
     nomeCliente: string;
     telefoneCliente: string;
     endereco: string;
+    pontoReferencia: string | null;
     observacoes: string | null;
     cidade: string;
     freteACombinar: boolean;

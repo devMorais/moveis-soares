@@ -11,6 +11,7 @@ export interface CriarPedidoPayload {
     nome_cliente: string;
     telefone_cliente: string;
     endereco: string;
+    ponto_referencia: string | null;
     observacoes: string | null;
     cidade_entrega_id: number | null;
     cidade_texto_livre: string | null;
@@ -30,6 +31,7 @@ export interface AcompanhamentoPedido {
     status: string;
     nomeCliente: string;
     endereco: string;
+    pontoReferencia: string | null;
     observacoes: string | null;
     cidade: string;
     freteACombinar: boolean;
