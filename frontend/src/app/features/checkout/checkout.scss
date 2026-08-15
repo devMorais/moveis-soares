@@ -53,6 +53,11 @@
     border-color: var(--color-primary);
 }
 
+.erro {
+    color: var(--color-primary);
+    font-size: 12px;
+}
+
 .cidades-lista {
     display: flex;
     flex-wrap: wrap;
@@ -146,6 +151,11 @@
 
 .btn-finalizar {
     width: 100%;
+}
+
+.btn-finalizar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .checkout-resumo {

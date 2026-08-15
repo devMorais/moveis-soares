@@ -7,10 +7,16 @@
                 <div class="campo">
                     <label for="nome">Nome completo</label>
                     <input type="text" id="nome" formControlName="nome">
+                    @if (form.controls.nome.touched && form.controls.nome.invalid) {
+                        <span class="erro">Informe seu nome completo.</span>
+                    }
                 </div>
                 <div class="campo">
                     <label for="telefone">WhatsApp</label>
                     <input type="tel" id="telefone" formControlName="telefone">
+                    @if (form.controls.telefone.touched && form.controls.telefone.invalid) {
+                        <span class="erro">Informe um número de WhatsApp pra contato.</span>
+                    }
                 </div>
                 <div class="campo">
                     <label>Cidade de entrega</label>
@@ -38,6 +44,10 @@
                     <button type="button" class="link-cidade-fora" (click)="minhaCidadeNaoEsta()">
                         Minha cidade não está na lista
                     </button>
+
+                    @if (tentouSemCidade()) {
+                        <span class="erro">Escolha uma cidade de entrega antes de continuar.</span>
+                    }
                 </div>
 
                 @if (cidadeForaDaLista()) {
@@ -56,6 +66,9 @@
                 <div class="campo">
                     <label for="endereco">Endereço completo</label>
                     <input type="text" id="endereco" formControlName="endereco" placeholder="Rua, número, bairro">
+                    @if (form.controls.endereco.touched && form.controls.endereco.invalid) {
+                        <span class="erro">Informe o endereço completo pra entrega.</span>
+                    }
                 </div>
                 <div class="campo">
                     <label for="pontoReferencia">Ponto de referência (opcional)</label>
