@@ -84,7 +84,8 @@
     border-radius: 4px;
     color: var(--color-text);
     font-family: var(--font-body);
-    font-size: 14px;
+    /* 16px pra nao disparar o zoom automatico do Safari/iOS ao focar o campo. */
+    font-size: 16px;
     resize: vertical;
 }
 
