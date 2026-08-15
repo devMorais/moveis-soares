@@ -112,6 +112,18 @@ export class ProdutoForm implements OnInit {
         });
     }
 
+    moverImagem(indice: number, direcao: -1 | 1): void {
+        const novoIndice = indice + direcao;
+
+        this.imagens.update((atuais) => {
+            if (novoIndice < 0 || novoIndice >= atuais.length) return atuais;
+
+            const copia = [...atuais];
+            [copia[indice], copia[novoIndice]] = [copia[novoIndice], copia[indice]];
+            return copia;
+        });
+    }
+
     get imagemPendente(): boolean {
         return this.imagens().length === 0;
     }

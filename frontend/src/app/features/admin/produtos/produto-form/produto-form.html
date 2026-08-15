@@ -101,6 +101,24 @@
                                 } @else {
                                     <button type="button" (click)="definirComoPrincipal(i)" class="galeria-preview__acao">Tornar principal</button>
                                 }
+                                <div class="galeria-preview__mover">
+                                    <button
+                                        type="button"
+                                        (click)="moverImagem(i, -1)"
+                                        [disabled]="i === 0"
+                                        aria-label="Mover foto pra esquerda"
+                                    >
+                                        <i class="fas fa-arrow-left"></i>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        (click)="moverImagem(i, 1)"
+                                        [disabled]="i === imagens().length - 1"
+                                        aria-label="Mover foto pra direita"
+                                    >
+                                        <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
                                 <button type="button" (click)="removerImagem(i)" class="galeria-preview__remover" aria-label="Remover foto">
                                     <i class="fas fa-xmark"></i>
                                 </button>
