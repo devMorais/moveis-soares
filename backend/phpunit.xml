@@ -17,15 +17,30 @@
             <directory>app</directory>
         </include>
     </source>
+    <!--
+        Testes rodam contra MySQL real (nao sqlite in-memory) porque algumas
+        migrations do projeto usam SQL exclusivo de MySQL (ALTER ... MODIFY,
+        ENUM) sem doctrine/dbal instalado. Precisa existir um banco
+        "moveis_soares_testing" vazio no MySQL local (Herd ja bundla um).
+        RefreshDatabase cuida de rodar as migrations e limpar entre testes.
+    -->
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="BROADCAST_CONNECTION" value="null"/>
         <env name="CACHE_STORE" value="array"/>
-        <env name="DB_CONNECTION" value="sqlite"/>
-        <env name="DB_DATABASE" value=":memory:"/>
+        <env name="DB_CONNECTION" value="mysql"/>
+        <env name="DB_HOST" value="127.0.0.1"/>
+        <env name="DB_PORT" value="3306"/>
+        <env name="DB_DATABASE" value="moveis_soares_testing"/>
+        <env name="DB_USERNAME" value="root"/>
+        <env name="DB_PASSWORD" value="root"/>
         <env name="DB_URL" value=""/>
+        <env name="INFINITEPAY_HANDLE" value="loja_teste"/>
+        <env name="INFINITEPAY_URL" value="https://api.checkout.infinitepay.io"/>
+        <env name="INFINITEPAY_WEBHOOK_URL" value="https://moveis-soares.test/api/webhooks/infinitepay"/>
+        <env name="INFINITEPAY_REDIRECT_URL" value="https://moveis-soares.test/checkout/retorno"/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>

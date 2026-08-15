@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CidadeEntrega extends Model
 {
+    use HasFactory;
+
     protected $table = 'cidades_entrega';
 
     protected $fillable = [
