@@ -29,17 +29,23 @@ export class Checkout implements OnInit {
     cidades = signal<CidadeEntrega[]>([]);
     enviando = signal(false);
 
-    /** Cidade escolhida na lista - so cidades cadastradas pelo admin podem ser escolhidas. */
+    /** Cidade escolhida na lista de cidades cadastradas pelo admin. */
     cidadeSelecionada = signal<CidadeEntrega | null>(null);
-    /** Cliente indicou que a cidade dele nao esta na lista - mostra o caminho pelo WhatsApp. */
+    /**
+     * Cliente indicou que a cidade dele nao esta na lista - libera o campo
+     * de texto livre (MS-PED-03: nao bloqueia a finalizacao, o pedido segue
+     * com frete "a combinar" e um atalho pro WhatsApp fica disponivel como
+     * alternativa mais rapida, nao como unico caminho).
+     */
     cidadeForaDaLista = signal(false);
-    /** Cliente tentou finalizar sem escolher cidade - mostra aviso especifico pra isso. */
+    /** Cliente tentou finalizar sem escolher/digitar nenhuma cidade - mostra aviso especifico pra isso. */
     tentouSemCidade = signal(false);
 
     form = this.fb.nonNullable.group({
         nome: ['', Validators.required],
         telefone: ['', Validators.required],
         endereco: ['', Validators.required],
+        cidadeTexto: [''],
         pontoReferencia: [''],
         observacoes: [''],
     });
@@ -61,11 +67,13 @@ export class Checkout implements OnInit {
         this.cidadeSelecionada.set(cidade);
         this.cidadeForaDaLista.set(false);
         this.tentouSemCidade.set(false);
+        this.form.controls.cidadeTexto.setValue('');
     }
 
     minhaCidadeNaoEsta(): void {
         this.cidadeSelecionada.set(null);
         this.cidadeForaDaLista.set(true);
+        this.tentouSemCidade.set(false);
     }
 
     /** Mensagem pronta com os itens do carrinho e link de cada produto, pra agilizar o atendimento manual. */
@@ -89,13 +97,15 @@ export class Checkout implements OnInit {
 
     finalizar(): void {
         const cidade = this.cidadeSelecionada();
+        const cidadeTexto = this.form.controls.cidadeTexto.value.trim();
+        const temCidade = !!cidade || (this.cidadeForaDaLista() && cidadeTexto.length > 0);
 
-        if (this.form.invalid || !cidade) {
+        if (this.form.invalid || !temCidade) {
             this.form.markAllAsTouched();
-            this.tentouSemCidade.set(!cidade);
+            this.tentouSemCidade.set(!temCidade);
             this.toast.erro(
-                !cidade
-                    ? 'Escolha a cidade de entrega antes de continuar.'
+                !temCidade
+                    ? 'Escolha sua cidade na lista ou digite o nome dela antes de continuar.'
                     : 'Preencha os campos obrigatórios antes de continuar.',
             );
             return;
@@ -111,9 +121,9 @@ export class Checkout implements OnInit {
             endereco: dados.endereco,
             ponto_referencia: dados.pontoReferencia || null,
             observacoes: dados.observacoes || null,
-            cidade_entrega_id: cidade.id,
-            cidade_texto_livre: null,
-            frete_a_combinar: false,
+            cidade_entrega_id: cidade?.id ?? null,
+            cidade_texto_livre: cidade ? null : cidadeTexto,
+            frete_a_combinar: !cidade,
             itens: this.carrinho.itens().map((item) => ({
                 produto_id: item.produtoId,
                 quantidade: item.quantidade,

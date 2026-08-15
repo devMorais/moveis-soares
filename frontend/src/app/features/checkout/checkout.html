@@ -46,16 +46,22 @@
                     </button>
 
                     @if (tentouSemCidade()) {
-                        <span class="erro">Escolha uma cidade de entrega antes de continuar.</span>
+                        <span class="erro">Escolha ou digite sua cidade antes de continuar.</span>
                     }
                 </div>
 
                 @if (cidadeForaDaLista()) {
+                    <div class="campo">
+                        <label for="cidadeTexto">Digite o nome da sua cidade</label>
+                        <input type="text" id="cidadeTexto" formControlName="cidadeTexto" placeholder="Nome da cidade">
+                    </div>
+
                     <div class="aviso-frete-combinar">
                         <i class="fas fa-triangle-exclamation"></i>
                         <p>
-                            Ainda não entregamos automaticamente na sua cidade — fale com a gente pelo
-                            WhatsApp que a gente confirma a entrega e o frete pra você.
+                            Ainda não entregamos automaticamente na sua cidade — o frete fica "a combinar"
+                            e a gente confirma com você pelo WhatsApp assim que o pedido chegar. Se
+                            preferir, já pode chamar a gente direto:
                         </p>
                         <a [href]="linkWhatsapp" target="_blank" rel="noopener" class="btn-whatsapp">
                             <i class="fab fa-whatsapp"></i> Falar agora pelo WhatsApp
@@ -105,6 +111,8 @@
                     <span>Frete</span>
                     @if (cidadeSelecionada(); as cidade) {
                         <span>{{ cidade.valorFrete === 0 ? 'Grátis' : ('R$ ' + cidade.valorFrete) }}</span>
+                    } @else if (cidadeForaDaLista()) {
+                        <span>A combinar</span>
                     } @else {
                         <span>Escolha a cidade</span>
                     }
