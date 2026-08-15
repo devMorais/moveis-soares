@@ -1,7 +1,7 @@
 <header [class.aberto]="menuAberto()" [class.rolado]="rolado()">
     <div class="container barra">
         <a routerLink="/" class="logo" (click)="fecharMenu()">
-            <img [src]="info.logoUrl" [alt]="info.businessName">
+            <img [src]="info.logoUrl" [alt]="info.businessName" width="1024" height="1024">
         </a>
         <nav class="menu">
             <a routerLink="/" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharMenu()">Home</a>

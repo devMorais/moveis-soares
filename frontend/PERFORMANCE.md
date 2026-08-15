@@ -22,15 +22,24 @@ Corrigidos elementos abaixo do mínimo recomendado:
 - `.carrinho-fechar` (fechar carrinho): sem tamanho definido → 44px (com margem negativa pra não alterar o visual).
 - `.carrinho-item__quantidade button` e `.carrinho-item__remover` (dentro do carrinho): 18px → 32px — não deu pra chegar em 44px sem quebrar o layout compacto da linha do item, mas já é uma melhora considerável. Se continuar sendo um problema no teste real do dedo, vale revisar o layout da linha do carrinho num card à parte.
 
-## Resultados do Lighthouse (preencher após medir)
+### 4. `width`/`height` explícito nas imagens
+O Lighthouse aponta isso separado do CSS `aspect-ratio` (que o projeto já usava) — adicionado `width="800" height="800"` nas fotos de produto/categoria (todas quadradas, processadas pelo `ImagemService`) e `width="1024" height="1024"` na logo, em Home, Categoria, Produto, navbar, rodapé, carrinho lateral e acompanhamento de pedido.
 
-Passo a passo pra medir: abrir o site (local ou produção) no Chrome, F12 → aba **Lighthouse** → categoria **Performance**, dispositivo **Mobile** → Analyze page load.
+### 5. Pendente pra depois (não resolvido agora)
+- **"Improve image delivery" (~212 KiB no Lighthouse)**: as fotos são servidas sempre em 800x800, mesmo em cards pequenos que mostram bem menos que isso. Resolver direito precisa gerar mais de um tamanho por imagem no upload (srcset) — mudança de backend, não só de template.
+- **CSS não usado do Font Awesome (~89 KiB)**: o projeto importa o pacote de ícones inteiro (`all.min.css`) mas usa uns 50 ícones only. Testei: dividir em arquivos separados (solid/brands/regular) não ajuda muito, porque o mapeamento de nome pro glifo de cada ícone fica todo junto num arquivo base que carrega de qualquer jeito. Precisa de um subset de verdade (ferramenta `fontawesome-subset` ou trocar os ~50 ícones usados por SVG inline) — não fiz agora por ser mais arriscado de quebrar ícone em produção sem dar tempo de testar direito.
 
-| Página | Performance ANTES | Performance DEPOIS | Observações |
+## Resultados do Lighthouse
+
+**Importante sobre como medir isso direito:** não dá pra confiar na nota do Lighthouse rodada em `ng serve` (localhost:4200, modo desenvolvimento) — o código ali nunca é minificado/otimizado, então a nota fica sempre baixa (30-50) independente de qualquer correção de HTML/CSS, porque o que mais pesa nesse modo é o JavaScript não otimizado, não as imagens/layout. Testei também um build de produção rodando localmente, mas nesse dia a API de produção (moveissoares.dolen.com.br) estava respondendo devagar, o que também distorceu o número (media mais a lentidão do servidor do que o código do site).
+
+**Medida real e confiável**: rodar o Lighthouse direto em produção (moveissoares.dolen.com.br) depois que este PR for aceito e o Fernando fizer o deploy, num horário em que o servidor esteja respondendo normal. Só assim o número reflete o que o visitante de verdade sente.
+
+| Página | Performance ANTES (dev, referência) | Performance DEPOIS (dev, referência) | Performance em produção (preencher após deploy) |
 |---|---|---|---|
-| Home | — | — | |
-| Categoria | — | — | |
-| Produto | — | — | |
+| Home | 48 | 60 | — |
+| Categoria | 39 / 19 | 47 / 20 | — |
+| Produto | — | — | — |
 
 ## Teste manual de rolagem/interação (preencher após testar)
 
