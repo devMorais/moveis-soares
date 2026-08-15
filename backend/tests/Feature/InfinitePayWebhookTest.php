@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Pedido;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class InfinitePayWebhookTest extends TestCase
@@ -28,6 +29,10 @@ class InfinitePayWebhookTest extends TestCase
     {
         $pedido = $this->criarPedidoAguardando('pedido-1-abc123');
 
+        Http::fake([
+            '*/payment_check' => Http::response(['success' => true, 'paid' => true, 'capture_method' => 'pix'], 200),
+        ]);
+
         $resposta = $this->postJson('/api/webhooks/infinitepay', [
             'order_nsu' => 'pedido-1-abc123',
             'transaction_nsu' => 'txn-999',
@@ -49,12 +54,36 @@ class InfinitePayWebhookTest extends TestCase
     {
         $pedido = $this->criarPedidoAguardando('pedido-2-xyz');
 
+        Http::fake([
+            '*/payment_check' => Http::response(['success' => true, 'paid' => true, 'capture_method' => 'credit_card'], 200),
+        ]);
+
         $this->postJson('/api/webhooks/infinitepay', [
             'order_nsu' => 'pedido-2-xyz',
             'capture_method' => 'credit_card',
         ])->assertOk();
 
         $this->assertSame('CARTAO', $pedido->fresh()->metodo_pagamento);
+    }
+
+    public function test_rejeita_chamada_forjada_que_nunca_passou_pela_infinitepay(): void
+    {
+        $pedido = $this->criarPedidoAguardando('pedido-4-forjado');
+
+        // simula um atacante chutando o order_nsu sem nunca ter pago de verdade -
+        // a InfinitePay confirma que NAO esta pago (paid: false).
+        Http::fake([
+            '*/payment_check' => Http::response(['success' => true, 'paid' => false], 200),
+        ]);
+
+        $resposta = $this->postJson('/api/webhooks/infinitepay', [
+            'order_nsu' => 'pedido-4-forjado',
+            'capture_method' => 'pix',
+        ]);
+
+        $resposta->assertStatus(402);
+        $resposta->assertJson(['success' => false]);
+        $this->assertSame('AGUARDANDO', $pedido->fresh()->status);
     }
 
     public function test_e_idempotente_nao_reprocessa_pedido_ja_pago(): void
