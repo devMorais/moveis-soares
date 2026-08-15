@@ -12,7 +12,7 @@
             @for (produto of produtos(); track produto.id) {
                 <a [routerLink]="['/produto', produto.slug]" class="card-produto">
                     <div class="imagem">
-                        <img [src]="produto.imagemUrl" [alt]="produto.nome" loading="lazy">
+                        <img [src]="produto.imagemUrl" [alt]="produto.nome" width="800" height="800" loading="lazy">
                         @if (produto.precoDe) {
                             <span class="selo">Oferta</span>
                         }
