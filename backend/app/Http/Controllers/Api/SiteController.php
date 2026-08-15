@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ConfiguracaoSite;
 use App\Models\SecaoContato;
 use App\Models\SecaoCta;
 use App\Models\SecaoInstitucional;
@@ -26,6 +27,9 @@ class SiteController extends Controller
             'institucional' => SecaoInstitucional::first(),
             'cta' => SecaoCta::all()->keyBy('chave'),
             'secoesVisiveis' => SecaoVisibilidade::mapaDeVisibilidade(),
+            'identidade' => [
+                'logoUrl' => ConfiguracaoSite::instancia()->logo_url,
+            ],
         ]);
     }
 }

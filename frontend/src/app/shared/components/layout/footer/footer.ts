@@ -15,6 +15,7 @@ export class Footer {
     marca = SITE_INFO;
     ano = new Date().getFullYear();
 
+    logoUrl = computed(() => this.site.conteudo().identidade.logoUrl ?? SITE_INFO.logoUrl);
     contato = computed(() => this.site.conteudo().contato);
     sobreVisivel = computed(() => this.site.conteudo().secoesVisiveis['sobre'] ?? true);
     contatoVisivel = computed(() => this.site.conteudo().secoesVisiveis['contato'] ?? true);

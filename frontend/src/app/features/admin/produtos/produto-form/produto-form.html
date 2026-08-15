@@ -62,7 +62,15 @@
 
             <div class="campo">
                 <label for="descricao">Descrição</label>
-                <textarea id="descricao" rows="4" formControlName="descricao"></textarea>
+                <app-rich-text-editor
+                    id="descricao"
+                    formControlName="descricao"
+                    placeholder="Descreva o produto: material, acabamento, diferenciais..."
+                    [limiteCaracteres]="limiteDescricao"
+                />
+                @if (form.controls.descricao.errors?.['limiteExcedido']) {
+                    <span class="erro">Descrição muito longa. Reduza o texto para caber no limite.</span>
+                }
             </div>
 
             <div class="campo-grid">

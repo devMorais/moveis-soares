@@ -24,6 +24,7 @@ export class Navbar implements OnInit {
     info = SITE_INFO;
     categorias = signal<Categoria[]>([]);
 
+    logoUrl = computed(() => this.site.conteudo().identidade.logoUrl ?? SITE_INFO.logoUrl);
     sobreVisivel = computed(() => this.site.conteudo().secoesVisiveis['sobre'] ?? true);
     contatoVisivel = computed(() => this.site.conteudo().secoesVisiveis['contato'] ?? true);
 

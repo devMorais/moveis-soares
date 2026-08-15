@@ -29,6 +29,10 @@ export interface SecaoCtaItem {
     texto: string | null;
 }
 
+export interface Identidade {
+    logoUrl: string | null;
+}
+
 export interface SiteConteudo {
     /** Nunca null na prática - o service sempre garante o fallback estático. */
     sobre: SecaoSobre;
@@ -36,4 +40,5 @@ export interface SiteConteudo {
     institucional: SecaoInstitucional;
     cta: Record<string, SecaoCtaItem>;
     secoesVisiveis: Record<string, boolean>;
+    identidade: Identidade;
 }

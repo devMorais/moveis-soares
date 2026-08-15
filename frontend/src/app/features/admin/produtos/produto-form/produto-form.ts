@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CategoriaAdminService } from '../../../../core/services/categoria-admin.service';
 import { ProdutoAdminService } from '../../../../core/services/produto-admin.service';
@@ -8,10 +8,19 @@ import { environment } from '../../../../../environments/environment';
 import { CategoriaAdmin } from '../../../../core/types/categoria/categoria-admin.type';
 import { UploadImagem } from '../../../../shared/components/upload-imagem/upload-imagem';
 import { LightboxService } from '../../../../shared/components/lightbox/lightbox.service';
+import { RichTextEditor } from '../../../../shared/components/rich-text-editor/rich-text-editor';
+
+/** Conta só o texto visível (sem as tags de formatação) pra bater com o contador mostrado no editor. */
+function descricaoDentroDoLimite(limite: number) {
+    return (control: AbstractControl): ValidationErrors | null => {
+        const texto = String(control.value ?? '').replace(/<[^>]*>/g, '');
+        return texto.length > limite ? { limiteExcedido: { limite, atual: texto.length } } : null;
+    };
+}
 
 @Component({
     selector: 'app-produto-form',
-    imports: [ReactiveFormsModule, UploadImagem, RouterLink],
+    imports: [ReactiveFormsModule, UploadImagem, RouterLink, RichTextEditor],
     templateUrl: './produto-form.html',
     styleUrl: './produto-form.scss',
 })
@@ -34,13 +43,15 @@ export class ProdutoForm implements OnInit {
     /** Primeira imagem enviada vira a principal; as demais compõem a galeria. */
     imagens = signal<string[]>([]);
 
+    readonly limiteDescricao = 2000;
+
     form = this.fb.nonNullable.group({
         nome: ['', [Validators.required, Validators.minLength(3)]],
         categoria_id: [null as number | null, Validators.required],
         preco: [null as number | null, [Validators.required, Validators.min(0.01)]],
         preco_de: [null as number | null],
         especificacao: [''],
-        descricao: [''],
+        descricao: ['', descricaoDentroDoLimite(this.limiteDescricao)],
         altura_cm: [null as number | null],
         largura_cm: [null as number | null],
         profundidade_cm: [null as number | null],

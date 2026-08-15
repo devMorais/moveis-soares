@@ -65,7 +65,7 @@
                     </div>
 
                     @if (produto()!.descricao) {
-                        <p class="descricao">{{ produto()!.descricao }}</p>
+                        <div class="descricao" [innerHTML]="produto()!.descricao"></div>
                     }
 
                     @if (temMedidas()) {
