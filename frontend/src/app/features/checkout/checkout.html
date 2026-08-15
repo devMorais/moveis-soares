@@ -7,30 +7,79 @@
                 <div class="campo">
                     <label for="nome">Nome completo</label>
                     <input type="text" id="nome" formControlName="nome">
+                    @if (form.controls.nome.touched && form.controls.nome.invalid) {
+                        <span class="erro">Informe seu nome completo.</span>
+                    }
                 </div>
                 <div class="campo">
                     <label for="telefone">WhatsApp</label>
                     <input type="tel" id="telefone" formControlName="telefone">
+                    @if (form.controls.telefone.touched && form.controls.telefone.invalid) {
+                        <span class="erro">Informe um número de WhatsApp pra contato.</span>
+                    }
                 </div>
                 <div class="campo">
-                    <label for="endereco">Endereço completo</label>
-                    <input type="text" id="endereco" formControlName="endereco">
-                </div>
-                <div class="campo">
-                    <label for="cidadeTexto">Cidade</label>
-                    <input type="text" id="cidadeTexto" formControlName="cidadeTexto" list="lista-cidades" placeholder="Digite ou escolha sua cidade">
-                    <datalist id="lista-cidades">
+                    <label>Cidade de entrega</label>
+                    <div class="cidades-lista">
                         @for (cidade of cidades(); track cidade.id) {
-                            <option [value]="cidade.nomeCidade"></option>
-                        }
-                    </datalist>
-                    <div class="cidades-sugestoes">
-                        @for (cidade of cidades(); track cidade.id) {
-                            <button type="button" (click)="selecionarCidade(cidade)">{{ cidade.nomeCidade }}</button>
+                            <button
+                                type="button"
+                                class="cidade-opcao"
+                                [class.selecionada]="cidadeSelecionada()?.id === cidade.id"
+                                (click)="selecionarCidade(cidade)"
+                            >
+                                {{ cidade.nomeCidade }}
+                            </button>
                         }
                     </div>
+
+                    @if (cidadeSelecionada(); as cidade) {
+                        <p class="frete-confirmado">
+                            <i class="fas fa-truck"></i>
+                            Frete pra {{ cidade.nomeCidade }}:
+                            <strong>{{ cidade.valorFrete === 0 ? 'Grátis' : ('R$ ' + cidade.valorFrete) }}</strong>
+                        </p>
+                    }
+
+                    <button type="button" class="link-cidade-fora" (click)="minhaCidadeNaoEsta()">
+                        Minha cidade não está na lista
+                    </button>
+
+                    @if (tentouSemCidade()) {
+                        <span class="erro">Escolha ou digite sua cidade antes de continuar.</span>
+                    }
                 </div>
 
+                @if (cidadeForaDaLista()) {
+                    <div class="campo">
+                        <label for="cidadeTexto">Digite o nome da sua cidade</label>
+                        <input type="text" id="cidadeTexto" formControlName="cidadeTexto" placeholder="Nome da cidade">
+                    </div>
+
+                    <div class="aviso-frete-combinar">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <p>
+                            Ainda não entregamos automaticamente na sua cidade — o frete fica "a combinar"
+                            e a gente confirma com você pelo WhatsApp assim que o pedido chegar. Se
+                            preferir, já pode chamar a gente direto:
+                        </p>
+                        <a [href]="linkWhatsapp" target="_blank" rel="noopener" class="btn-whatsapp">
+                            <i class="fab fa-whatsapp"></i> Falar agora pelo WhatsApp
+                        </a>
+                    </div>
+                }
+
+                <div class="campo">
+                    <label for="endereco">Endereço completo</label>
+                    <input type="text" id="endereco" formControlName="endereco" placeholder="Rua, número, bairro">
+                    @if (form.controls.endereco.touched && form.controls.endereco.invalid) {
+                        <span class="erro">Informe o endereço completo pra entrega.</span>
+                    }
+                </div>
+                <div class="campo">
+                    <label for="pontoReferencia">Ponto de referência (opcional)</label>
+                    <input type="text" id="pontoReferencia" formControlName="pontoReferencia" placeholder="Ex: perto do mercado tal, prédio azul...">
+                </div>
                 <div class="campo">
                     <label for="observacoes">Observações (opcional)</label>
                     <textarea
@@ -40,19 +89,6 @@
                         placeholder="Ex: entregar no período da tarde, montar no quarto de cima..."
                     ></textarea>
                 </div>
-
-                @if (form.controls.cidadeTexto.value && !cidadeEncontrada()) {
-                    <div class="aviso-frete-combinar">
-                        <i class="fas fa-triangle-exclamation"></i>
-                        <p>
-                            Sua cidade não está na nossa lista de entrega automática — vamos combinar o
-                            frete com você pelo WhatsApp assim que confirmarmos seu pedido.
-                        </p>
-                        <a [href]="linkWhatsapp" target="_blank" rel="noopener" class="btn-whatsapp">
-                            <i class="fab fa-whatsapp"></i> Falar agora pelo WhatsApp
-                        </a>
-                    </div>
-                }
 
                 <button type="submit" class="btn btn-finalizar" [disabled]="enviando()">
                     {{ enviando() ? 'Processando...' : 'Ir para pagamento' }}
@@ -73,10 +109,12 @@
                 </div>
                 <div class="checkout-resumo__linha">
                     <span>Frete</span>
-                    @if (cidadeEncontrada()) {
-                        <span>R$ {{ freteACobrar() }}</span>
-                    } @else {
+                    @if (cidadeSelecionada(); as cidade) {
+                        <span>{{ cidade.valorFrete === 0 ? 'Grátis' : ('R$ ' + cidade.valorFrete) }}</span>
+                    } @else if (cidadeForaDaLista()) {
                         <span>A combinar</span>
+                    } @else {
+                        <span>Escolha a cidade</span>
                     }
                 </div>
                 <div class="checkout-resumo__total">

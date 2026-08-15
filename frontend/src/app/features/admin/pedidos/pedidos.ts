@@ -15,6 +15,7 @@ const ROTULOS_STATUS: Record<StatusPedido, string> = {
     ENVIADO: 'Enviado',
     ENTREGUE: 'Entregue',
     FALHOU: 'Falha no pagamento',
+    EXPIRADO: 'Reserva expirada',
 };
 
 /** A partir de quantas horas parado em "aguardando" o pedido ganha o selo de atencao na lista. */

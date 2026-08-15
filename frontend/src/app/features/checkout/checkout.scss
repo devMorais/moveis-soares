@@ -53,25 +53,69 @@
     border-color: var(--color-primary);
 }
 
-.cidades-sugestoes {
+.erro {
+    color: var(--color-primary);
+    font-size: 12px;
+}
+
+.cidades-lista {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    margin-top: 4px;
 }
 
-.cidades-sugestoes button {
-    padding: 4px 10px;
+.cidade-opcao {
+    padding: 6px 14px;
     background-color: var(--color-bg);
     border: 1px solid var(--color-border);
     border-radius: 999px;
     color: var(--color-text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.cidade-opcao:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.cidade-opcao.selecionada {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+}
+
+.frete-confirmado {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--color-text-muted);
+}
+
+.frete-confirmado i {
+    color: var(--color-primary);
+}
+
+.frete-confirmado strong {
+    color: var(--color-text);
+}
+
+.link-cidade-fora {
+    align-self: flex-start;
+    margin-top: 6px;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-text-muted);
     font-size: 12px;
+    text-decoration: underline;
     cursor: pointer;
 }
 
-.cidades-sugestoes button:hover {
-    border-color: var(--color-primary);
+.link-cidade-fora:hover {
     color: var(--color-primary);
 }
 
@@ -107,6 +151,11 @@
 
 .btn-finalizar {
     width: 100%;
+}
+
+.btn-finalizar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .checkout-resumo {
