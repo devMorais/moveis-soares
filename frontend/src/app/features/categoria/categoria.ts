@@ -20,6 +20,7 @@ export class Categoria implements OnInit, OnDestroy {
     categoria = signal<CategoriaType | null>(null);
     produtos = signal<Produto[]>([]);
     carregando = signal(false);
+    naoEncontrada = signal(false);
 
     private paginaAtual = signal(1);
     private ultimaPagina = signal(1);
@@ -41,16 +42,20 @@ export class Categoria implements OnInit, OnDestroy {
             this.slugAtual = slug;
             this.categoria.set(null);
             this.produtos.set([]);
+            this.naoEncontrada.set(false);
             this.paginaAtual.set(1);
             this.ultimaPagina.set(1);
 
-            this.categoriaService.porSlug(slug).subscribe((categoria) => {
-                this.categoria.set(categoria);
-                this.seo.set({
-                    title: categoria.nome,
-                    description: `Confira os móveis de ${categoria.nome.toLowerCase()} com qualidade e preço justo na Móveis Soares.`,
-                    image: categoria.imagemUrl,
-                });
+            this.categoriaService.porSlug(slug).subscribe({
+                next: (categoria) => {
+                    this.categoria.set(categoria);
+                    this.seo.set({
+                        title: categoria.nome,
+                        description: `Confira os móveis de ${categoria.nome.toLowerCase()} com qualidade e preço justo na Móveis Soares.`,
+                        image: categoria.imagemUrl,
+                    });
+                },
+                error: () => this.naoEncontrada.set(true),
             });
             this.carregarProdutos(slug, 1);
         });
