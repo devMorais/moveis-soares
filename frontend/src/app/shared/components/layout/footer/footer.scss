@@ -13,7 +13,10 @@ footer .conteudo {
 }
 
 footer .coluna .logo {
-    max-width: 150px;
+    display: block;
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
     margin-bottom: 15px;
 }
 

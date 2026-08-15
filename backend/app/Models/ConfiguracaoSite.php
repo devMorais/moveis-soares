@@ -10,6 +10,7 @@ class ConfiguracaoSite extends Model
 
     protected $fillable = [
         'modulos_habilitados',
+        'logo_url',
         'seo_titulo_site',
         'seo_titulo_padrao',
         'seo_descricao_padrao',

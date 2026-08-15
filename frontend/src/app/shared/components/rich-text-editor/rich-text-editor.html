@@ -1,0 +1,4 @@
+<div class="editor-rico" [class.editor-rico--limite-excedido]="caracteres() > limiteCaracteres()">
+    <div #editor class="editor-rico__area"></div>
+    <span class="editor-rico__contador">{{ caracteres() }} / {{ limiteCaracteres() }} caracteres</span>
+</div>
