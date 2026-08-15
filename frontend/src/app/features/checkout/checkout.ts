@@ -94,7 +94,7 @@ export class Checkout implements OnInit {
         this.pedidoService.criar(payload).subscribe({
             next: (resposta) => {
                 this.carrinho.limpar();
-                window.location.href = resposta.link;
+                this.router.navigate(['/pedido/acompanhar', resposta.token]);
             },
             error: () => {
                 this.enviando.set(false);

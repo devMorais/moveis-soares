@@ -57,6 +57,56 @@
     margin-bottom: 20px;
 }
 
+.acompanhar-aviso {
+    margin-bottom: 24px;
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.acompanhar-aviso p {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+.acompanhar-aviso p:last-child {
+    margin-bottom: 0;
+}
+
+.acompanhar-aviso--reserva {
+    background-color: rgba(230, 51, 41, 0.08);
+}
+
+.acompanhar-aviso--reserva i {
+    color: var(--color-primary);
+    margin-top: 2px;
+}
+
+.acompanhar-aviso--expirado {
+    background-color: var(--color-bg);
+}
+
+.acompanhar-aviso--expirado i {
+    color: var(--color-text-muted);
+    margin-top: 2px;
+}
+
+.btn-pagar {
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: var(--color-primary);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 4px;
+}
+
 .timeline {
     display: flex;
     flex-direction: column;

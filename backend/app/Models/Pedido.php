@@ -5,9 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 class Pedido extends Model
 {
+    /**
+     * Minutos que o estoque fica reservado pra um pedido "aguardando
+     * pagamento" antes de ser cancelado automaticamente e o estoque
+     * devolvido. Mesmo padrao usado pelo WooCommerce (Hold stock).
+     */
+    public const LIMITE_RESERVA_MINUTOS = 60;
+
     protected $fillable = [
         'token_acompanhamento',
         'nome_cliente',
@@ -64,6 +72,33 @@ class Pedido extends Model
             'status' => 'PAGO',
             'metodo_pagamento' => $metodo,
         ]);
+    }
+
+    /**
+     * Devolve ao estoque as quantidades reservadas pelos itens deste
+     * pedido e muda o status - usado tanto quando a geracao do link de
+     * pagamento falha na hora (FALHOU) quanto quando o pedido fica
+     * "aguardando" tempo demais sem pagamento (EXPIRADO).
+     */
+    public function liberarEstoqueEMudarStatus(string $status): void
+    {
+        DB::transaction(function () use ($status) {
+            $itens = $this->itens()->get();
+            $produtos = Produto::whereIn('id', $itens->pluck('produto_id'))
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+
+            foreach ($itens as $item) {
+                $produto = $produtos->get($item->produto_id);
+
+                if ($produto && $produto->estoque !== null) {
+                    $produto->increment('estoque', $item->quantidade);
+                }
+            }
+
+            $this->update(['status' => $status]);
+        });
     }
 
     public function paraApi(): array
