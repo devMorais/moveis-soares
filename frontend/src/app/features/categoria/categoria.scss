@@ -1,5 +1,16 @@
 @use '../../shared/styles/produto-card';
 
+.categoria-estado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    min-height: 50vh;
+    padding-top: 100px;
+    text-align: center;
+}
+
 .banner-categoria {
     position: relative;
     height: 240px;
