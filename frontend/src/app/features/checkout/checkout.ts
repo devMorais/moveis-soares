@@ -48,8 +48,6 @@ export class Checkout implements OnInit {
 
     totalPedido = computed(() => this.carrinho.subtotal() + (this.freteACobrar() ?? 0));
 
-    podeFinalizar = computed(() => this.cidadeSelecionada() !== null);
-
     ngOnInit(): void {
         if (this.carrinho.itens().length === 0) {
             this.router.navigate(['/']);
