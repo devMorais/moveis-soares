@@ -100,6 +100,7 @@ export class Configuracoes implements OnInit {
     });
 
     form = this.fb.nonNullable.group({
+        logo_url: [''],
         seo_titulo_site: [''],
         seo_titulo_padrao: [''],
         seo_descricao_padrao: [''],
@@ -120,6 +121,7 @@ export class Configuracoes implements OnInit {
         this.seoService.mostrar().subscribe({
             next: (dados) => {
                 this.form.patchValue({
+                    logo_url: dados.logoUrl ?? '',
                     seo_titulo_site: dados.tituloSite ?? '',
                     seo_titulo_padrao: dados.tituloPadrao ?? '',
                     seo_descricao_padrao: dados.descricaoPadrao ?? '',
@@ -244,6 +246,10 @@ export class Configuracoes implements OnInit {
                 }
             },
         });
+    }
+
+    aoDefinirLogo(url: string): void {
+        this.form.patchValue({ logo_url: url });
     }
 
     aoDefinirOgImage(url: string): void {

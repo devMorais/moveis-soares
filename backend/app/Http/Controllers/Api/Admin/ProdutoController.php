@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\PedidoItem;
 use App\Models\Produto;
+use App\Suporte\DescricaoSanitizer;
 use App\Suporte\Helpers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -102,7 +103,7 @@ class ProdutoController extends Controller
             'imagens' => ['nullable', 'array'],
             'imagens.*' => ['string'],
             'especificacao' => ['nullable', 'string', 'max:255'],
-            'descricao' => ['nullable', 'string'],
+            'descricao' => ['nullable', 'string', 'max:6000'],
             'altura_cm' => ['nullable', 'integer', 'min:0'],
             'largura_cm' => ['nullable', 'integer', 'min:0'],
             'profundidade_cm' => ['nullable', 'integer', 'min:0'],
@@ -112,6 +113,7 @@ class ProdutoController extends Controller
         ]);
 
         $dados['imagens'] = $dados['imagens'] ?? [];
+        $dados['descricao'] = DescricaoSanitizer::limpar($dados['descricao'] ?? null);
 
         return $dados;
     }

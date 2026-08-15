@@ -17,6 +17,7 @@ class ConfiguracaoSeoController extends Controller
     public function atualizar(Request $request): JsonResponse
     {
         $dados = $request->validate([
+            'logo_url' => ['nullable', 'string'],
             'seo_titulo_site' => ['nullable', 'string', 'max:255'],
             'seo_titulo_padrao' => ['nullable', 'string', 'max:255'],
             'seo_descricao_padrao' => ['nullable', 'string', 'max:500'],
@@ -37,6 +38,7 @@ class ConfiguracaoSeoController extends Controller
     private function paraApi(ConfiguracaoSite $config): array
     {
         return [
+            'logoUrl' => $config->logo_url,
             'tituloSite' => $config->seo_titulo_site,
             'tituloPadrao' => $config->seo_titulo_padrao,
             'descricaoPadrao' => $config->seo_descricao_padrao,

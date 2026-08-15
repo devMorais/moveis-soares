@@ -42,6 +42,14 @@
                 <div class="secao">
                     <h2>Identidade</h2>
                     <div class="campo">
+                        <label>Logo do site</label>
+                        <span class="campo__ajuda">Aparece no menu e no rodapé do site. Recomendado: imagem quadrada.</span>
+                        <app-upload-imagem [endpoint]="uploadEndpoint" (uploadConcluido)="aoDefinirLogo($event)" />
+                        @if (form.controls.logo_url.value) {
+                            <img [src]="form.controls.logo_url.value" alt="Prévia da logo" class="preview-imagem">
+                        }
+                    </div>
+                    <div class="campo">
                         <label for="titulo_site">Nome do site</label>
                         <input type="text" id="titulo_site" formControlName="seo_titulo_site" placeholder="Móveis Soares">
                         <span class="campo__ajuda">Aparece na aba do navegador junto com o título de cada página.</span>

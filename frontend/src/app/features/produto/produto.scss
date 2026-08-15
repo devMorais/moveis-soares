@@ -129,6 +129,34 @@
     color: var(--color-text-muted);
     line-height: 1.6;
     margin-bottom: 16px;
+    overflow-wrap: anywhere;
+}
+
+.descricao p {
+    margin-bottom: 10px;
+}
+
+.descricao h1,
+.descricao h2,
+.descricao h3 {
+    color: var(--color-text);
+    margin: 14px 0 8px;
+}
+
+.descricao ul,
+.descricao ol {
+    margin: 0 0 10px 20px;
+}
+
+.descricao blockquote {
+    margin: 0 0 10px;
+    padding-left: 12px;
+    border-left: 3px solid var(--color-border);
+}
+
+.descricao a {
+    color: var(--color-primary);
+    text-decoration: underline;
 }
 
 .medidas {

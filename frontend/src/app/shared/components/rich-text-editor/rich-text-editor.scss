@@ -1,0 +1,44 @@
+.editor-rico {
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-rico__area {
+    background-color: var(--admin-surface);
+    border-radius: 6px;
+    font-family: var(--admin-font);
+}
+
+.editor-rico ::ng-deep .ql-toolbar.ql-snow {
+    border-color: var(--admin-border);
+    border-radius: 6px 6px 0 0;
+}
+
+.editor-rico ::ng-deep .ql-container.ql-snow {
+    border-color: var(--admin-border);
+    border-radius: 0 0 6px 6px;
+    font-size: 14px;
+    min-height: 140px;
+}
+
+.editor-rico ::ng-deep .ql-editor {
+    color: var(--admin-text);
+    min-height: 140px;
+}
+
+.editor-rico ::ng-deep .ql-editor.ql-blank::before {
+    color: var(--admin-text-muted);
+    font-style: normal;
+}
+
+.editor-rico__contador {
+    align-self: flex-end;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--admin-text-muted);
+}
+
+.editor-rico--limite-excedido .editor-rico__contador {
+    color: #e04b4b;
+    font-weight: 600;
+}
