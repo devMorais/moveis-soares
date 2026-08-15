@@ -4,6 +4,7 @@ import { environment } from '../../../environments/environment';
 
 export interface ConfiguracaoSeo {
     logoUrl: string | null;
+    produtosPorPagina: number;
     tituloSite: string | null;
     tituloPadrao: string | null;
     descricaoPadrao: string | null;
@@ -17,6 +18,7 @@ export interface ConfiguracaoSeo {
 
 export interface DadosConfiguracaoSeo {
     logo_url?: string | null;
+    produtos_por_pagina?: number;
     seo_titulo_site?: string | null;
     seo_titulo_padrao?: string | null;
     seo_descricao_padrao?: string | null;

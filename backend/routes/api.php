@@ -30,6 +30,7 @@ Route::get('/categorias/{slug}/produtos', [CategoriaController::class, 'produtos
 Route::get('/categorias/{slug}', [CategoriaController::class, 'porSlug']);
 Route::post('/produtos/{id}/visualizacao', [ProdutoController::class, 'registrarVisualizacao']);
 Route::get('/produtos/categoria/{slug}', [ProdutoController::class, 'porCategoria']);
+Route::get('/produtos/destaques', [ProdutoController::class, 'destaques']);
 Route::get('/produtos/{slug}', [ProdutoController::class, 'porSlug']);
 Route::get('/produtos', [ProdutoController::class, 'index']);
 Route::post('/contato', [ContatoController::class, 'enviar']);

@@ -382,6 +382,35 @@
     font-size: 16px;
 }
 
+.catalogo .acoes {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.catalogo .acoes button {
+    padding: 10px 24px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.catalogo .acoes button:hover:not(:disabled) {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.catalogo .acoes button:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
 /* ===== Quem somos / CTA — minimalista ===== */
 
 .quem-somos {

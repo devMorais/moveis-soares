@@ -71,7 +71,7 @@
                     Todos
                 </button>
                 @for (categoria of categorias(); track categoria.slug) {
-                    <button type="button" [class.ativo]="categoriaAtiva() === categoria.nome" (click)="filtrarPorCategoria(categoria.nome)">
+                    <button type="button" [class.ativo]="categoriaAtiva() === categoria.slug" (click)="filtrarPorCategoria(categoria.slug)">
                         {{ categoria.nome }}
                     </button>
                 }
@@ -79,7 +79,7 @@
         </div>
 
         <div class="grid-produtos">
-            @for (produto of produtosFiltrados(); track produto.id) {
+            @for (produto of produtos(); track produto.id) {
                 <a [routerLink]="['/produto', produto.slug]" class="card-produto">
                     <div class="imagem">
                         <img [src]="produto.imagemUrl" [alt]="produto.nome" width="800" height="800" loading="lazy">
@@ -102,6 +102,18 @@
                 <p class="vazio">Nenhum produto encontrado nessa categoria.</p>
             }
         </div>
+
+        @if (temMaisPaginas) {
+            <div class="acoes">
+                <button type="button" (click)="carregarMais()" [disabled]="carregando()">
+                    @if (carregando()) {
+                        Carregando...
+                    } @else {
+                        Carregar mais
+                    }
+                </button>
+            </div>
+        }
     </div>
 </section>
 

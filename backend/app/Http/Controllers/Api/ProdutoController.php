@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\Exceptions\ImagemInvalidaException;
 use App\Services\ImagemService;
 use App\Models\Categoria;
+use App\Models\ConfiguracaoSite;
 use App\Models\Produto;
 use App\Models\ProdutoVisualizacao;
 use App\Suporte\Helpers;
@@ -21,13 +22,41 @@ class ProdutoController extends Controller
     }
 
     /**
-     * Lista todos os produtos, com a categoria carregada junto (evita N+1).
+     * Lista os produtos ativos, paginados - o tamanho da pagina e definido
+     * pelo admin em Configuracoes > Catalogo (ConfiguracaoSite::produtos_por_pagina),
+     * nao pelo visitante, pra manter controle total no painel. Aceita
+     * ?categoria=slug opcional pra filtrar sem trocar de rota (usado pelos
+     * filtros da home).
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
+    {
+        $query = Produto::ativos()->with('categoria');
+
+        if ($slug = $request->query('categoria')) {
+            $query->whereHas('categoria', fn ($q) => $q->where('slug', $slug));
+        }
+
+        $porPagina = ConfiguracaoSite::instancia()->produtos_por_pagina;
+
+        $produtos = $query->orderByDesc('created_at')->paginate($porPagina);
+        $produtos->through(fn (Produto $produto) => $produto->paraApi());
+
+        return response()->json($produtos);
+    }
+
+    /**
+     * Produtos em destaque (com selo) pro carrossel da home - separado da
+     * listagem paginada de proposito: um produto em destaque pode estar em
+     * qualquer pagina do catalogo completo, entao o carrossel precisa da
+     * sua propria busca pequena e independente da paginacao.
+     */
+    public function destaques(): JsonResponse
     {
         $produtos = Produto::ativos()
+            ->whereNotNull('selo')
             ->with('categoria')
             ->orderByDesc('created_at')
+            ->limit(10)
             ->get()
             ->map(fn (Produto $produto) => $produto->paraApi());
 

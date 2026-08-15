@@ -16,11 +16,12 @@ const ROTULOS_PAPEL: Record<UserRole, string> = {
     atendente: 'Atendente',
 };
 
-type Aba = 'notificacoes' | 'identidade' | 'compartilhamento' | 'rastreamento' | 'usuarios';
+type Aba = 'notificacoes' | 'identidade' | 'catalogo' | 'compartilhamento' | 'rastreamento' | 'usuarios';
 
 const NOMES_ABA: Record<Aba, string> = {
     notificacoes: 'Notificações',
     identidade: 'Identidade e SEO',
+    catalogo: 'Catálogo',
     compartilhamento: 'Compartilhamento',
     rastreamento: 'Rastreamento',
     usuarios: 'Usuários',
@@ -44,7 +45,7 @@ export class Configuracoes implements OnInit {
 
     uploadEndpoint = `${environment.apiUrl}/admin/upload-imagem`;
     nomesAba = NOMES_ABA;
-    abasDisponiveis: Aba[] = ['notificacoes', 'identidade', 'compartilhamento', 'rastreamento', 'usuarios'];
+    abasDisponiveis: Aba[] = ['notificacoes', 'identidade', 'catalogo', 'compartilhamento', 'rastreamento', 'usuarios'];
     abaAtiva = signal<Aba>('notificacoes');
 
     carregando = signal(true);
@@ -101,6 +102,7 @@ export class Configuracoes implements OnInit {
 
     form = this.fb.nonNullable.group({
         logo_url: [''],
+        produtos_por_pagina: [12, [Validators.required, Validators.min(4), Validators.max(100)]],
         seo_titulo_site: [''],
         seo_titulo_padrao: [''],
         seo_descricao_padrao: [''],
@@ -122,6 +124,7 @@ export class Configuracoes implements OnInit {
             next: (dados) => {
                 this.form.patchValue({
                     logo_url: dados.logoUrl ?? '',
+                    produtos_por_pagina: dados.produtosPorPagina ?? 12,
                     seo_titulo_site: dados.tituloSite ?? '',
                     seo_titulo_padrao: dados.tituloPadrao ?? '',
                     seo_descricao_padrao: dados.descricaoPadrao ?? '',
@@ -261,6 +264,12 @@ export class Configuracoes implements OnInit {
     }
 
     salvar(): void {
+        if (this.form.invalid) {
+            this.form.markAllAsTouched();
+            this.toast.erro('Verifique os campos destacados antes de salvar.');
+            return;
+        }
+
         this.salvando.set(true);
 
         this.seoService.atualizar(this.form.getRawValue()).subscribe({

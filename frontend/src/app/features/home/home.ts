@@ -27,7 +27,14 @@ export class Home implements OnInit, OnDestroy {
 
     info = SITE_INFO;
     categorias = signal<Categoria[]>([]);
+
+    /** Carrossel de destaque do hero - busca propria e independente da paginacao do catalogo. */
+    destaques = signal<Produto[]>([]);
+
     produtos = signal<Produto[]>([]);
+    carregando = signal(false);
+    private paginaAtual = signal(1);
+    private ultimaPagina = signal(1);
 
     institucional = computed(() => this.site.conteudo().institucional);
     cta = computed(() => this.site.conteudo().cta['home']);
@@ -42,18 +49,14 @@ export class Home implements OnInit, OnDestroy {
         })),
     );
 
-    /** Só os produtos com selo entram no carrossel de destaque do hero. */
-    destaques = computed(() => this.produtos().filter((p) => p.selo));
-
     slideAtual = signal(0);
     private timerId?: ReturnType<typeof setInterval>;
 
     categoriaAtiva = signal<string | null>(null);
-    produtosFiltrados = computed(() => {
-        const categoria = this.categoriaAtiva();
-        if (!categoria) return this.produtos();
-        return this.produtos().filter((p) => p.categoria.toLowerCase() === categoria.toLowerCase());
-    });
+
+    get temMaisPaginas(): boolean {
+        return this.paginaAtual() < this.ultimaPagina();
+    }
 
     ngOnInit(): void {
         this.seo.set({
@@ -61,8 +64,9 @@ export class Home implements OnInit, OnDestroy {
             description:
                 'Móveis de qualidade para escritório, quarto, sala e cozinha, com preço justo e atendimento que cuida de cada detalhe da sua casa.',
         });
-        this.produtoService.listar().subscribe((produtos) => this.produtos.set(produtos));
+        this.produtoService.destaques().subscribe((produtos) => this.destaques.set(produtos));
         this.categoriaService.listar().subscribe((categorias) => this.categorias.set(categorias));
+        this.carregarProdutos(1);
         this.iniciarAutoplay();
     }
 
@@ -99,7 +103,27 @@ export class Home implements OnInit, OnDestroy {
         this.iniciarAutoplay();
     }
 
-    filtrarPorCategoria(nome: string | null): void {
-        this.categoriaAtiva.set(nome);
+    filtrarPorCategoria(slug: string | null): void {
+        if (this.categoriaAtiva() === slug) return;
+        this.categoriaAtiva.set(slug);
+        this.carregarProdutos(1);
+    }
+
+    carregarMais(): void {
+        if (!this.temMaisPaginas || this.carregando()) return;
+        this.carregarProdutos(this.paginaAtual() + 1);
+    }
+
+    private carregarProdutos(pagina: number): void {
+        this.carregando.set(true);
+        this.produtoService.listar(pagina, this.categoriaAtiva()).subscribe({
+            next: (resposta) => {
+                this.produtos.update((atual) => (pagina === 1 ? resposta.data : [...atual, ...resposta.data]));
+                this.paginaAtual.set(resposta.current_page);
+                this.ultimaPagina.set(resposta.last_page);
+                this.carregando.set(false);
+            },
+            error: () => this.carregando.set(false),
+        });
     }
 }

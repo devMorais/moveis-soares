@@ -81,6 +81,31 @@
             </form>
         }
 
+        @if (abaAtiva() === 'catalogo') {
+            <form [formGroup]="form" (ngSubmit)="salvar()" class="form-seo">
+                <div class="secao">
+                    <h2>Catálogo público</h2>
+                    <div class="campo">
+                        <label for="produtos_por_pagina">Produtos por página</label>
+                        <input type="number" id="produtos_por_pagina" formControlName="produtos_por_pagina" min="4" max="100" step="1">
+                        <span class="campo__ajuda">
+                            Quantos produtos aparecem de cada vez na home e nas páginas de categoria antes do visitante clicar em "Carregar mais" (entre 4 e 100).
+                        </span>
+                        @if (form.controls.produtos_por_pagina.touched && form.controls.produtos_por_pagina.invalid) {
+                            <span class="aviso">
+                                <i class="fas fa-triangle-exclamation"></i>
+                                Informe um número entre 4 e 100.
+                            </span>
+                        }
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-salvar" [disabled]="salvando()">
+                    {{ salvando() ? 'Salvando...' : 'Salvar configurações' }}
+                </button>
+            </form>
+        }
+
         @if (abaAtiva() === 'compartilhamento') {
             <form [formGroup]="form" (ngSubmit)="salvar()" class="form-seo">
                 <div class="secao">
