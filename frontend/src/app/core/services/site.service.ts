@@ -32,6 +32,7 @@ interface SiteConteudoBruto {
     } | null;
     cta: Record<string, { titulo: string | null; texto: string | null }>;
     secoesVisiveis: Record<string, boolean>;
+    identidade: { logoUrl: string | null } | null;
 }
 
 /** Conteudo de fallback: o mesmo texto que estava hardcoded antes da migracao pra conteudo dinamico. */
@@ -71,6 +72,7 @@ const FALLBACK: SiteConteudo = {
         sobre: { titulo: 'Vamos renovar sua casa?', texto: 'Entre em contato e converse com a nossa equipe sobre o móvel ideal pra você.' },
     },
     secoesVisiveis: { hero: true, sobre: true, contato: true },
+    identidade: { logoUrl: SITE_INFO.logoUrl },
 };
 
 @Injectable({ providedIn: 'root' })
@@ -138,6 +140,7 @@ export class SiteService {
                 sobre: bruto.cta?.['sobre'] ?? FALLBACK.cta['sobre'],
             },
             secoesVisiveis: { ...FALLBACK.secoesVisiveis, ...(bruto.secoesVisiveis ?? {}) },
+            identidade: { logoUrl: bruto.identidade?.logoUrl ?? FALLBACK.identidade.logoUrl },
         };
     }
 }
