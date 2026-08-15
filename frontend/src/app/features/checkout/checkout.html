@@ -84,7 +84,7 @@
                     ></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-finalizar" [disabled]="enviando() || !podeFinalizar()">
+                <button type="submit" class="btn btn-finalizar" [disabled]="enviando()">
                     {{ enviando() ? 'Processando...' : 'Ir para pagamento' }}
                 </button>
             </form>
