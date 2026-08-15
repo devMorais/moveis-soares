@@ -25,7 +25,7 @@
             <div class="produto-grid">
                 <div class="produto-galeria">
                     <pinch-zoom class="produto-galeria__zoom" [properties]="{ backgroundColor: 'transparent', limitZoom: 3 }">
-                        <img [src]="imagemAtual()" [alt]="produto()!.nome">
+                        <img [src]="imagemAtual()" [alt]="produto()!.nome" width="800" height="800" fetchpriority="high">
                     </pinch-zoom>
 
                     @if (galeria().length > 1) {
@@ -37,7 +37,7 @@
                                     [class.ativa]="i === indiceImagemAtual()"
                                     (click)="selecionarImagem(i)"
                                 >
-                                    <img [src]="imagem" [alt]="produto()!.nome + ' - foto ' + (i + 1)">
+                                    <img [src]="imagem" [alt]="produto()!.nome + ' - foto ' + (i + 1)" width="800" height="800" loading="lazy">
                                 </button>
                             }
                         </div>

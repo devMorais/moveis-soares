@@ -37,6 +37,12 @@
 }
 
 .carrinho-fechar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin: -10px -10px -10px 0;
     background: none;
     border: none;
     color: var(--color-text);
@@ -87,16 +93,19 @@
 .carrinho-item__quantidade {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 3px 10px;
+    gap: 4px;
+    padding: 0 6px;
     border: 1px solid var(--color-border);
     border-radius: 999px;
     width: max-content;
 }
 
 .carrinho-item__quantidade button {
-    width: 18px;
-    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
     background: none;
     border: none;
     color: var(--color-text);
@@ -118,6 +127,12 @@
 }
 
 .carrinho-item__remover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    margin: -6px -6px -6px 0;
     background: none;
     border: none;
     color: var(--color-text-muted);
