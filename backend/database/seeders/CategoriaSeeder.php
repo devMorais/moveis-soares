@@ -14,22 +14,22 @@ class CategoriaSeeder extends Seeder
             [
                 'nome' => 'Quarto',
                 'slug' => 'quarto',
-                'imagem_url' => 'assets/images/produtos/guarda-roupa-off-white-6-portas.jpg',
+                'imagem_url' => 'assets/images/produtos/guarda-roupa-off-white-6-portas.webp',
             ],
             [
                 'nome' => 'Sala',
                 'slug' => 'sala',
-                'imagem_url' => 'assets/images/produtos/buffet-amendoa.jpg',
+                'imagem_url' => 'assets/images/produtos/buffet-amendoa.webp',
             ],
             [
                 'nome' => 'Escritorio',
                 'slug' => 'escritorio',
-                'imagem_url' => 'assets/images/produtos/guarda-roupa-classico-4-portas.jpg',
+                'imagem_url' => 'assets/images/produtos/guarda-roupa-classico-4-portas.webp',
             ],
             [
                 'nome' => 'Cozinha',
                 'slug' => 'cozinha',
-                'imagem_url' => 'assets/images/produtos/guarda-roupa-glossy-4-portas.jpg',
+                'imagem_url' => 'assets/images/produtos/guarda-roupa-glossy-4-portas.webp',
             ],
         ];
 
