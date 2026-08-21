@@ -17,8 +17,8 @@ class ConteudoCtaController extends Controller
     public function atualizar(string $chave, Request $request): JsonResponse
     {
         $dados = $request->validate([
-            'titulo' => ['sometimes', 'nullable', 'string'],
-            'texto' => ['sometimes', 'nullable', 'string'],
+            'titulo' => ['required', 'string'],
+            'texto' => ['required', 'string'],
         ]);
 
         $cta = SecaoCta::firstOrNew(['chave' => $chave]);

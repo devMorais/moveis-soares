@@ -39,10 +39,10 @@ export class ConteudoInicio implements OnInit {
     });
 
     form = this.fb.nonNullable.group({
-        resumo_titulo: [''],
-        resumo_texto: [''],
-        cta_titulo: [''],
-        cta_texto: [''],
+        resumo_titulo: ['', Validators.required],
+        resumo_texto: ['', Validators.required],
+        cta_titulo: ['', Validators.required],
+        cta_texto: ['', Validators.required],
         itens: this.fb.array([this.novoItemLista(), this.novoItemLista(), this.novoItemLista()]),
     });
 
@@ -84,7 +84,27 @@ export class ConteudoInicio implements OnInit {
         this.subAbaAtiva.set(aba);
     }
 
+    /** Leva a pessoa direto pra sub-aba com o primeiro campo obrigatorio vazio, pra nao ficar procurando. */
+    private irParaPrimeiraAbaComErro(): void {
+        const { resumo_titulo, resumo_texto, cta_titulo, cta_texto } = this.form.controls;
+
+        if (resumo_titulo.invalid || resumo_texto.invalid) {
+            this.subAbaAtiva.set('quem-somos');
+        } else if (this.itens.invalid) {
+            this.subAbaAtiva.set('destaques');
+        } else if (cta_titulo.invalid || cta_texto.invalid) {
+            this.subAbaAtiva.set('banner');
+        }
+    }
+
     salvar(): void {
+        if (this.form.invalid) {
+            this.form.markAllAsTouched();
+            this.irParaPrimeiraAbaComErro();
+            this.toast.erro('Preencha todos os campos obrigatórios antes de salvar.');
+            return;
+        }
+
         this.salvando.set(true);
         const valores = this.form.getRawValue();
 
