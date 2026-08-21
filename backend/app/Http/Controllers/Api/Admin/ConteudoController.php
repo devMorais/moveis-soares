@@ -22,14 +22,21 @@ class ConteudoController extends Controller
         'sobre' => [
             'model' => SecaoSobre::class,
             'campos' => ['titulo_historia', 'texto_historia', 'imagem_url', 'diferenciais'],
+            // Imagem fica de fora de proposito - o texto ja e suficiente pra
+            // publicar a secao, a foto e um complemento (MS-CONT-04).
+            'obrigatorios' => ['titulo_historia', 'texto_historia', 'diferenciais'],
         ],
         'contato' => [
             'model' => SecaoContato::class,
             'campos' => ['telefone_display', 'telefone_whatsapp', 'email', 'endereco', 'horario'],
+            'obrigatorios' => ['telefone_display', 'telefone_whatsapp', 'email', 'endereco', 'horario'],
         ],
         'institucional' => [
             'model' => SecaoInstitucional::class,
             'campos' => ['itens', 'resumo_titulo', 'resumo_texto'],
+            // Bloco "Quem somos" e os 3 destaques da home aparecem direto pro
+            // visitante - nao faz sentido salvar em branco (MS-CONT-04).
+            'obrigatorios' => ['resumo_titulo', 'resumo_texto', 'itens'],
         ],
     ];
 
@@ -44,11 +51,28 @@ class ConteudoController extends Controller
     {
         $config = self::SECOES[$slug] ?? throw new NotFoundHttpException("Seção '{$slug}' não existe.");
 
-        $regras = collect($config['campos'])->mapWithKeys(function (string $campo) {
+        $regras = collect($config['campos'])->mapWithKeys(function (string $campo) use ($config) {
             $tipo = in_array($campo, ['diferenciais', 'itens'], true) ? 'array' : 'string';
+            $obrigatorio = in_array($campo, $config['obrigatorios'], true);
 
-            return [$campo => ['sometimes', 'nullable', $tipo]];
+            return [$campo => $obrigatorio ? ['required', $tipo] : ['sometimes', 'nullable', $tipo]];
         })->all();
+
+        if ($slug === 'institucional') {
+            $regras['itens'][] = 'size:3';
+            $regras['itens.*.titulo'] = ['required', 'string'];
+            $regras['itens.*.texto'] = ['required', 'string'];
+        }
+
+        if ($slug === 'sobre') {
+            $regras['diferenciais'][] = 'size:4';
+            $regras['diferenciais.*.titulo'] = ['required', 'string'];
+            $regras['diferenciais.*.texto'] = ['required', 'string'];
+        }
+
+        if ($slug === 'contato') {
+            $regras['email'] = ['required', 'email'];
+        }
 
         $dados = $request->validate($regras);
 
