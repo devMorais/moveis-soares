@@ -42,6 +42,8 @@ export class ProdutoForm implements OnInit {
 
     /** Primeira imagem enviada vira a principal; as demais compõem a galeria. */
     imagens = signal<string[]>([]);
+    /** Fica true depois da primeira tentativa de salvar - so ai mostra o aviso de foto faltando. */
+    tentouSalvar = signal(false);
 
     readonly limiteDescricao = 2000;
 
@@ -142,6 +144,8 @@ export class ProdutoForm implements OnInit {
     salvar(): void {
         if (this.form.invalid || this.imagemPendente) {
             this.form.markAllAsTouched();
+            this.tentouSalvar.set(true);
+            this.toast.erro('Preencha os campos obrigatórios antes de salvar.');
             return;
         }
 
