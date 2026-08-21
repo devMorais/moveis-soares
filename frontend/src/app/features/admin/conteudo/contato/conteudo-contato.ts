@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ConteudoAdminService } from '../../../../core/services/conteudo-admin.service';
 import { ToastService } from '../../../../core/services/toast.service';
@@ -18,11 +18,11 @@ export class ConteudoContato implements OnInit {
     salvando = signal(false);
 
     form = this.fb.nonNullable.group({
-        telefone_display: [''],
-        telefone_whatsapp: [''],
-        email: [''],
-        endereco: [''],
-        horario: [''],
+        telefone_display: ['', Validators.required],
+        telefone_whatsapp: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        endereco: ['', Validators.required],
+        horario: ['', Validators.required],
     });
 
     ngOnInit(): void {
@@ -33,6 +33,12 @@ export class ConteudoContato implements OnInit {
     }
 
     salvar(): void {
+        if (this.form.invalid) {
+            this.form.markAllAsTouched();
+            this.toast.erro('Preencha todos os campos obrigatórios antes de salvar.');
+            return;
+        }
+
         this.salvando.set(true);
 
         this.conteudoService.atualizar('contato', this.form.getRawValue()).subscribe({
