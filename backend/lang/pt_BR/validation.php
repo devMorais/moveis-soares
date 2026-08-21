@@ -141,6 +141,12 @@ return [
         'valor_frete' => 'valor do frete',
         'cidade_entrega_id' => 'cidade de entrega',
         'itens' => 'itens do pedido',
+        'resumo_titulo' => 'título',
+        'resumo_texto' => 'texto resumido',
+        'titulo' => 'título',
+        'texto' => 'texto',
+        'itens.*.titulo' => 'título do destaque',
+        'itens.*.texto' => 'texto do destaque',
     ],
 
 ];
