@@ -43,11 +43,11 @@ export class ConteudoSobre implements OnInit {
     });
 
     form = this.fb.nonNullable.group({
-        titulo_historia: [''],
-        texto_historia: [''],
+        titulo_historia: ['', Validators.required],
+        texto_historia: ['', Validators.required],
         imagem_url: [''],
-        cta_titulo: [''],
-        cta_texto: [''],
+        cta_titulo: ['', Validators.required],
+        cta_texto: ['', Validators.required],
         diferenciais: this.fb.array([this.novoItemLista(), this.novoItemLista(), this.novoItemLista(), this.novoItemLista()]),
     });
 
@@ -95,7 +95,27 @@ export class ConteudoSobre implements OnInit {
         this.form.patchValue({ imagem_url: url });
     }
 
+    /** Leva a pessoa direto pra sub-aba com o primeiro campo obrigatorio vazio, pra nao ficar procurando. */
+    private irParaPrimeiraAbaComErro(): void {
+        const { titulo_historia, texto_historia, cta_titulo, cta_texto } = this.form.controls;
+
+        if (titulo_historia.invalid || texto_historia.invalid) {
+            this.subAbaAtiva.set('historia');
+        } else if (this.diferenciais.invalid) {
+            this.subAbaAtiva.set('diferenciais');
+        } else if (cta_titulo.invalid || cta_texto.invalid) {
+            this.subAbaAtiva.set('banner');
+        }
+    }
+
     salvar(): void {
+        if (this.form.invalid) {
+            this.form.markAllAsTouched();
+            this.irParaPrimeiraAbaComErro();
+            this.toast.erro('Preencha todos os campos obrigatórios antes de salvar.');
+            return;
+        }
+
         this.salvando.set(true);
         const valores = this.form.getRawValue();
 

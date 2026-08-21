@@ -20,10 +20,16 @@
                 <div class="campo">
                     <label for="sobre-titulo">Título da história</label>
                     <input type="text" id="sobre-titulo" formControlName="titulo_historia">
+                    @if (form.controls.titulo_historia.touched && form.controls.titulo_historia.invalid) {
+                        <span class="erro">Esse campo não pode ficar vazio.</span>
+                    }
                 </div>
                 <div class="campo">
                     <label for="sobre-texto">Texto</label>
                     <textarea id="sobre-texto" formControlName="texto_historia" rows="5"></textarea>
+                    @if (form.controls.texto_historia.touched && form.controls.texto_historia.invalid) {
+                        <span class="erro">Esse campo não pode ficar vazio.</span>
+                    }
                 </div>
                 <div class="campo">
                     <label>Imagem</label>
@@ -45,10 +51,16 @@
                             <div class="campo">
                                 <label>Título</label>
                                 <input type="text" formControlName="titulo">
+                                @if (item.get('titulo')?.touched && item.get('titulo')?.invalid) {
+                                    <span class="erro">Esse campo não pode ficar vazio.</span>
+                                }
                             </div>
                             <div class="campo">
                                 <label>Texto</label>
                                 <input type="text" formControlName="texto">
+                                @if (item.get('texto')?.touched && item.get('texto')?.invalid) {
+                                    <span class="erro">Esse campo não pode ficar vazio.</span>
+                                }
                             </div>
                         </div>
                     }
@@ -62,10 +74,16 @@
                 <div class="campo">
                     <label for="sobre-cta-titulo">Título</label>
                     <input type="text" id="sobre-cta-titulo" formControlName="cta_titulo">
+                    @if (form.controls.cta_titulo.touched && form.controls.cta_titulo.invalid) {
+                        <span class="erro">Esse campo não pode ficar vazio.</span>
+                    }
                 </div>
                 <div class="campo">
                     <label for="sobre-cta-texto">Texto</label>
                     <input type="text" id="sobre-cta-texto" formControlName="cta_texto">
+                    @if (form.controls.cta_texto.touched && form.controls.cta_texto.invalid) {
+                        <span class="erro">Esse campo não pode ficar vazio.</span>
+                    }
                 </div>
             </div>
         }
