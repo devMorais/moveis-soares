@@ -1,6 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { forkJoin } from 'rxjs';
 import { ConteudoAdminService } from '../../../../core/services/conteudo-admin.service';
 import { ToastService } from '../../../../core/services/toast.service';
 
@@ -84,46 +83,72 @@ export class ConteudoInicio implements OnInit {
         this.subAbaAtiva.set(aba);
     }
 
-    /** Leva a pessoa direto pra sub-aba com o primeiro campo obrigatorio vazio, pra nao ficar procurando. */
-    private irParaPrimeiraAbaComErro(): void {
-        const { resumo_titulo, resumo_texto, cta_titulo, cta_texto } = this.form.controls;
+    /**
+     * Cada aba salva so os proprios campos, num pedido separado - assim dá pra
+     * ir preenchendo e salvando aba por aba, sem precisar terminar as outras
+     * duas primeiro (bug encontrado ao vivo: salvar travava tudo se qualquer
+     * outra aba, ainda nao preenchida, estivesse vazia).
+     */
+    salvar(): void {
+        const aba = this.subAbaAtiva();
 
-        if (resumo_titulo.invalid || resumo_texto.invalid) {
-            this.subAbaAtiva.set('quem-somos');
-        } else if (this.itens.invalid) {
-            this.subAbaAtiva.set('destaques');
-        } else if (cta_titulo.invalid || cta_texto.invalid) {
-            this.subAbaAtiva.set('banner');
-        }
+        if (aba === 'quem-somos') return this.salvarQuemSomos();
+        if (aba === 'destaques') return this.salvarDestaques();
+        return this.salvarBanner();
     }
 
-    salvar(): void {
-        if (this.form.invalid) {
-            this.form.markAllAsTouched();
-            this.irParaPrimeiraAbaComErro();
+    private salvarQuemSomos(): void {
+        const { resumo_titulo, resumo_texto } = this.form.controls;
+
+        if (resumo_titulo.invalid || resumo_texto.invalid) {
+            resumo_titulo.markAsTouched();
+            resumo_texto.markAsTouched();
             this.toast.erro('Preencha todos os campos obrigatórios antes de salvar.');
             return;
         }
 
         this.salvando.set(true);
-        const valores = this.form.getRawValue();
+        this.conteudoService
+            .atualizar('institucional', { resumo_titulo: resumo_titulo.value, resumo_texto: resumo_texto.value })
+            .subscribe({ next: () => this.aoSalvarComSucesso(), error: () => this.aoSalvarComErro() });
+    }
 
-        forkJoin([
-            this.conteudoService.atualizar('institucional', {
-                resumo_titulo: valores.resumo_titulo,
-                resumo_texto: valores.resumo_texto,
-                itens: valores.itens,
-            }),
-            this.conteudoService.atualizarCta('home', { titulo: valores.cta_titulo, texto: valores.cta_texto }),
-        ]).subscribe({
-            next: () => {
-                this.salvando.set(false);
-                this.toast.sucesso('Conteúdo salvo com sucesso.');
-            },
-            error: () => {
-                this.salvando.set(false);
-                this.toast.erro('Não foi possível salvar. Tente novamente.');
-            },
-        });
+    private salvarDestaques(): void {
+        if (this.itens.invalid) {
+            this.itens.markAllAsTouched();
+            this.toast.erro('Preencha todos os campos obrigatórios antes de salvar.');
+            return;
+        }
+
+        this.salvando.set(true);
+        this.conteudoService
+            .atualizar('institucional', { itens: this.itens.getRawValue() })
+            .subscribe({ next: () => this.aoSalvarComSucesso(), error: () => this.aoSalvarComErro() });
+    }
+
+    private salvarBanner(): void {
+        const { cta_titulo, cta_texto } = this.form.controls;
+
+        if (cta_titulo.invalid || cta_texto.invalid) {
+            cta_titulo.markAsTouched();
+            cta_texto.markAsTouched();
+            this.toast.erro('Preencha todos os campos obrigatórios antes de salvar.');
+            return;
+        }
+
+        this.salvando.set(true);
+        this.conteudoService
+            .atualizarCta('home', { titulo: cta_titulo.value, texto: cta_texto.value })
+            .subscribe({ next: () => this.aoSalvarComSucesso(), error: () => this.aoSalvarComErro() });
+    }
+
+    private aoSalvarComSucesso(): void {
+        this.salvando.set(false);
+        this.toast.sucesso('Conteúdo salvo com sucesso.');
+    }
+
+    private aoSalvarComErro(): void {
+        this.salvando.set(false);
+        this.toast.erro('Não foi possível salvar. Tente novamente.');
     }
 }

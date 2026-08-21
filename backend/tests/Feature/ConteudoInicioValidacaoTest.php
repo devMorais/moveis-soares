@@ -68,6 +68,51 @@ class ConteudoInicioValidacaoTest extends TestCase
         ])->assertOk();
     }
 
+    public function test_salva_so_o_bloco_quem_somos_sem_precisar_dos_destaques(): void
+    {
+        $this->comoAdmin();
+
+        $this->putJson('/api/admin/conteudo/institucional', [
+            'resumo_titulo' => 'Quem somos',
+            'resumo_texto' => 'Texto resumido',
+        ])->assertOk();
+    }
+
+    public function test_salva_so_os_destaques_sem_precisar_do_bloco_quem_somos(): void
+    {
+        $this->comoAdmin();
+
+        $this->putJson('/api/admin/conteudo/institucional', [
+            'itens' => [
+                ['titulo' => 'Entrega', 'texto' => 'Combinada com você'],
+                ['titulo' => 'Qualidade', 'texto' => 'Você vê'],
+                ['titulo' => 'Atendimento', 'texto' => 'Próximo'],
+            ],
+        ])->assertOk();
+    }
+
+    public function test_salvar_so_quem_somos_nao_apaga_destaques_ja_salvos(): void
+    {
+        $this->comoAdmin();
+
+        $this->putJson('/api/admin/conteudo/institucional', [
+            'itens' => [
+                ['titulo' => 'Entrega', 'texto' => 'Combinada com você'],
+                ['titulo' => 'Qualidade', 'texto' => 'Você vê'],
+                ['titulo' => 'Atendimento', 'texto' => 'Próximo'],
+            ],
+        ])->assertOk();
+
+        $this->putJson('/api/admin/conteudo/institucional', [
+            'resumo_titulo' => 'Quem somos',
+            'resumo_texto' => 'Texto resumido',
+        ])->assertOk();
+
+        $resposta = $this->getJson('/api/admin/conteudo/institucional');
+        $resposta->assertJsonPath('itens.0.titulo', 'Entrega');
+        $resposta->assertJsonPath('resumo_titulo', 'Quem somos');
+    }
+
     public function test_nao_salva_banner_final_com_titulo_ou_texto_vazio(): void
     {
         $this->comoAdmin();

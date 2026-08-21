@@ -51,20 +51,32 @@ class ConteudoController extends Controller
     {
         $config = self::SECOES[$slug] ?? throw new NotFoundHttpException("Seção '{$slug}' não existe.");
 
-        $regras = collect($config['campos'])->mapWithKeys(function (string $campo) use ($config) {
+        // 'institucional' e 'sobre' sao editados em abas (Quem somos / Destaques /
+        // Banner na mesma tela) e cada aba salva so os seus proprios campos - por
+        // isso "obrigatorio" aqui e condicional ("sometimes"): so exige valor
+        // quando o campo realmente vem no payload, pra nao bloquear o salvamento
+        // de uma aba so porque outra aba (que nem foi tocada agora) esta vazia.
+        // 'contato' fica de fora dessa regra porque e uma tela unica, sem abas.
+        $condicional = $slug !== 'contato';
+
+        $regras = collect($config['campos'])->mapWithKeys(function (string $campo) use ($config, $condicional) {
             $tipo = in_array($campo, ['diferenciais', 'itens'], true) ? 'array' : 'string';
             $obrigatorio = in_array($campo, $config['obrigatorios'], true);
 
-            return [$campo => $obrigatorio ? ['required', $tipo] : ['sometimes', 'nullable', $tipo]];
+            if (! $obrigatorio) {
+                return [$campo => ['sometimes', 'nullable', $tipo]];
+            }
+
+            return [$campo => $condicional ? ['sometimes', 'required', $tipo] : ['required', $tipo]];
         })->all();
 
-        if ($slug === 'institucional') {
+        if ($slug === 'institucional' && $request->has('itens')) {
             $regras['itens'][] = 'size:3';
             $regras['itens.*.titulo'] = ['required', 'string'];
             $regras['itens.*.texto'] = ['required', 'string'];
         }
 
-        if ($slug === 'sobre') {
+        if ($slug === 'sobre' && $request->has('diferenciais')) {
             $regras['diferenciais'][] = 'size:4';
             $regras['diferenciais.*.titulo'] = ['required', 'string'];
             $regras['diferenciais.*.texto'] = ['required', 'string'];
