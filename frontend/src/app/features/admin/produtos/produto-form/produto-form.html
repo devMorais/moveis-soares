@@ -134,7 +134,7 @@
                         }
                     </div>
                 }
-                @if (imagemPendente) {
+                @if (imagemPendente && tentouSalvar()) {
                     <span class="erro">Envie ao menos uma foto do produto.</span>
                 }
             </div>
