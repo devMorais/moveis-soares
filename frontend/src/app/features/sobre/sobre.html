@@ -7,7 +7,10 @@
 
 <section class="quem-somos">
     <div class="container">
-        <div class="conteudo">
+        <div class="conteudo" [class.conteudo--com-foto]="sobre()?.imagemUrl">
+            @if (sobre()?.imagemUrl) {
+                <img [src]="sobre()!.imagemUrl" [alt]="marca.businessName" class="foto" width="800" height="800" loading="lazy">
+            }
             <div class="texto">
                 <h2 class="titulo">{{ sobre()?.tituloHistoria }}</h2>
                 @for (paragrafo of (sobre()?.textoHistoria ?? '').split('\n\n'); track paragrafo) {

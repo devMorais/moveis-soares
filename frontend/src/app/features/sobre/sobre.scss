@@ -35,6 +35,18 @@
     margin: 0 auto;
 }
 
+.quem-somos .conteudo--com-foto {
+    max-width: 1000px;
+}
+
+.quem-somos .foto {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 24px;
+}
+
 .quem-somos .texto .titulo {
     font-size: 28px;
     margin-bottom: 15px;
@@ -61,6 +73,17 @@
 @media only screen and (min-width: 900px) {
     .diferenciais {
         background-attachment: fixed;
+    }
+
+    .quem-somos .conteudo--com-foto {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 48px;
+        align-items: center;
+    }
+
+    .quem-somos .conteudo--com-foto .foto {
+        margin-bottom: 0;
     }
 }
 
