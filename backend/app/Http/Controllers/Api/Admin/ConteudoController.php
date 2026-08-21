@@ -22,12 +22,14 @@ class ConteudoController extends Controller
         'sobre' => [
             'model' => SecaoSobre::class,
             'campos' => ['titulo_historia', 'texto_historia', 'imagem_url', 'diferenciais'],
-            'obrigatorios' => [],
+            // Imagem fica de fora de proposito - o texto ja e suficiente pra
+            // publicar a secao, a foto e um complemento (MS-CONT-04).
+            'obrigatorios' => ['titulo_historia', 'texto_historia', 'diferenciais'],
         ],
         'contato' => [
             'model' => SecaoContato::class,
             'campos' => ['telefone_display', 'telefone_whatsapp', 'email', 'endereco', 'horario'],
-            'obrigatorios' => [],
+            'obrigatorios' => ['telefone_display', 'telefone_whatsapp', 'email', 'endereco', 'horario'],
         ],
         'institucional' => [
             'model' => SecaoInstitucional::class,
@@ -60,6 +62,16 @@ class ConteudoController extends Controller
             $regras['itens'][] = 'size:3';
             $regras['itens.*.titulo'] = ['required', 'string'];
             $regras['itens.*.texto'] = ['required', 'string'];
+        }
+
+        if ($slug === 'sobre') {
+            $regras['diferenciais'][] = 'size:4';
+            $regras['diferenciais.*.titulo'] = ['required', 'string'];
+            $regras['diferenciais.*.texto'] = ['required', 'string'];
+        }
+
+        if ($slug === 'contato') {
+            $regras['email'] = ['required', 'email'];
         }
 
         $dados = $request->validate($regras);

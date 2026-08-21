@@ -147,6 +147,14 @@ return [
         'texto' => 'texto',
         'itens.*.titulo' => 'título do destaque',
         'itens.*.texto' => 'texto do destaque',
+        'titulo_historia' => 'título da história',
+        'texto_historia' => 'texto da história',
+        'diferenciais' => 'diferenciais',
+        'diferenciais.*.titulo' => 'título do diferencial',
+        'diferenciais.*.texto' => 'texto do diferencial',
+        'telefone_display' => 'telefone',
+        'telefone_whatsapp' => 'WhatsApp',
+        'horario' => 'horário de atendimento',
     ],
 
 ];

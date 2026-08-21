@@ -10,22 +10,37 @@
             <div class="campo">
                 <label for="contato-telefone">Telefone (exibido)</label>
                 <input type="text" id="contato-telefone" formControlName="telefone_display">
+                @if (form.controls.telefone_display.touched && form.controls.telefone_display.invalid) {
+                    <span class="erro">Esse campo não pode ficar vazio.</span>
+                }
             </div>
             <div class="campo">
                 <label for="contato-whatsapp">WhatsApp (só números, com DDI)</label>
                 <input type="text" id="contato-whatsapp" formControlName="telefone_whatsapp">
+                @if (form.controls.telefone_whatsapp.touched && form.controls.telefone_whatsapp.invalid) {
+                    <span class="erro">Esse campo não pode ficar vazio.</span>
+                }
             </div>
             <div class="campo">
                 <label for="contato-email">E-mail</label>
                 <input type="email" id="contato-email" formControlName="email">
+                @if (form.controls.email.touched && form.controls.email.invalid) {
+                    <span class="erro">Informe um e-mail válido.</span>
+                }
             </div>
             <div class="campo">
                 <label for="contato-endereco">Endereço</label>
                 <input type="text" id="contato-endereco" formControlName="endereco">
+                @if (form.controls.endereco.touched && form.controls.endereco.invalid) {
+                    <span class="erro">Esse campo não pode ficar vazio.</span>
+                }
             </div>
             <div class="campo">
                 <label for="contato-horario">Horário de atendimento</label>
                 <input type="text" id="contato-horario" formControlName="horario">
+                @if (form.controls.horario.touched && form.controls.horario.invalid) {
+                    <span class="erro">Esse campo não pode ficar vazio.</span>
+                }
             </div>
         </div>
 
