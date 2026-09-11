@@ -1,7 +1,6 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { forkJoin } from 'rxjs';
 import { ConteudoAdminService } from '../../../../core/services/conteudo-admin.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { UploadImagem } from '../../../../shared/components/upload-imagem/upload-imagem';
@@ -95,47 +94,76 @@ export class ConteudoSobre implements OnInit {
         this.form.patchValue({ imagem_url: url });
     }
 
-    /** Leva a pessoa direto pra sub-aba com o primeiro campo obrigatorio vazio, pra nao ficar procurando. */
-    private irParaPrimeiraAbaComErro(): void {
-        const { titulo_historia, texto_historia, cta_titulo, cta_texto } = this.form.controls;
+    /**
+     * Cada aba salva so os proprios campos, num pedido separado - assim dá pra
+     * ir preenchendo e salvando aba por aba, sem precisar terminar as outras
+     * duas primeiro (bug encontrado ao vivo: salvar travava tudo se qualquer
+     * outra aba, ainda nao preenchida, estivesse vazia).
+     */
+    salvar(): void {
+        const aba = this.subAbaAtiva();
 
-        if (titulo_historia.invalid || texto_historia.invalid) {
-            this.subAbaAtiva.set('historia');
-        } else if (this.diferenciais.invalid) {
-            this.subAbaAtiva.set('diferenciais');
-        } else if (cta_titulo.invalid || cta_texto.invalid) {
-            this.subAbaAtiva.set('banner');
-        }
+        if (aba === 'historia') return this.salvarHistoria();
+        if (aba === 'diferenciais') return this.salvarDiferenciais();
+        return this.salvarBanner();
     }
 
-    salvar(): void {
-        if (this.form.invalid) {
-            this.form.markAllAsTouched();
-            this.irParaPrimeiraAbaComErro();
+    private salvarHistoria(): void {
+        const { titulo_historia, texto_historia, imagem_url } = this.form.controls;
+
+        if (titulo_historia.invalid || texto_historia.invalid) {
+            titulo_historia.markAsTouched();
+            texto_historia.markAsTouched();
             this.toast.erro('Preencha todos os campos obrigatórios antes de salvar.');
             return;
         }
 
         this.salvando.set(true);
-        const valores = this.form.getRawValue();
+        this.conteudoService
+            .atualizar('sobre', {
+                titulo_historia: titulo_historia.value,
+                texto_historia: texto_historia.value,
+                imagem_url: imagem_url.value,
+            })
+            .subscribe({ next: () => this.aoSalvarComSucesso(), error: () => this.aoSalvarComErro() });
+    }
 
-        forkJoin([
-            this.conteudoService.atualizar('sobre', {
-                titulo_historia: valores.titulo_historia,
-                texto_historia: valores.texto_historia,
-                imagem_url: valores.imagem_url,
-                diferenciais: valores.diferenciais,
-            }),
-            this.conteudoService.atualizarCta('sobre', { titulo: valores.cta_titulo, texto: valores.cta_texto }),
-        ]).subscribe({
-            next: () => {
-                this.salvando.set(false);
-                this.toast.sucesso('Conteúdo salvo com sucesso.');
-            },
-            error: () => {
-                this.salvando.set(false);
-                this.toast.erro('Não foi possível salvar. Tente novamente.');
-            },
-        });
+    private salvarDiferenciais(): void {
+        if (this.diferenciais.invalid) {
+            this.diferenciais.markAllAsTouched();
+            this.toast.erro('Preencha todos os campos obrigatórios antes de salvar.');
+            return;
+        }
+
+        this.salvando.set(true);
+        this.conteudoService
+            .atualizar('sobre', { diferenciais: this.diferenciais.getRawValue() })
+            .subscribe({ next: () => this.aoSalvarComSucesso(), error: () => this.aoSalvarComErro() });
+    }
+
+    private salvarBanner(): void {
+        const { cta_titulo, cta_texto } = this.form.controls;
+
+        if (cta_titulo.invalid || cta_texto.invalid) {
+            cta_titulo.markAsTouched();
+            cta_texto.markAsTouched();
+            this.toast.erro('Preencha todos os campos obrigatórios antes de salvar.');
+            return;
+        }
+
+        this.salvando.set(true);
+        this.conteudoService
+            .atualizarCta('sobre', { titulo: cta_titulo.value, texto: cta_texto.value })
+            .subscribe({ next: () => this.aoSalvarComSucesso(), error: () => this.aoSalvarComErro() });
+    }
+
+    private aoSalvarComSucesso(): void {
+        this.salvando.set(false);
+        this.toast.sucesso('Conteúdo salvo com sucesso.');
+    }
+
+    private aoSalvarComErro(): void {
+        this.salvando.set(false);
+        this.toast.erro('Não foi possível salvar. Tente novamente.');
     }
 }

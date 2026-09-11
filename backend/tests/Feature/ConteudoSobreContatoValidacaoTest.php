@@ -53,6 +53,25 @@ class ConteudoSobreContatoValidacaoTest extends TestCase
         $this->assertArrayHasKey('diferenciais.1.titulo', $resposta->json('erros'));
     }
 
+    public function test_salva_so_a_historia_do_sobre_sem_precisar_dos_diferenciais(): void
+    {
+        $this->comoAdmin();
+
+        $this->putJson('/api/admin/conteudo/sobre', [
+            'titulo_historia' => 'Nossa história',
+            'texto_historia' => 'Texto',
+        ])->assertOk();
+    }
+
+    public function test_salva_so_os_diferenciais_do_sobre_sem_precisar_da_historia(): void
+    {
+        $this->comoAdmin();
+
+        $this->putJson('/api/admin/conteudo/sobre', [
+            'diferenciais' => $this->diferenciaisValidos(),
+        ])->assertOk();
+    }
+
     public function test_salva_sobre_sem_imagem_pois_imagem_e_opcional(): void
     {
         $this->comoAdmin();
