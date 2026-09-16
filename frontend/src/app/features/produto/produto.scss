@@ -209,6 +209,21 @@
     width: 100%;
 }
 
+/*
+ * Verde oficial do WhatsApp - excecao proposital a identidade da loja,
+ * mesmo criterio ja adotado nos outros botoes de WhatsApp: o usuario
+ * reconhece o canal pela cor antes de ler o texto.
+ */
+.btn-whatsapp {
+    background-color: #25d366;
+    border-color: #25d366;
+}
+
+.btn-whatsapp:hover {
+    background-color: #1eb455;
+    border-color: #1eb455;
+}
+
 @media only screen and (min-width: 900px) {
     .produto-grid {
         grid-template-columns: 1.1fr 1fr;

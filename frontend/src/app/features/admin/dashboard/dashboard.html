@@ -8,36 +8,42 @@
 </div>
 
 @if (!isAdmin()) {
-    <div class="acoes-rapidas">
-        <a routerLink="/admin/pedidos" class="acao-rapida">
-            <i class="fas fa-box"></i> Ver pedidos
-        </a>
-    </div>
+    @if (vendasOnlineHabilitado()) {
+        <div class="acoes-rapidas">
+            <a routerLink="/admin/pedidos" class="acao-rapida">
+                <i class="fas fa-box"></i> Ver pedidos
+            </a>
+        </div>
 
-    @if (carregando()) {
-        <p>Carregando...</p>
-    } @else {
-        <app-modulo-bloqueado
-            nomeModulo="vendas_online"
-            mensagem="Vendas online desativadas a pedido da loja — fale com a Dolen pra reativar esse recurso."
-        >
+        @if (carregando()) {
+            <p>Carregando...</p>
+        } @else {
             <div class="kpis">
                 <div class="kpi-card kpi-card--alerta">
                     <span class="kpi-card__rotulo">Pedidos aguardando pagamento</span>
                     <strong class="kpi-card__valor">{{ totalAguardando() }}</strong>
                 </div>
             </div>
-        </app-modulo-bloqueado>
+        }
     }
+
+    <div class="rankings">
+        <div class="ranking-card">
+            <h2><i class="fas fa-lightbulb"></i> Dica de marketing</h2>
+            <p>{{ dicaDoDia }}</p>
+        </div>
+    </div>
 } @else {
 
 <div class="acoes-rapidas">
     <a routerLink="/admin/produtos/novo" class="acao-rapida">
         <i class="fas fa-plus"></i> Novo produto
     </a>
-    <a routerLink="/admin/pedidos" class="acao-rapida">
-        <i class="fas fa-box"></i> Ver pedidos aguardando
-    </a>
+    @if (vendasOnlineHabilitado()) {
+        <a routerLink="/admin/pedidos" class="acao-rapida">
+            <i class="fas fa-box"></i> Ver pedidos aguardando
+        </a>
+    }
     <a routerLink="/admin/categorias" class="acao-rapida">
         <i class="fas fa-tags"></i> Nova categoria
     </a>
@@ -46,10 +52,7 @@
 @if (carregando()) {
     <p>Carregando...</p>
 } @else if (resumo(); as r) {
-    <app-modulo-bloqueado
-        nomeModulo="vendas_online"
-        mensagem="Vendas online desativadas a pedido da loja — fale com a Dolen pra reativar esse recurso."
-    >
+    @if (vendasOnlineHabilitado()) {
         <div class="kpis">
             <div class="kpi-card">
                 <span class="kpi-card__rotulo">Faturamento total</span>
@@ -83,13 +86,15 @@
                 </div>
             </div>
         </div>
-    </app-modulo-bloqueado>
+    }
 
     <div class="rankings">
-        <app-modulo-bloqueado
-            nomeModulo="vendas_online"
-            mensagem="Vendas online desativadas a pedido da loja — fale com a Dolen pra reativar esse recurso."
-        >
+        <div class="ranking-card">
+            <h2><i class="fas fa-lightbulb"></i> Dica de marketing</h2>
+            <p>{{ dicaDoDia }}</p>
+        </div>
+
+        @if (vendasOnlineHabilitado()) {
             <div class="ranking-card">
                 <h2>Produtos mais vendidos</h2>
                 @if (r.produtosMaisVendidos.length === 0) {
@@ -113,7 +118,7 @@
                     </ul>
                 }
             </div>
-        </app-modulo-bloqueado>
+        }
 
         <div class="ranking-card">
             <h2>Produtos mais visitados</h2>

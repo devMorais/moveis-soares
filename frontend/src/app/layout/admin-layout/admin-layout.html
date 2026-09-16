@@ -40,7 +40,7 @@
                 </div>
             }
 
-            @for (item of itensPrincipais; track item.rota) {
+            @for (item of itensPrincipaisVisiveis(); track item.rota) {
                 <a [routerLink]="item.rota" routerLinkActive="ativo">
                     <i class="fas" [class]="item.icone"></i>
                     {{ item.label }}
@@ -48,10 +48,12 @@
             }
 
             @if (isAdmin()) {
-                <a [routerLink]="itemEntrega.rota" routerLinkActive="ativo">
-                    <i class="fas" [class]="itemEntrega.icone"></i>
-                    {{ itemEntrega.label }}
-                </a>
+                @if (vendasOnlineHabilitado()) {
+                    <a [routerLink]="itemEntrega.rota" routerLinkActive="ativo">
+                        <i class="fas" [class]="itemEntrega.icone"></i>
+                        {{ itemEntrega.label }}
+                    </a>
+                }
                 <a [routerLink]="itemSecoes.rota" routerLinkActive="ativo">
                     <i class="fas" [class]="itemSecoes.icone"></i>
                     {{ itemSecoes.label }}
@@ -59,10 +61,12 @@
 
                 <div class="admin-sidebar__separador"></div>
 
-                <a [routerLink]="itemInstagram.rota" routerLinkActive="ativo">
-                    <i class="fas" [class]="itemInstagram.icone"></i>
-                    {{ itemInstagram.label }}
-                </a>
+                @if (instagramHabilitado()) {
+                    <a [routerLink]="itemInstagram.rota" routerLinkActive="ativo">
+                        <i class="fas" [class]="itemInstagram.icone"></i>
+                        {{ itemInstagram.label }}
+                    </a>
+                }
                 <a [routerLink]="itemConfiguracoes.rota" routerLinkActive="ativo">
                     <i class="fas" [class]="itemConfiguracoes.icone"></i>
                     {{ itemConfiguracoes.label }}

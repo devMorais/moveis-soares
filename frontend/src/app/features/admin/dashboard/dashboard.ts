@@ -5,7 +5,7 @@ import { ChartConfiguration } from 'chart.js';
 import { AuthService } from '../../../core/services/auth.service';
 import { DashboardAdminService, DashboardResumo } from '../../../core/services/dashboard-admin.service';
 import { PedidoAdminService } from '../../../core/services/pedido-admin.service';
-import { ModuloBloqueado } from '../../../shared/components/modulo-bloqueado/modulo-bloqueado';
+import { ModulosService } from '../../../core/services/modulos.service';
 
 const ROTULOS_STATUS: Record<string, string> = {
     AGUARDANDO: 'Aguardando',
@@ -18,9 +18,27 @@ const ROTULOS_STATUS: Record<string, string> = {
 
 const CORES_STATUS = ['#f59e0b', '#22c55e', '#3b82f6', '#8b5cf6', '#10b981', '#ef4444'];
 
+/**
+ * Banco de dicas de marketing - conteudo fixo, sem backend nem cadastro.
+ * A dica troca sozinha a cada dia so pra dar movimento ao painel; se um dia
+ * virar conteudo editavel pela loja, e so trocar por uma chamada de API.
+ */
+const DICAS_MARKETING = [
+    'Responda no WhatsApp em até uma hora: na maioria das vezes a venda fica com quem responde primeiro.',
+    'Mande o link da página do produto no WhatsApp em vez de uma foto solta — o cliente vê preço, medidas e fotos de uma vez.',
+    'Móvel sem medida cadastrada trava a venda: é a dúvida número um de quem compra pela internet.',
+    'Publique um produto por dia no Instagram com o link da página dele na descrição.',
+    'Foto de ambiente montado engaja mais que foto do móvel sozinho no fundo branco.',
+    'Depois da entrega, peça uma foto do móvel na casa do cliente e publique com o depoimento dele.',
+    'Responda todas as avaliações do Google, inclusive as ruins: isso pesa no seu posicionamento na busca.',
+    'Atualize o preço no painel assim que ele mudar — quem vê preço errado desiste e não avisa.',
+    'Produto que muita gente visitou e ninguém comprou costuma estar com foto fraca ou preço fora da média.',
+    'Use luz natural e fundo claro nas fotos: é o ajuste mais barato que mais aumenta conversão.',
+];
+
 @Component({
     selector: 'app-admin-dashboard',
-    imports: [RouterLink, BaseChartDirective, ModuloBloqueado],
+    imports: [RouterLink, BaseChartDirective],
     templateUrl: './dashboard.html',
     styleUrl: './dashboard.scss',
 })
@@ -28,9 +46,15 @@ export class Dashboard implements OnInit {
     auth = inject(AuthService);
     private dashboardService = inject(DashboardAdminService);
     private pedidosService = inject(PedidoAdminService);
+    private modulos = inject(ModulosService);
     private cdr = inject(ChangeDetectorRef);
 
     isAdmin = computed(() => this.auth.currentUser()?.role === 'admin');
+
+    /** Sem vendas online, os numeros de faturamento/pedido param de existir. */
+    vendasOnlineHabilitado = computed(() => this.modulos.estaHabilitado('vendas_online', true));
+
+    dicaDoDia = DICAS_MARKETING[Math.floor(Date.now() / 86_400_000) % DICAS_MARKETING.length];
 
     carregando = signal(true);
     resumo = signal<DashboardResumo | null>(null);
@@ -52,6 +76,8 @@ export class Dashboard implements OnInit {
     };
 
     ngOnInit(): void {
+        this.modulos.carregar();
+
         if (!this.isAdmin()) {
             this.pedidosService.listar('AGUARDANDO').subscribe({
                 next: (pedidos) => {

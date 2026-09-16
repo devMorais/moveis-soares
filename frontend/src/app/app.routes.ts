@@ -59,7 +59,7 @@ export const routes: Routes = [
             },
             {
                 path: 'instagram',
-                canActivate: [adminOnlyGuard],
+                canActivate: [adminOnlyGuard, moduloHabilitadoGuard('instagram', false, '/admin')],
                 loadComponent: () => import('./features/admin/instagram/instagram').then((m) => m.Instagram),
             },
             {
@@ -80,11 +80,12 @@ export const routes: Routes = [
             },
             {
                 path: 'entrega',
-                canActivate: [adminOnlyGuard],
+                canActivate: [adminOnlyGuard, moduloHabilitadoGuard('vendas_online', true, '/admin')],
                 loadComponent: () => import('./features/admin/entrega/entrega').then((m) => m.Entrega),
             },
             {
                 path: 'pedidos',
+                canActivate: [moduloHabilitadoGuard('vendas_online', true, '/admin')],
                 loadComponent: () => import('./features/admin/pedidos/pedidos').then((m) => m.Pedidos),
             },
             {
