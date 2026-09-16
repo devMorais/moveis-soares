@@ -17,12 +17,17 @@
     @if (carregando()) {
         <p>Carregando...</p>
     } @else {
-        <div class="kpis">
-            <div class="kpi-card kpi-card--alerta">
-                <span class="kpi-card__rotulo">Pedidos aguardando pagamento</span>
-                <strong class="kpi-card__valor">{{ totalAguardando() }}</strong>
+        <app-modulo-bloqueado
+            nomeModulo="vendas_online"
+            mensagem="Vendas online desativadas a pedido da loja — fale com a Dolen pra reativar esse recurso."
+        >
+            <div class="kpis">
+                <div class="kpi-card kpi-card--alerta">
+                    <span class="kpi-card__rotulo">Pedidos aguardando pagamento</span>
+                    <strong class="kpi-card__valor">{{ totalAguardando() }}</strong>
+                </div>
             </div>
-        </div>
+        </app-modulo-bloqueado>
     }
 } @else {
 
@@ -41,64 +46,74 @@
 @if (carregando()) {
     <p>Carregando...</p>
 } @else if (resumo(); as r) {
-    <div class="kpis">
-        <div class="kpi-card">
-            <span class="kpi-card__rotulo">Faturamento total</span>
-            <strong class="kpi-card__valor">R$ {{ r.kpis.faturamentoTotal }}</strong>
+    <app-modulo-bloqueado
+        nomeModulo="vendas_online"
+        mensagem="Vendas online desativadas a pedido da loja — fale com a Dolen pra reativar esse recurso."
+    >
+        <div class="kpis">
+            <div class="kpi-card">
+                <span class="kpi-card__rotulo">Faturamento total</span>
+                <strong class="kpi-card__valor">R$ {{ r.kpis.faturamentoTotal }}</strong>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-card__rotulo">Pedidos no mês</span>
+                <strong class="kpi-card__valor">{{ r.kpis.pedidosNoMes }}</strong>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-card__rotulo">Ticket médio</span>
+                <strong class="kpi-card__valor">R$ {{ r.kpis.ticketMedio }}</strong>
+            </div>
+            <div class="kpi-card kpi-card--alerta">
+                <span class="kpi-card__rotulo">Aguardando pagamento</span>
+                <strong class="kpi-card__valor">{{ r.kpis.pedidosAguardando }}</strong>
+            </div>
         </div>
-        <div class="kpi-card">
-            <span class="kpi-card__rotulo">Pedidos no mês</span>
-            <strong class="kpi-card__valor">{{ r.kpis.pedidosNoMes }}</strong>
-        </div>
-        <div class="kpi-card">
-            <span class="kpi-card__rotulo">Ticket médio</span>
-            <strong class="kpi-card__valor">R$ {{ r.kpis.ticketMedio }}</strong>
-        </div>
-        <div class="kpi-card kpi-card--alerta">
-            <span class="kpi-card__rotulo">Aguardando pagamento</span>
-            <strong class="kpi-card__valor">{{ r.kpis.pedidosAguardando }}</strong>
-        </div>
-    </div>
 
-    <div class="graficos">
-        <div class="grafico-card grafico-card--linha">
-            <h2>Vendas nos últimos 30 dias</h2>
-            <div class="grafico-card__area">
-                <canvas baseChart [data]="vendasChartData()" [options]="vendasChartOptions" type="line"></canvas>
+        <div class="graficos">
+            <div class="grafico-card grafico-card--linha">
+                <h2>Vendas nos últimos 30 dias</h2>
+                <div class="grafico-card__area">
+                    <canvas baseChart [data]="vendasChartData()" [options]="vendasChartOptions" type="line"></canvas>
+                </div>
+            </div>
+            <div class="grafico-card">
+                <h2>Pedidos por status</h2>
+                <div class="grafico-card__area">
+                    <canvas baseChart [data]="statusChartData()" [options]="statusChartOptions" type="doughnut"></canvas>
+                </div>
             </div>
         </div>
-        <div class="grafico-card">
-            <h2>Pedidos por status</h2>
-            <div class="grafico-card__area">
-                <canvas baseChart [data]="statusChartData()" [options]="statusChartOptions" type="doughnut"></canvas>
-            </div>
-        </div>
-    </div>
+    </app-modulo-bloqueado>
 
     <div class="rankings">
-        <div class="ranking-card">
-            <h2>Produtos mais vendidos</h2>
-            @if (r.produtosMaisVendidos.length === 0) {
-                <p class="ranking-card__vazio">Nenhuma venda registrada ainda.</p>
-            } @else {
-                <ul class="ranking-lista">
-                    @for (item of r.produtosMaisVendidos; track item.nome) {
-                        <li>
-                            <div class="ranking-lista__topo">
-                                <span>{{ item.nome }}</span>
-                                <strong>{{ item.total }}</strong>
-                            </div>
-                            <div class="ranking-lista__barra">
-                                <div
-                                    class="ranking-lista__preenchimento"
-                                    [style.width.%]="(item.total / maiorValor(r.produtosMaisVendidos)) * 100"
-                                ></div>
-                            </div>
-                        </li>
-                    }
-                </ul>
-            }
-        </div>
+        <app-modulo-bloqueado
+            nomeModulo="vendas_online"
+            mensagem="Vendas online desativadas a pedido da loja — fale com a Dolen pra reativar esse recurso."
+        >
+            <div class="ranking-card">
+                <h2>Produtos mais vendidos</h2>
+                @if (r.produtosMaisVendidos.length === 0) {
+                    <p class="ranking-card__vazio">Nenhuma venda registrada ainda.</p>
+                } @else {
+                    <ul class="ranking-lista">
+                        @for (item of r.produtosMaisVendidos; track item.nome) {
+                            <li>
+                                <div class="ranking-lista__topo">
+                                    <span>{{ item.nome }}</span>
+                                    <strong>{{ item.total }}</strong>
+                                </div>
+                                <div class="ranking-lista__barra">
+                                    <div
+                                        class="ranking-lista__preenchimento"
+                                        [style.width.%]="(item.total / maiorValor(r.produtosMaisVendidos)) * 100"
+                                    ></div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </app-modulo-bloqueado>
 
         <div class="ranking-card">
             <h2>Produtos mais visitados</h2>

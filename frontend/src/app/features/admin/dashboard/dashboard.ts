@@ -5,6 +5,7 @@ import { ChartConfiguration } from 'chart.js';
 import { AuthService } from '../../../core/services/auth.service';
 import { DashboardAdminService, DashboardResumo } from '../../../core/services/dashboard-admin.service';
 import { PedidoAdminService } from '../../../core/services/pedido-admin.service';
+import { ModuloBloqueado } from '../../../shared/components/modulo-bloqueado/modulo-bloqueado';
 
 const ROTULOS_STATUS: Record<string, string> = {
     AGUARDANDO: 'Aguardando',
@@ -19,7 +20,7 @@ const CORES_STATUS = ['#f59e0b', '#22c55e', '#3b82f6', '#8b5cf6', '#10b981', '#e
 
 @Component({
     selector: 'app-admin-dashboard',
-    imports: [RouterLink, BaseChartDirective],
+    imports: [RouterLink, BaseChartDirective, ModuloBloqueado],
     templateUrl: './dashboard.html',
     styleUrl: './dashboard.scss',
 })

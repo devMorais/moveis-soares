@@ -3,6 +3,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PinchZoomComponent } from '@meddv/ngx-pinch-zoom';
 import { ProdutoService } from '../../core/services/produto';
 import { CarrinhoService } from '../../core/services/carrinho.service';
+import { ModulosService } from '../../core/services/modulos.service';
+import { SiteService } from '../../core/services/site.service';
 import { ToastService } from '../../core/services/toast.service';
 import { Seo } from '../../core/services/seo';
 import { Produto as ProdutoType } from '../../core/types/produto/produto.type';
@@ -17,6 +19,8 @@ export class Produto implements OnInit {
     private route = inject(ActivatedRoute);
     private produtoService = inject(ProdutoService);
     private carrinhoService = inject(CarrinhoService);
+    private modulos = inject(ModulosService);
+    private site = inject(SiteService);
     private toast = inject(ToastService);
     private seo = inject(Seo);
 
@@ -46,7 +50,12 @@ export class Produto implements OnInit {
         return estoque !== undefined && estoque <= 0;
     });
 
+    /** Com as vendas online desligadas, a compra vira conversa no WhatsApp. */
+    vendasOnlineHabilitado = computed(() => this.modulos.estaHabilitado('vendas_online', true));
+
     ngOnInit(): void {
+        this.modulos.carregar();
+
         const slug = this.route.snapshot.paramMap.get('slug');
         if (!slug) {
             this.naoEncontrado.set(true);
@@ -97,5 +106,19 @@ export class Produto implements OnInit {
 
         this.toast.sucesso(`${produto.nome} adicionado ao carrinho.`);
         this.carrinhoService.abrir();
+    }
+
+    /** Abre o WhatsApp da loja com o produto, a quantidade e o link da pagina. */
+    comprarPeloWhatsapp(): void {
+        const produto = this.produto();
+        if (!produto) return;
+
+        const link = `${window.location.origin}/produto/${produto.slug}`;
+        const texto = encodeURIComponent(
+            `Olá! Tenho interesse em "${produto.nome}" (${this.quantidade()}x) — ${link}`,
+        );
+        const telefone = this.site.conteudo().contato?.telefoneWhatsapp;
+
+        window.open(`https://wa.me/${telefone}?text=${texto}`, '_blank');
     }
 }

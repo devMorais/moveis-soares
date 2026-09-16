@@ -92,9 +92,16 @@
                             <button type="button" (click)="aumentarQuantidade()" aria-label="Aumentar quantidade">+</button>
                         </div>
 
-                        <button type="button" class="btn btn-comprar" (click)="adicionarAoCarrinho()">
-                            Adicionar ao carrinho
-                        </button>
+                        @if (vendasOnlineHabilitado()) {
+                            <button type="button" class="btn btn-comprar" (click)="adicionarAoCarrinho()">
+                                Adicionar ao carrinho
+                            </button>
+                        } @else {
+                            <button type="button" class="btn btn-comprar" (click)="comprarPeloWhatsapp()">
+                                <i class="fab fa-whatsapp"></i>
+                                Comprar pelo WhatsApp
+                            </button>
+                        }
                     }
                 </div>
             </div>

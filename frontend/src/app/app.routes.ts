@@ -11,6 +11,7 @@ import { Ajuda } from './features/ajuda/ajuda';
 import { authGuard } from './core/guards/auth.guard';
 import { adminOnlyGuard } from './core/guards/admin-only.guard';
 import { secaoVisivelGuard } from './core/guards/secao-visivel.guard';
+import { moduloHabilitadoGuard } from './core/guards/modulo-habilitado.guard';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -18,7 +19,7 @@ export const routes: Routes = [
     { path: 'contato', component: Contato, canActivate: [secaoVisivelGuard('contato')] },
     { path: 'categoria/:slug', component: Categoria },
     { path: 'produto/:slug', component: Produto },
-    { path: 'checkout', component: Checkout },
+    { path: 'checkout', component: Checkout, canActivate: [moduloHabilitadoGuard('vendas_online')] },
     { path: 'checkout/retorno', component: PedidoRetorno },
     { path: 'pedido/acompanhar/:token', component: PedidoAcompanhar },
     { path: 'ajuda', component: Ajuda },

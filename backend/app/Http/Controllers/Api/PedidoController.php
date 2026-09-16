@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Mail\NovoPedidoRecebido;
 use App\Models\CidadeEntrega;
+use App\Models\ConfiguracaoSite;
 use App\Models\Pedido;
 use App\Models\PedidoItem;
 use App\Models\Produto;
@@ -21,6 +22,17 @@ class PedidoController extends Controller
 {
     public function criar(Request $request): JsonResponse
     {
+        // Com vendas_online desligado a loja so vende pelo WhatsApp: nenhum
+        // pedido ou cobranca pode nascer aqui, nem vindo de uma aba antiga com
+        // o JS de antes em cache. Chave ausente vale como habilitado, pra uma
+        // config nova nunca derrubar a loja sozinha.
+        if ((ConfiguracaoSite::modulos()['vendas_online'] ?? true) === false) {
+            return response()->json(
+                Helpers::mensagemErro('As vendas pelo site estão desativadas. Fale com a loja pelo WhatsApp para fazer seu pedido.'),
+                403,
+            );
+        }
+
         $dados = $request->validate([
             'nome_cliente' => ['required', 'string', 'max:255'],
             'telefone_cliente' => ['required', 'string', 'max:30'],

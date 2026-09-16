@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SITE_INFO } from '../../../../core/constants/site-info';
 import { CarrinhoService } from '../../../../core/services/carrinho.service';
+import { ModulosService } from '../../../../core/services/modulos.service';
 import { SiteService } from '../../../../core/services/site.service';
 import { CategoriaService } from '../../../../core/services/categoria';
 import { Categoria } from '../../../../core/types/categoria/categoria.type';
@@ -19,6 +20,7 @@ export class Navbar implements OnInit {
     private platformId = inject(PLATFORM_ID);
     private site = inject(SiteService);
     private categoriaService = inject(CategoriaService);
+    private modulos = inject(ModulosService);
     carrinho = inject(CarrinhoService);
 
     info = SITE_INFO;
@@ -27,6 +29,7 @@ export class Navbar implements OnInit {
     logoUrl = computed(() => this.site.conteudo().identidade.logoUrl ?? SITE_INFO.logoUrl);
     sobreVisivel = computed(() => this.site.conteudo().secoesVisiveis['sobre'] ?? true);
     contatoVisivel = computed(() => this.site.conteudo().secoesVisiveis['contato'] ?? true);
+    vendasOnlineHabilitado = computed(() => this.modulos.estaHabilitado('vendas_online', true));
 
     menuAberto = signal(false);
     rolado = signal(false);
@@ -38,6 +41,7 @@ export class Navbar implements OnInit {
     }
 
     ngOnInit(): void {
+        this.modulos.carregar();
         this.categoriaService.listar().subscribe((categorias) => this.categorias.set(categorias));
     }
 
