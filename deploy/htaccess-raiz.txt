@@ -1,4 +1,13 @@
 RewriteEngine On
+
+# Dominio canonico: o subdominio antigo so redireciona pro dominio proprio,
+# pra nao dividir o SEO entre dois enderecos com o mesmo conteudo.
+RewriteCond %{HTTP_HOST} ^moveissoares\.dolen\.com\.br$ [NC]
+RewriteRule ^(.*)$ https://moveissoares.com.br/$1 [R=301,L]
+
+# O sitemap e gerado pelo Laravel (reflete o catalogo do banco em tempo real).
+RewriteRule ^sitemap\.xml$ /api/sitemap.xml [L]
+
 RewriteCond %{REQUEST_URI} !^/api/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

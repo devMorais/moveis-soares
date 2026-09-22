@@ -1,6 +1,8 @@
 import { Injectable, inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Meta, Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
 export interface SeoConfig {
@@ -30,6 +32,8 @@ export class Seo {
     private readonly meta = inject(Meta);
     private readonly title = inject(Title);
     private readonly http = inject(HttpClient);
+    private readonly documento = inject(DOCUMENT);
+    private readonly router = inject(Router);
 
     private config: ConfiguracaoSeoPublica | null = null;
 
@@ -65,6 +69,28 @@ export class Seo {
         if (imagem) {
             this.meta.updateTag({ property: 'og:image', content: imagem });
         }
+
+        this.aplicarCanonical();
+    }
+
+    /**
+     * Aponta cada pagina para o dominio proprio. Usa a rota do Router (e nao
+     * window.location) porque isso tambem roda na pre-renderizacao, onde nao
+     * existe window.
+     */
+    private aplicarCanonical(): void {
+        const caminho = this.router.url.split('?')[0].split('#')[0];
+        const href = `${environment.siteUrl}${caminho}`;
+
+        let link = this.documento.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+
+        if (!link) {
+            link = this.documento.createElement('link');
+            link.setAttribute('rel', 'canonical');
+            this.documento.head.appendChild(link);
+        }
+
+        link.setAttribute('href', href);
     }
 
     private aplicarRobots(indexar: boolean): void {

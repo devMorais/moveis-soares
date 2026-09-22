@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Areas sem valor de busca: painel, API e o fluxo de pedido.
+Disallow: /admin
+Disallow: /api/
+Disallow: /checkout
+Disallow: /pedido/
+
+Sitemap: https://moveissoares.com.br/sitemap.xml
