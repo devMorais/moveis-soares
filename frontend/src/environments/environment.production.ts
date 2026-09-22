@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://moveissoares.dolen.com.br/api',
+    apiUrl: 'https://moveissoares.com.br/api',
 };
