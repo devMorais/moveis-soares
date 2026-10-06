@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Services\Exceptions\ImagemInvalidaException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ImagemService
@@ -29,28 +30,91 @@ class ImagemService
     private const PASTA_DESTINO = 'produtos';
 
     /**
-     * Processa um upload de imagem: valida, redimensiona/corta para um
-     * quadrado fixo, converte para WebP e salva no disco publico.
+     * Lado maior da versao grande, em pixels. Imagem menor que isso nao e
+     * ampliada (scale() nunca amplia).
+     */
+    private const LADO_MAXIMO_GRANDE = 1600;
+
+    private const QUALIDADE_QUADRADA = 80;
+
+    private const QUALIDADE_GRANDE = 85;
+
+    /**
+     * Sufixo do nome da versao grande: {uuid}.webp (quadrada) e
+     * {uuid}-grande.webp (grande) ficam lado a lado na mesma pasta.
+     */
+    private const SUFIXO_GRANDE = '-grande';
+
+    /**
+     * Processa um upload de imagem: valida e gera DUAS versoes WebP no disco
+     * publico - a quadrada (cover, vitrine) e a grande (proporcao original,
+     * zoom da pagina do produto).
+     *
+     * @return array{quadrada: string, grande: string} caminhos relativos ao disk 'public'
      *
      * @throws ImagemInvalidaException
      */
-    public function processar(UploadedFile $arquivo, int $tamanho = 800): string
+    public function processar(UploadedFile $arquivo, int $tamanho = 800): array
     {
         $this->validar($arquivo);
 
-        $nomeArquivo = Str::uuid()->toString() . '.webp';
+        $uuid = Str::uuid()->toString();
+        $nomeQuadrada = $uuid . '.webp';
+        $nomeGrande = $uuid . self::SUFIXO_GRANDE . '.webp';
 
-        $caminho = Image::fromUpload($arquivo)
+        $caminhoQuadrada = Image::fromUpload($arquivo)
             ->cover($tamanho, $tamanho)
             ->toWebp()
-            ->quality(80)
-            ->storePubliclyAs(path: self::PASTA_DESTINO, name: $nomeArquivo, disk: 'public');
+            ->quality(self::QUALIDADE_QUADRADA)
+            ->storePubliclyAs(path: self::PASTA_DESTINO, name: $nomeQuadrada, disk: 'public');
 
-        if ($caminho === false) {
+        if ($caminhoQuadrada === false) {
             throw ImagemInvalidaException::falhaAoSalvar();
         }
 
-        return $caminho;
+        $caminhoGrande = Image::fromUpload($arquivo)
+            ->scale(self::LADO_MAXIMO_GRANDE, self::LADO_MAXIMO_GRANDE)
+            ->toWebp()
+            ->quality(self::QUALIDADE_GRANDE)
+            ->storePubliclyAs(path: self::PASTA_DESTINO, name: $nomeGrande, disk: 'public');
+
+        if ($caminhoGrande === false) {
+            // Nao deixa a quadrada orfa se a grande falhou.
+            Storage::disk('public')->delete($caminhoQuadrada);
+
+            throw ImagemInvalidaException::falhaAoSalvar();
+        }
+
+        return [
+            'quadrada' => $caminhoQuadrada,
+            'grande' => $caminhoGrande,
+        ];
+    }
+
+    /**
+     * Deduz o caminho da versao grande a partir do caminho da quadrada
+     * (produtos/abc.webp -> produtos/abc-grande.webp).
+     */
+    public function caminhoGrande(string $caminhoQuadrada): string
+    {
+        return Str::replaceLast('.webp', self::SUFIXO_GRANDE . '.webp', $caminhoQuadrada);
+    }
+
+    /**
+     * Apaga do disco as DUAS versoes de uma imagem, a partir do caminho da
+     * quadrada. Produto antigo, que nao tem a grande, nao da erro: o delete
+     * ignora arquivo inexistente.
+     */
+    public function apagar(?string $caminhoQuadrada): void
+    {
+        if ($caminhoQuadrada === null || $caminhoQuadrada === '') {
+            return;
+        }
+
+        Storage::disk('public')->delete([
+            $caminhoQuadrada,
+            $this->caminhoGrande($caminhoQuadrada),
+        ]);
     }
 
     /**

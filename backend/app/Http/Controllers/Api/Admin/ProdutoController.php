@@ -3,16 +3,24 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Categoria;
 use App\Models\PedidoItem;
 use App\Models\Produto;
+use App\Services\ImagemService;
 use App\Suporte\DescricaoSanitizer;
 use App\Suporte\Helpers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProdutoController extends Controller
 {
+    public function __construct(
+        private readonly ImagemService $imagemService
+    ) {
+    }
+
     public function index(): JsonResponse
     {
         $produtos = Produto::with('categoria')
@@ -44,6 +52,7 @@ class ProdutoController extends Controller
     public function update(int $id, Request $request): JsonResponse
     {
         $produto = Produto::findOrFail($id);
+        $imagemAntiga = $produto->imagem_url;
         $dados = $this->validarDados($request);
 
         if ($dados['nome'] !== $produto->nome) {
@@ -51,6 +60,11 @@ class ProdutoController extends Controller
         }
 
         $produto->update($dados);
+
+        // Trocou a foto: apaga as duas versoes da antiga (se ninguem mais usa).
+        if ($imagemAntiga !== $produto->imagem_url) {
+            $this->apagarImagemSeNinguemUsa($imagemAntiga);
+        }
 
         return response()->json($produto->fresh('categoria')->loadCount('visualizacoes')->paraApi());
     }
@@ -89,6 +103,9 @@ class ProdutoController extends Controller
 
         $produto->delete();
 
+        // Apaga as duas versoes da foto principal (se ninguem mais usa).
+        $this->apagarImagemSeNinguemUsa($produto->imagem_url);
+
         return response()->json(Helpers::mensagemSucesso('Produto removido.'));
     }
 
@@ -115,7 +132,80 @@ class ProdutoController extends Controller
         $dados['imagens'] = $dados['imagens'] ?? [];
         $dados['descricao'] = DescricaoSanitizer::limpar($dados['descricao'] ?? null);
 
+        // A versao grande nao vem do painel: o backend deduz pelo nome da
+        // imagem principal. Produto antigo (sem versao grande no disco) fica null.
+        $dados['imagem_original_url'] = $this->urlVersaoGrande($dados['imagem_url']);
+
         return $dados;
+    }
+
+    /**
+     * Converte a URL publica salva em imagem_url no caminho dentro do disk
+     * 'public' (produtos/abc.webp). Devolve null pra qualquer URL que nao
+     * seja uma imagem gerada pelo ImagemService - assim nada fora da pasta
+     * de produtos e apagado ou deduzido por engano.
+     */
+    private function caminhoDaImagem(?string $url): ?string
+    {
+        if ($url === null || $url === '') {
+            return null;
+        }
+
+        $base = Storage::disk('public')->url('');
+
+        if (str_starts_with($url, $base)) {
+            $relativo = substr($url, strlen($base));
+        } elseif (preg_match('#/storage/(.+)$#', $url, $m)) {
+            $relativo = $m[1];
+        } else {
+            return null;
+        }
+
+        return preg_match('#^produtos/[^/]+\.webp$#', $relativo) ? $relativo : null;
+    }
+
+    private function urlVersaoGrande(string $urlQuadrada): ?string
+    {
+        $caminho = $this->caminhoDaImagem($urlQuadrada);
+
+        if ($caminho === null) {
+            return null;
+        }
+
+        $grande = $this->imagemService->caminhoGrande($caminho);
+
+        return Storage::disk('public')->exists($grande)
+            ? Storage::disk('public')->url($grande)
+            : null;
+    }
+
+    /**
+     * Apaga as duas versoes da imagem, mas so se nenhum outro produto
+     * (imagem principal ou galeria) nem categoria ainda aponta pro mesmo
+     * arquivo - o comando de stress test, por exemplo, cria varios produtos
+     * compartilhando uma foto. A busca e pelo nome do arquivo porque o JSON
+     * da galeria guarda as barras das URLs escapadas.
+     */
+    private function apagarImagemSeNinguemUsa(?string $url): void
+    {
+        $caminho = $this->caminhoDaImagem($url);
+
+        if ($caminho === null) {
+            return;
+        }
+
+        $nome = basename($caminho);
+
+        $emUso = Produto::where('imagem_url', 'like', '%' . $nome)
+            ->orWhere('imagens', 'like', '%' . $nome . '%')
+            ->exists()
+            || Categoria::where('imagem_url', 'like', '%' . $nome)->exists();
+
+        if ($emUso) {
+            return;
+        }
+
+        $this->imagemService->apagar($caminho);
     }
 
     private function slugUnico(string $nome, ?int $ignorarId = null): string

@@ -19,6 +19,7 @@ class Produto extends Model
         'preco',
         'preco_de',
         'imagem_url',
+        'imagem_original_url',
         'imagens',
         'especificacao',
         'descricao',
@@ -73,6 +74,9 @@ class Produto extends Model
     /**
      * Formata o produto no shape esperado pelo frontend (Produto interface):
      * categoria como string (nome), preco/precoDe como number, etc.
+     *
+     * imagemOriginalUrl e a versao grande (proporcao original) usada no
+     * zoom; vem null em produto antigo, que so tem a versao quadrada.
      */
     public function paraApi(): array
     {
@@ -85,6 +89,7 @@ class Produto extends Model
             'precoDe' => $this->preco_de !== null ? (float) $this->preco_de : null,
             'preco' => (float) $this->preco,
             'imagemUrl' => $this->imagem_url,
+            'imagemOriginalUrl' => $this->imagem_original_url,
             'imagens' => $this->imagens,
             'especificacao' => $this->especificacao,
             'descricao' => $this->descricao,
