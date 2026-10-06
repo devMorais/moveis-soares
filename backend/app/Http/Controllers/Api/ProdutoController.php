@@ -98,7 +98,8 @@ class ProdutoController extends Controller
 
     /**
      * Recebe o upload de uma imagem de produto, processa via ImagemService
-     * (WebP, 800x800, 80% de qualidade) e retorna a URL publica salva.
+     * (WebP: quadrada 800x800 + versao grande com proporcao original) e
+     * retorna as URLs publicas das duas versoes.
      *
      * Nenhum Controller deve chamar $request->file(...)->store(...)
      * diretamente - sempre passar pelo ImagemService::processar().
@@ -110,13 +111,14 @@ class ProdutoController extends Controller
         ]);
 
         try {
-            $caminhoRelativo = $this->imagemService->processar($request->file('imagem'));
+            $caminhos = $this->imagemService->processar($request->file('imagem'));
         } catch (ImagemInvalidaException $e) {
             return response()->json(Helpers::mensagemErro($e->getMessage()), 422);
         }
 
         return response()->json([
-            'url' => Storage::disk('public')->url($caminhoRelativo),
+            'url' => Storage::disk('public')->url($caminhos['quadrada']),
+            'urlOriginal' => Storage::disk('public')->url($caminhos['grande']),
         ]);
     }
 
