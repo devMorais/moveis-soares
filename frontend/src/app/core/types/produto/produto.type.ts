@@ -10,6 +10,8 @@ export interface Produto {
     imagemUrl: string;
     /** Demais fotos do produto, alem da principal (imagemUrl) - ver MS-CAT-02. */
     imagens?: string[];
+        /** Versão grande (proporção original, lado maior até 1600px). Null em produto antigo. */
+    imagemOriginalUrl?: string | null;
     /** Linha curta de especificação, ex: "4 PORTAS | 2 GAVETAS" */
     especificacao?: string;
     /** Selo do card/hero, ex: "Lançamento", "Oferta" */

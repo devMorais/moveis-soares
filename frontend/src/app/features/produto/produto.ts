@@ -1,6 +1,6 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { PinchZoomComponent } from '@meddv/ngx-pinch-zoom';
+import { VisualizadorImagens, ItemImagem } from '../../shared/components/visualizador-imagens/visualizador-imagens';
 import { ProdutoService } from '../../core/services/produto';
 import { CarrinhoService } from '../../core/services/carrinho.service';
 import { ModulosService } from '../../core/services/modulos.service';
@@ -11,7 +11,7 @@ import { Produto as ProdutoType } from '../../core/types/produto/produto.type';
 
 @Component({
     selector: 'app-produto',
-    imports: [RouterLink, PinchZoomComponent],
+    imports: [RouterLink, VisualizadorImagens],
     templateUrl: './produto.html',
     styleUrl: './produto.scss',
 })
@@ -39,6 +39,23 @@ export class Produto implements OnInit {
     });
 
     imagemAtual = computed(() => this.galeria()[this.indiceImagemAtual()] ?? '');
+
+    ampliadaAberta = signal(false);
+
+    /**
+     * Versão grande de cada foto, na mesma ordem da galeria().
+     * Principal: imagemOriginalUrl (ou a quadrada, se for cadastro antigo).
+     * Demais: a API só manda a quadrada; a grande tem o mesmo nome + "-grande".
+     * Se a grande não existir, o visualizador volta para a quadrada sozinho.
+     */
+    itensAmpliados = computed<ItemImagem[]>(() => {
+        const p = this.produto();
+        if (!p) return [];
+        return this.galeria().map((quadrada, i) => ({
+            src: i === 0 ? (p.imagemOriginalUrl ?? quadrada) : this.urlGrande(quadrada),
+            fallback: quadrada,
+        }));
+    });
 
     temMedidas = computed(() => {
         const p = this.produto();
@@ -85,6 +102,18 @@ export class Produto implements OnInit {
         this.indiceImagemAtual.set(indice);
     }
 
+    abrirAmpliada(): void {
+        this.ampliadaAberta.set(true);
+    }
+
+    fecharAmpliada(): void {
+        this.ampliadaAberta.set(false);
+    }
+
+    private urlGrande(url: string): string {
+        return /\/produtos\/[^/]+\.webp$/i.test(url) ? url.replace(/\.webp$/i, '-grande.webp') : url;
+    }
+
     aumentarQuantidade(): void {
         this.quantidade.update((q) => q + 1);
     }
@@ -108,7 +137,7 @@ export class Produto implements OnInit {
         this.carrinhoService.abrir();
     }
 
-    /** Abre o WhatsApp da loja com o produto, a quantidade e o link da pagina. */
+    /** Abre o WhatsApp da loja com o produto, a quantidade e o link da página. */
     comprarPeloWhatsapp(): void {
         const produto = this.produto();
         if (!produto) return;

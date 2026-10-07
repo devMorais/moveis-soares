@@ -24,9 +24,10 @@
 
             <div class="produto-grid">
                 <div class="produto-galeria">
-                    <pinch-zoom class="produto-galeria__zoom" [properties]="{ backgroundColor: 'transparent', limitZoom: 3 }">
+                    <button type="button" class="produto-galeria__principal" (click)="abrirAmpliada()" aria-label="Ampliar foto de {{ produto()!.nome }}">
                         <img [src]="imagemAtual()" [alt]="produto()!.nome" width="800" height="800" fetchpriority="high">
-                    </pinch-zoom>
+                        <span class="produto-galeria__lupa" aria-hidden="true"><i class="fas fa-magnifying-glass-plus"></i></span>
+                    </button>
 
                     @if (galeria().length > 1) {
                         <div class="produto-galeria__miniaturas">
@@ -107,4 +108,13 @@
             </div>
         </div>
     </section>
+
+    @if (ampliadaAberta()) {
+        <app-visualizador-imagens
+            [itens]="itensAmpliados()"
+            [indiceInicial]="indiceImagemAtual()"
+            [descricao]="produto()!.nome"
+            (fechou)="fecharAmpliada()"
+        />
+    }
 }

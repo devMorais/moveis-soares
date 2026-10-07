@@ -1,0 +1,35 @@
+<div
+    class="visualizador"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="descricao() + ' ampliada'"
+    (click)="aoClicarFundo($event)"
+    (touchstart)="aoTocar($event)"
+    (touchend)="aoSoltar($event)"
+>
+    <button type="button" class="visualizador__botao visualizador__fechar" (click)="fechar()" aria-label="Fechar">
+        <i class="fas fa-xmark" aria-hidden="true"></i>
+    </button>
+
+    @if (temVarias()) {
+        <button type="button" class="visualizador__botao visualizador__seta visualizador__seta--esq" (click)="anterior()" aria-label="Foto anterior">
+            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="visualizador__botao visualizador__seta visualizador__seta--dir" (click)="proxima()" aria-label="Próxima foto">
+            <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        </button>
+        <span class="visualizador__contador" aria-live="polite">{{ indice() + 1 }} / {{ itens().length }}</span>
+    }
+
+    <!-- O @for com um item só recria o zoom a cada foto, voltando ao tamanho normal. -->
+    @for (i of [indice()]; track i) {
+        <pinch-zoom [properties]="{ backgroundColor: 'transparent', limitZoom: 4, autoHeight: true }">
+            <img
+                class="visualizador__imagem"
+                [src]="srcAtual()"
+                [alt]="descricao() + ' - foto ' + (indice() + 1)"
+                (error)="aoFalharImagem()"
+            >
+        </pinch-zoom>
+    }
+</div>
